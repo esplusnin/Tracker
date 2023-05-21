@@ -13,7 +13,9 @@ enum Resources {
         static let trackersTabBar = UIImage(named: "record.circle.fill")
         static let statisticTabBar = UIImage(named: "hare.fill")
         
-        // MainScreen:
+        // Main screen:
         static let trackersIsEmpty = UIImage(named: "StarError")
+        // Navigation Controller:
+        static let plus = UIImage(named: "plus")
     }
 }
