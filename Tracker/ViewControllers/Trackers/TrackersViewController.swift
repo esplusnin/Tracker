@@ -15,18 +15,23 @@ class TrackersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        trackersView.trackersCollection.register(TrackerCell.self, forCellWithReuseIdentifier: "Cell")
-        trackersView.trackersCollection.register(SupplementaryView.self,
-                                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                                 withReuseIdentifier: "Header")
-        
+        setMainCollectionSettings()
         trackersView.searchTextField.delegate = self
-        trackersView.trackersCollection.dataSource = self
-        trackersView.trackersCollection.delegate = self
         
         setViews()
         setNavBar()
         setConstraints()
+        setTargets()
+    }
+    
+    private func setTargets() {
+        trackersView.addTrackerButton.addTarget(self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
+    }
+    
+    @objc func switchToCreatingTrackerVC() {
+        let viewController = CreatingTrackerViewController()
+        
+        present(viewController, animated: true)
     }
     
     private func setViews() {
@@ -90,6 +95,16 @@ class TrackersViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
+    
+    private func setMainCollectionSettings() {
+        trackersView.trackersCollection.register(TrackerCell.self, forCellWithReuseIdentifier: "Cell")
+        trackersView.trackersCollection.register(SupplementaryView.self,
+                                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                                 withReuseIdentifier: "Header")
+        
+        trackersView.trackersCollection.dataSource = self
+        trackersView.trackersCollection.delegate = self
+    }
 }
 
 extension TrackersViewController: UITextFieldDelegate {
@@ -126,7 +141,6 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
                                                   verticalFittingPriority: .fittingSizeLevel)
     }
 }
-
 
 extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
