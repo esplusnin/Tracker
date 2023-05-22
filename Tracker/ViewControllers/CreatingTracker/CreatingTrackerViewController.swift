@@ -15,6 +15,11 @@ final class CreatingTrackerViewController: UIViewController {
         super.viewDidLoad()
         setViews()
         setConstraints()
+        setTargets()
+    }
+    
+    private func setTargets() {
+        creatingTrackerView.habitCreateButton.addTarget(self, action: #selector(switchToNewHabitVC), for: .touchUpInside)
     }
     
     @objc func switchToNewHabitVC() {

@@ -17,6 +17,12 @@
 		7ECDD92F2A1BB13300771EE4 /* NewHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD92E2A1BB13300771EE4 /* NewHabitViewController.swift */; };
 		7ECDD9312A1BB14A00771EE4 /* NewUnregularEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD9302A1BB14A00771EE4 /* NewUnregularEventViewController.swift */; };
 		7ECDD9332A1BB15B00771EE4 /* NewHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD9322A1BB15B00771EE4 /* NewHabitView.swift */; };
+		7ECDD9372A1BBE9500771EE4 /* NewHabitPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD9362A1BBE9500771EE4 /* NewHabitPresenter.swift */; };
+		7ECDD9392A1BBE9F00771EE4 /* NewHabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD9382A1BBE9F00771EE4 /* NewHabitCell.swift */; };
+		7ECDD93B2A1BC56400771EE4 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD93A2A1BC56400771EE4 /* CategoryViewController.swift */; };
+		7ECDD93D2A1BC5BD00771EE4 /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD93C2A1BC5BD00771EE4 /* ScheduleViewController.swift */; };
+		7ECDD9412A1BC92C00771EE4 /* NewHabitCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD9402A1BC92C00771EE4 /* NewHabitCollectionCell.swift */; };
+		7ECDD9432A1BD9C300771EE4 /* NewHabitSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD9422A1BD9C300771EE4 /* NewHabitSupplementaryView.swift */; };
 		7ED3D3F52A1A0643004C371B /* UIColor + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED3D3F42A1A0643004C371B /* UIColor + Extension.swift */; };
 		7ED3D3F92A1A0C0C004C371B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED3D3F82A1A0C0C004C371B /* TabBarController.swift */; };
 		7ED3D3FB2A1A0E21004C371B /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED3D3FA2A1A0E21004C371B /* StatisticViewController.swift */; };
@@ -43,6 +49,12 @@
 		7ECDD92E2A1BB13300771EE4 /* NewHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitViewController.swift; sourceTree = "<group>"; };
 		7ECDD9302A1BB14A00771EE4 /* NewUnregularEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUnregularEventViewController.swift; sourceTree = "<group>"; };
 		7ECDD9322A1BB15B00771EE4 /* NewHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitView.swift; sourceTree = "<group>"; };
+		7ECDD9362A1BBE9500771EE4 /* NewHabitPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitPresenter.swift; sourceTree = "<group>"; };
+		7ECDD9382A1BBE9F00771EE4 /* NewHabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitCell.swift; sourceTree = "<group>"; };
+		7ECDD93A2A1BC56400771EE4 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		7ECDD93C2A1BC5BD00771EE4 /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
+		7ECDD9402A1BC92C00771EE4 /* NewHabitCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitCollectionCell.swift; sourceTree = "<group>"; };
+		7ECDD9422A1BD9C300771EE4 /* NewHabitSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHabitSupplementaryView.swift; sourceTree = "<group>"; };
 		7ED3D3F42A1A0643004C371B /* UIColor + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
 		7ED3D3F82A1A0C0C004C371B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		7ED3D3FA2A1A0E21004C371B /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
@@ -85,6 +97,10 @@
 			children = (
 				7ECDD9322A1BB15B00771EE4 /* NewHabitView.swift */,
 				7ECDD92E2A1BB13300771EE4 /* NewHabitViewController.swift */,
+				7ECDD9362A1BBE9500771EE4 /* NewHabitPresenter.swift */,
+				7ECDD9382A1BBE9F00771EE4 /* NewHabitCell.swift */,
+				7ECDD9402A1BC92C00771EE4 /* NewHabitCollectionCell.swift */,
+				7ECDD9422A1BD9C300771EE4 /* NewHabitSupplementaryView.swift */,
 			);
 			path = NewHabit;
 			sourceTree = "<group>";
@@ -95,6 +111,22 @@
 				7ECDD9302A1BB14A00771EE4 /* NewUnregularEventViewController.swift */,
 			);
 			path = NewUnregularEvent;
+			sourceTree = "<group>";
+		};
+		7ECDD93E2A1BC5F400771EE4 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				7ECDD93A2A1BC56400771EE4 /* CategoryViewController.swift */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		7ECDD93F2A1BC60000771EE4 /* Schedule */ = {
+			isa = PBXGroup;
+			children = (
+				7ECDD93C2A1BC5BD00771EE4 /* ScheduleViewController.swift */,
+			);
+			path = Schedule;
 			sourceTree = "<group>";
 		};
 		7ED3D3F62A1A064A004C371B /* Extensions */ = {
@@ -139,7 +171,9 @@
 		7ED3D4002A1A1991004C371B /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				7ECDD93E2A1BC5F400771EE4 /* Category */,
 				7ECDD92D2A1BAB3800771EE4 /* CreatingTracker */,
+				7ECDD93F2A1BC60000771EE4 /* Schedule */,
 				7ECDD9342A1BB17800771EE4 /* NewHabit */,
 				7ECDD9352A1BB18400771EE4 /* NewUnregularEvent */,
 				7ED3D3FE2A1A193C004C371B /* Trackers */,
@@ -282,12 +316,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				7ECDD91F2A1B40B800771EE4 /* TrackersViewPresenter.swift in Sources */,
+				7ECDD9372A1BBE9500771EE4 /* NewHabitPresenter.swift in Sources */,
 				7ECDD9312A1BB14A00771EE4 /* NewUnregularEventViewController.swift in Sources */,
+				7ECDD93D2A1BC5BD00771EE4 /* ScheduleViewController.swift in Sources */,
 				7ECDD9212A1B41AB00771EE4 /* TrackersViewPresenterProtocol.swift in Sources */,
 				7ECDD92F2A1BB13300771EE4 /* NewHabitViewController.swift in Sources */,
 				7EF620A22A1629B900B66A4B /* TrackersViewController.swift in Sources */,
 				7ED3D40A2A1A20BB004C371B /* Colors.swift in Sources */,
 				7ECDD92C2A1BAB3400771EE4 /* CreatingTrackerView.swift in Sources */,
+				7ECDD93B2A1BC56400771EE4 /* CategoryViewController.swift in Sources */,
 				7ED3D4102A1A391B004C371B /* TrackersViewControllerProtocol.swift in Sources */,
 				7ED3D3F92A1A0C0C004C371B /* TabBarController.swift in Sources */,
 				7ECDD92A2A1BAB0800771EE4 /* CreatingTrackerViewController.swift in Sources */,
@@ -296,9 +333,12 @@
 				7ED3D3FB2A1A0E21004C371B /* StatisticViewController.swift in Sources */,
 				7EF6209E2A1629B900B66A4B /* AppDelegate.swift in Sources */,
 				7EF620A02A1629B900B66A4B /* SceneDelegate.swift in Sources */,
+				7ECDD9432A1BD9C300771EE4 /* NewHabitSupplementaryView.swift in Sources */,
 				7ECDD91D2A1B396200771EE4 /* StatisticView.swift in Sources */,
+				7ECDD9412A1BC92C00771EE4 /* NewHabitCollectionCell.swift in Sources */,
 				7ECDD9252A1B6EB100771EE4 /* SupplementaryHeaderView.swift in Sources */,
 				7ECDD9232A1B42A200771EE4 /* TrackerCell.swift in Sources */,
+				7ECDD9392A1BBE9F00771EE4 /* NewHabitCell.swift in Sources */,
 				7ECDD9332A1BB15B00771EE4 /* NewHabitView.swift in Sources */,
 				7ED3D4022A1A19A0004C371B /* TrackersView.swift in Sources */,
 			);

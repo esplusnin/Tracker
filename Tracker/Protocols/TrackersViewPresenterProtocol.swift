@@ -7,6 +7,7 @@
 
 import Foundation
 
-protocol TrackersViewPresenterProtocol {
-    var view: TrackersViewControllerProtocol { get set }
+protocol TrackersViewPresenterProtocol: AnyObject {
+    var view: TrackersViewControllerProtocol? { get set }
+    var emojiArray: [String] { get}
 }

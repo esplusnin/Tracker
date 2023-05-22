@@ -10,7 +10,7 @@ import SnapKit
 
 class TrackersViewController: UIViewController {
     
-    var presenter: TrackersViewPresenterProtocol?
+    var presenter = TrackersViewPresenter()
     private let trackersView = TrackersView()
     
     override func viewDidLoad() {
@@ -152,7 +152,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell else { return UICollectionViewCell() }
         cell.trackerLabel.text = "Полить цветы"
         cell.cellView.backgroundColor = cell.colorSectionArray[indexPath.row]
-        cell.emojiLabel.text = cell.emojiArray[indexPath.row]
+        cell.emojiLabel.text = presenter.emojiArray[indexPath.row]
         cell.completeTrackerDayButton.backgroundColor = cell.colorSectionArray[indexPath.row]
         
         return cell

@@ -53,7 +53,7 @@ final class TrackersView {
     
     lazy var searchTextField: UISearchTextField = {
         let textField = UISearchTextField()
-        textField.text = " Поиск..."
+        textField.placeholder = "Поиск..."
         textField.textColor = UIColor.gray
         
         return textField

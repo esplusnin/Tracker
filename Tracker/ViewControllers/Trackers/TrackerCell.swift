@@ -68,12 +68,6 @@ final class TrackerCell: UICollectionViewCell {
         UIColor.colorSelection17, UIColor.colorSelection18,
     ]
     
-    var emojiArray = [
-        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
-        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-        "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
-    ]
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setViews()

@@ -8,5 +8,10 @@
 import Foundation
 
 final class TrackersViewPresenter {
-    weak var view: TrackersViewControllerProtocol?
+    
+    var emojiArray = [
+        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
+        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
+        "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
+    ]
 }
