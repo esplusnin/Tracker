@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol TrackersViewControllerProtocol {
-    
+protocol TrackersViewControllerProtocol: AnyObject {
+    var presenter: TrackersViewPresenterProtocol { get set }
 }

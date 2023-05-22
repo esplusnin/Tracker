@@ -10,10 +10,19 @@ import SnapKit
 
 class TrackersViewController: UIViewController {
     
+    var presenter: TrackersViewPresenterProtocol?
     private let trackersView = TrackersView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        trackersView.trackersCollection.register(TrackerCell.self, forCellWithReuseIdentifier: "Cell")
+        trackersView.trackersCollection.register(SupplementaryView.self,
+                                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                                 withReuseIdentifier: "Header")
+        
+        trackersView.searchTextField.delegate = self
+        trackersView.trackersCollection.dataSource = self
+        trackersView.trackersCollection.delegate = self
         
         setViews()
         setNavBar()
@@ -25,6 +34,8 @@ class TrackersViewController: UIViewController {
         
         view.addSubview(trackersView.emptyTrackersImageView)
         view.addSubview(trackersView.emptyTrackersLabel)
+        view.addSubview(trackersView.searchTextField)
+        view.addSubview(trackersView.trackersCollection)
     }
     
     private func setNavBar() {
@@ -34,7 +45,6 @@ class TrackersViewController: UIViewController {
         navigationBar.addSubview(trackersView.addTrackerButton)
         navigationBar.addSubview(trackersView.navigationBarTitleLabel)
         navigationBar.addSubview(trackersView.navigationBarDatePicker)
-        navigationBar.addSubview(trackersView.navigationBarSearchTextField)
     }
     
     private func setConstraints() {
@@ -68,11 +78,87 @@ class TrackersViewController: UIViewController {
             make.centerY.equalTo(trackersView.navigationBarTitleLabel.snp.centerY)
         }
         
-        trackersView.navigationBarSearchTextField.snp.makeConstraints { make in
+        trackersView.searchTextField.snp.makeConstraints { make in
             make.height.equalTo(36)
-            make.top.equalTo(trackersView.navigationBarTitleLabel.snp.bottom).inset(-7)
-            make.leading.trailing.equalTo(navigationBar).inset(16)
+            make.top.equalToSuperview().inset(150)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        trackersView.trackersCollection.snp.makeConstraints { make in
+            make.top.equalTo(trackersView.searchTextField.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
 }
 
+extension TrackersViewController: UITextFieldDelegate {
+    
+}
+
+extension TrackersViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: 167, height: 132)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        UIEdgeInsets(top: 24, left: 16, bottom: 0, right: 16)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let indexPath = IndexPath(row: 0, section: section)
+        
+        let headerView = self.collectionView(collectionView,
+                                             viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
+                                             at: indexPath)
+        
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
+                                                         height: UIView.layoutFittingExpandedSize.height),
+                                                  withHorizontalFittingPriority: .required,
+                                                  verticalFittingPriority: .fittingSizeLevel)
+    }
+}
+
+
+extension TrackersViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = trackersView.trackersCollection.dequeueReusableCell(
+            withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell else { return UICollectionViewCell() }
+        cell.trackerLabel.text = "Полить цветы"
+        cell.cellView.backgroundColor = cell.colorSectionArray[indexPath.row]
+        cell.emojiLabel.text = cell.emojiArray[indexPath.row]
+        cell.completeTrackerDayButton.backgroundColor = cell.colorSectionArray[indexPath.row]
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        var id: String
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            id = "Header"
+        default:
+            id = ""
+        }
+        
+        guard let view = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: id,
+            for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
+        
+        view.headerLabel.text = "Домашний уют"
+        return view
+    }
+}

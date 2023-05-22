@@ -51,9 +51,18 @@ final class TrackersView {
         return datePicker
     }()
     
-    lazy var navigationBarSearchTextField: UISearchTextField = {
+    lazy var searchTextField: UISearchTextField = {
         let textField = UISearchTextField()
+        textField.text = " Поиск..."
+        textField.textColor = UIColor.gray
         
         return textField
+    }()
+    
+    lazy var trackersCollection: UICollectionView = {
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        
+        
+        return collection
     }()
 }
