@@ -15,23 +15,51 @@ final class NewHabitCollectionCell: UICollectionViewCell {
         return label
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setViews()
-        setConstraints()
+    lazy var colorSectionImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = 8
+        
+        return imageView
+    }()
+    
+    //    override init(frame: CGRect) {
+    //        super.init(frame: frame)
+    //        setViews()
+    //        setConstraints()
+    //    }
+    //
+    //    required init?(coder: NSCoder) {
+    //        fatalError("init(coder:) has not been implemented")
+    //    }
+    
+    func setFirstSection() {
+        setFirstSectionViews()
+        setFirstSectionConstraints()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setViews() {
+    private func setFirstSectionViews() {
         contentView.addSubview(emojiLabel)
     }
     
-    private func setConstraints() {
+    private func setFirstSectionConstraints() {
         emojiLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
+        }
+    }
+    
+    func setSecondSection() {
+        setSecondSectionViews()
+        setSecondSectionConstraints()
+    }
+    
+    private func setSecondSectionViews() {
+        contentView.addSubview(colorSectionImageView)
+    }
+    
+    private func setSecondSectionConstraints() {
+        colorSectionImageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.top.leading.bottom.trailing.equalToSuperview()
         }
     }
 }

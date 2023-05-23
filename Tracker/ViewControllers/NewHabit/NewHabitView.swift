@@ -8,6 +8,7 @@
 import UIKit
 
 final class NewHabitView {
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Новая привычка"
@@ -21,7 +22,7 @@ final class NewHabitView {
         let textField = UITextField()
         textField.layer.cornerRadius = 16
         textField.backgroundColor = UIColor.backgroundDay
-        textField.placeholder = "   Введите название трекера"
+        textField.placeholder = "Введите название трекера"
         textField.textColor = UIColor.gray
         textField.font = UIFont.systemFont(ofSize: 17)
         
@@ -40,5 +41,27 @@ final class NewHabitView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         
         return collectionView
+    }()
+    
+    lazy var cancelButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.layer.cornerRadius = 16
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.red.cgColor
+        button.backgroundColor = .white
+        button.setTitle("Отменить", for: .normal)
+        button.setTitleColor(UIColor.red, for: .normal)
+        
+        return button
+    }()
+    
+    lazy var createButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.layer.cornerRadius = 16
+        button.backgroundColor = UIColor.gray
+        button.setTitle("Создать", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        
+        return button
     }()
 }

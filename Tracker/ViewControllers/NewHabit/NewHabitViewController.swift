@@ -11,7 +11,7 @@ import SnapKit
 final class NewHabitViewController: UIViewController {
     private let newHabit = NewHabitView()
     private let presenter = NewHabitPresenter()
-
+    
     var emojiArray = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
@@ -62,10 +62,13 @@ final class NewHabitViewController: UIViewController {
     
     private func setViews() {
         view.backgroundColor = .white
+        
         view.addSubview(newHabit.titleLabel)
         view.addSubview(newHabit.textField)
         view.addSubview(newHabit.tableView)
         view.addSubview(newHabit.colorCollectionView)
+        view.addSubview(newHabit.cancelButton)
+        view.addSubview(newHabit.createButton)
     }
     
     private func setConstraints() {
@@ -81,15 +84,31 @@ final class NewHabitViewController: UIViewController {
         }
         
         newHabit.tableView.snp.makeConstraints { make in
-            make.height.equalTo(150)
+            make.height.equalTo(149)
             make.top.equalTo(newHabit.textField.snp.bottom).inset(-24)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
         newHabit.colorCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(newHabit.tableView.snp.bottom).inset(-80)
+            make.top.equalTo(newHabit.tableView.snp.bottom).inset(-32)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(156)
+            make.height.equalTo(350)
+        }
+        
+        newHabit.cancelButton.snp.makeConstraints { make in
+            make.height.equalTo(60)
+            make.top.equalTo(newHabit.colorCollectionView.snp.bottom)
+            make.leading.equalToSuperview().inset(20)
+            make.trailing.equalTo(view.snp.centerX).offset(-10)
+            make.bottom.equalToSuperview().inset(34)
+        }
+        
+        newHabit.createButton.snp.makeConstraints { make in
+            make.height.equalTo(60)
+            make.top.equalTo(newHabit.colorCollectionView.snp.bottom)
+            make.leading.equalTo(view.snp.centerX).offset(10)
+            make.trailing.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().inset(34)
         }
     }
 }
@@ -129,7 +148,11 @@ extension NewHabitViewController: UITableViewDelegate {
 
 extension NewHabitViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        emojiArray.count
+        section == 0 ? emojiArray.count : colorSectionArray.count
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -137,7 +160,16 @@ extension NewHabitViewController: UICollectionViewDataSource {
             withReuseIdentifier: "CollectionCell",
             for: indexPath) as? NewHabitCollectionCell else { return UICollectionViewCell() }
         
-        cell.emojiLabel.text = emojiArray[indexPath.row]
+        switch indexPath.section {
+        case 0:
+            cell.setFirstSection()
+            cell.emojiLabel.text = emojiArray[indexPath.row]
+        case 1:
+            cell.setSecondSection()
+            cell.colorSectionImageView.backgroundColor = colorSectionArray[indexPath.row]
+        default:
+            return UICollectionViewCell()
+        }
         
         return cell
     }
@@ -156,17 +188,40 @@ extension NewHabitViewController: UICollectionViewDataSource {
             withReuseIdentifier: id,
             for: indexPath) as? NewHabitSupplementaryView else { return UICollectionReusableView() }
         
+        switch indexPath.section {
+        case 0:
+            view.headerLabel.text = "Emoji"
+        case 1:
+            view.headerLabel.text = "Цвет"
+        default:
+            view.headerLabel.text = ""
+        }
+        
         return view
     }
 }
 
 extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 32, height: 38)
+        switch indexPath.section {
+        case 0:
+            return CGSize(width: 32, height: 38)
+        case 1:
+            return CGSize(width: 40, height: 40)
+        default:
+            return CGSize(width: 32, height: 38)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 0, left: 29, bottom: 0, right: 29)
+        switch section {
+        case 0:
+            return UIEdgeInsets(top: 0, left: 29, bottom: 47, right: 29)
+        case 1:
+            return UIEdgeInsets(top: 0, left: 29, bottom: 47, right: 29)
+        default:
+            return UIEdgeInsets(top: 0, left: 29, bottom: 47, right: 29)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -184,9 +239,9 @@ extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
                                              at: indexPath)
         
         return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
-                                                             height: UIView.layoutFittingExpandedSize.height),
-                                                      withHorizontalFittingPriority: .required,
-                                                      verticalFittingPriority: .fittingSizeLevel)
+                                                         height: UIView.layoutFittingExpandedSize.height),
+                                                  withHorizontalFittingPriority: .required,
+                                                  verticalFittingPriority: .fittingSizeLevel)
     }
 }
 

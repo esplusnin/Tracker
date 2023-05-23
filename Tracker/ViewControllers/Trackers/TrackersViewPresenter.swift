@@ -9,6 +9,8 @@ import Foundation
 
 final class TrackersViewPresenter {
     
+    var categories: [TrackerCategory]?
+    
     var emojiArray = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",

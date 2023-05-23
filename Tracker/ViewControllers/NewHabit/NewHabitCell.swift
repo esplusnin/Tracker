@@ -21,7 +21,6 @@ final class NewHabitCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         backgroundColor = UIColor.backgroundDay
-        
         setViews()
         setConstraints()
     }

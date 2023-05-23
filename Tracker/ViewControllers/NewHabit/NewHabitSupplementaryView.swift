@@ -11,7 +11,6 @@ import SnapKit
 final class NewHabitSupplementaryView: UICollectionReusableView {
     lazy var headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Emoji"
         label.font = UIFont.boldSystemFont(ofSize: 19)
         label.textColor = UIColor.blackDay
         
@@ -26,7 +25,7 @@ final class NewHabitSupplementaryView: UICollectionReusableView {
         headerLabel.snp.makeConstraints { make in
             make.top.equalTo(snp.top)
             make.leading.equalTo(snp.leading).inset(28)
-            make.bottom.equalTo(snp.bottom)
+            make.bottom.equalTo(snp.bottom).inset(31)
         }
     }
     
