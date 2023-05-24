@@ -20,14 +20,23 @@ final class CreatingTrackerViewController: UIViewController {
     
     private func setTargets() {
         creatingTrackerView.habitCreateButton.addTarget(self, action: #selector(switchToNewHabitVC), for: .touchUpInside)
+        creatingTrackerView.unregularEventCreateButton.addTarget(self, action: #selector(switchToNewUnregularVC), for: .touchUpInside)
     }
     
     @objc func switchToNewHabitVC() {
-        let viewController = NewHabitViewController()
+        let viewController = NewTrackerViewController()
+        viewController.tracker = .habit
         
         present(viewController, animated: true)
     }
     
+    @objc func switchToNewUnregularVC() {
+        let viewController = NewTrackerViewController()
+        viewController.tracker = .unregularEvent
+        
+        present(viewController, animated: true)
+    }
+
     private func setViews() {
         view.backgroundColor = .white
         view.addSubview(creatingTrackerView.titleLabel)
@@ -37,7 +46,7 @@ final class CreatingTrackerViewController: UIViewController {
     
     private func setConstraints() {
         creatingTrackerView.titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(13)
+            make.top.equalToSuperview().inset(27)
             make.centerX.equalToSuperview()
         }
         

@@ -8,9 +8,15 @@
 import UIKit
 import SnapKit
 
-final class NewHabitViewController: UIViewController {
-    private let newHabit = NewHabitView()
-    private let presenter = NewHabitPresenter()
+enum KindOfTrackers {
+    case habit
+    case unregularEvent
+}
+
+final class NewTrackerViewController: UIViewController {
+    private let newTracker = NewTrackerView()
+    private let presenter = NewTrackerPresenter()
+    var tracker: KindOfTrackers?
     
     var emojiArray = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -28,18 +34,14 @@ final class NewHabitViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        newHabit.colorCollectionView.register(NewHabitCollectionCell.self,
-                                              forCellWithReuseIdentifier: "CollectionCell")
-        newHabit.colorCollectionView.register(NewHabitSupplementaryView.self,
-                                              forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                              withReuseIdentifier: "Header")
-        
-        newHabit.colorCollectionView.dataSource = self
-        newHabit.colorCollectionView.delegate = self
+        newTracker.textField.delegate = self
         
         setViews()
+        setTitle()
+        setTableView()
         setConstraints()
-        setTableViewMainSetting()
+        setTableViewMainSettings()
+        setCollectionViewMainSetting()
     }
     
     private func switchToCategoryVC() {
@@ -54,73 +56,115 @@ final class NewHabitViewController: UIViewController {
         present(viewController,animated: true)
     }
     
-    private func setTableViewMainSetting() {
-        newHabit.tableView.register(NewHabitCell.self, forCellReuseIdentifier: "Cell")
-        newHabit.tableView.dataSource = self
-        newHabit.tableView.delegate = self
+    private func setTableViewMainSettings() {
+        newTracker.tableView.register(NewTrackerCell.self, forCellReuseIdentifier: "Cell")
+        newTracker.tableView.dataSource = self
+        newTracker.tableView.delegate = self
+    }
+    
+    private func setCollectionViewMainSetting() {
+        newTracker.colorCollectionView.register(NewTrackerCollectionCell.self,
+                                                forCellWithReuseIdentifier: "CollectionCell")
+        newTracker.colorCollectionView.register(NewTrackerSupplementaryView.self,
+                                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                                withReuseIdentifier: "Header")
+        newTracker.colorCollectionView.dataSource = self
+        newTracker.colorCollectionView.delegate = self
     }
     
     private func setViews() {
         view.backgroundColor = .white
         
-        view.addSubview(newHabit.titleLabel)
-        view.addSubview(newHabit.textField)
-        view.addSubview(newHabit.tableView)
-        view.addSubview(newHabit.colorCollectionView)
-        view.addSubview(newHabit.cancelButton)
-        view.addSubview(newHabit.createButton)
+        view.addSubview(newTracker.titleLabel)
+        view.addSubview(newTracker.textField)
+        view.addSubview(newTracker.colorCollectionView)
+        view.addSubview(newTracker.cancelButton)
+        view.addSubview(newTracker.createButton)
+    }
+    
+    func setTitle() {
+        newTracker.titleLabel.text = tracker == .habit ? "Новая привычка" : "Новое нерегулярное событие"
     }
     
     private func setConstraints() {
-        newHabit.titleLabel.snp.makeConstraints { make in
+        newTracker.titleLabel.snp.makeConstraints { make in
+            make.height.equalTo(22)
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().inset(13)
+            make.top.equalToSuperview().inset(27)
         }
         
-        newHabit.textField.snp.makeConstraints { make in
+        newTracker.textField.snp.makeConstraints { make in
             make.height.equalTo(75)
-            make.top.equalTo(newHabit.titleLabel.snp.bottom).inset(-38)
+            make.top.equalTo(newTracker.titleLabel.snp.bottom).inset(-38)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
-        newHabit.tableView.snp.makeConstraints { make in
-            make.height.equalTo(149)
-            make.top.equalTo(newHabit.textField.snp.bottom).inset(-24)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-        
-        newHabit.colorCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(newHabit.tableView.snp.bottom).inset(-32)
+        newTracker.colorCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(newTracker.tableView.snp.bottom).inset(-32)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(350)
         }
         
-        newHabit.cancelButton.snp.makeConstraints { make in
+        newTracker.cancelButton.snp.makeConstraints { make in
             make.height.equalTo(60)
-            make.top.equalTo(newHabit.colorCollectionView.snp.bottom)
+            make.top.equalTo(newTracker.colorCollectionView.snp.bottom)
             make.leading.equalToSuperview().inset(20)
             make.trailing.equalTo(view.snp.centerX).offset(-10)
             make.bottom.equalToSuperview().inset(34)
         }
         
-        newHabit.createButton.snp.makeConstraints { make in
+        newTracker.createButton.snp.makeConstraints { make in
             make.height.equalTo(60)
-            make.top.equalTo(newHabit.colorCollectionView.snp.bottom)
+            make.top.equalTo(newTracker.colorCollectionView.snp.bottom)
             make.leading.equalTo(view.snp.centerX).offset(10)
             make.trailing.equalToSuperview().inset(20)
             make.bottom.equalToSuperview().inset(34)
         }
     }
+    
+    private func setTableView() {
+        view.addSubview(newTracker.tableView)
+        
+        newTracker.tableView.snp.makeConstraints { make in
+            if tracker == .habit {
+                make.height.equalTo(149)
+            } else {
+                make.height.equalTo(75)
+                newTracker.tableView.separatorStyle = .none
+            }
+            
+            make.height.equalTo(149)
+            make.top.equalTo(newTracker.textField.snp.bottom).inset(-24)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+    }
 }
 
-extension NewHabitViewController: UITableViewDataSource {
+extension NewTrackerViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.becomeFirstResponder()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+    }
+}
+
+extension NewTrackerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        2
+        switch tracker {
+        case .habit:
+            return 2
+        case .unregularEvent:
+            return 1
+        default:
+            return 2
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "Cell", for: indexPath) as? NewHabitCell else { return UITableViewCell() }
+            withIdentifier: "Cell", for: indexPath) as? NewTrackerCell else { return UITableViewCell() }
         
         cell.label.text = presenter.buttonsTitleForTableView[indexPath.row]
         cell.accessoryType = .disclosureIndicator
@@ -133,7 +177,7 @@ extension NewHabitViewController: UITableViewDataSource {
     }
 }
 
-extension NewHabitViewController: UITableViewDelegate {
+extension NewTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
         case IndexPath(row: 0, section: 0):
@@ -146,7 +190,7 @@ extension NewHabitViewController: UITableViewDelegate {
     }
 }
 
-extension NewHabitViewController: UICollectionViewDataSource {
+extension NewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         section == 0 ? emojiArray.count : colorSectionArray.count
     }
@@ -158,7 +202,7 @@ extension NewHabitViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "CollectionCell",
-            for: indexPath) as? NewHabitCollectionCell else { return UICollectionViewCell() }
+            for: indexPath) as? NewTrackerCollectionCell else { return UICollectionViewCell() }
         
         switch indexPath.section {
         case 0:
@@ -186,7 +230,7 @@ extension NewHabitViewController: UICollectionViewDataSource {
         guard let view = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             withReuseIdentifier: id,
-            for: indexPath) as? NewHabitSupplementaryView else { return UICollectionReusableView() }
+            for: indexPath) as? NewTrackerSupplementaryView else { return UICollectionReusableView() }
         
         switch indexPath.section {
         case 0:
@@ -201,13 +245,13 @@ extension NewHabitViewController: UICollectionViewDataSource {
     }
 }
 
-extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
+extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch indexPath.section {
         case 0:
             return CGSize(width: 32, height: 38)
         case 1:
-            return CGSize(width: 40, height: 40)
+            return CGSize(width: 46, height: 46)
         default:
             return CGSize(width: 32, height: 38)
         }
@@ -218,18 +262,32 @@ extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
         case 0:
             return UIEdgeInsets(top: 0, left: 29, bottom: 47, right: 29)
         case 1:
-            return UIEdgeInsets(top: 0, left: 29, bottom: 47, right: 29)
+            return UIEdgeInsets(top: 0, left: 25, bottom: 47, right: 25)
         default:
             return UIEdgeInsets(top: 0, left: 29, bottom: 47, right: 29)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        25
+        switch section {
+        case 0:
+            return 25
+        case 1:
+            return 12
+        default:
+            return 25
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        14
+        switch section {
+        case 0:
+            return 14
+        case 1:
+            return 6
+        default:
+            return 14
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -242,6 +300,33 @@ extension NewHabitViewController: UICollectionViewDelegateFlowLayout {
                                                          height: UIView.layoutFittingExpandedSize.height),
                                                   withHorizontalFittingPriority: .required,
                                                   verticalFittingPriority: .fittingSizeLevel)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? NewTrackerCollectionCell else { return }
+        
+        switch indexPath.section {
+        case 0:
+            cell.backgroundColor = .lightGray
+        case 1:
+            cell.layer.borderWidth = 2
+            cell.layer.borderColor = cell.colorSectionImageView.backgroundColor?.cgColor
+        default:
+            cell.backgroundColor = .lightGray
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? NewTrackerCollectionCell else { return }
+        
+        cell.backgroundColor = .none
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({
+            collectionView.deselectItem(at: $0, animated: true)
+        })
+        return true
     }
 }
 

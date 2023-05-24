@@ -19,15 +19,15 @@ final class TrackersView {
         let label = UILabel()
         label.text = "Что будем отслеживать?"
         label.textAlignment = .center
-        label.textColor = UIColor.blackDay
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = .blackDay
+        label.font = .systemFont(ofSize: 12)
         
         return label
     }()
     
     lazy var addTrackerButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = UIColor.blackDay
+        button.tintColor = .blackDay
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(Resources.Images.plus, for: .normal)
         
@@ -37,7 +37,7 @@ final class TrackersView {
     lazy var navigationBarTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Трекеры"
-        label.font = UIFont.boldSystemFont(ofSize: 34)
+        label.font = .boldSystemFont(ofSize: 34)
         
         return label
     }()
@@ -53,15 +53,15 @@ final class TrackersView {
     
     lazy var searchTextField: UISearchTextField = {
         let textField = UISearchTextField()
+        textField.returnKeyType = .go
         textField.placeholder = "Поиск..."
-        textField.textColor = UIColor.gray
+        textField.textColor = .blackDay
         
         return textField
     }()
     
     lazy var trackersCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        
         
         return collection
     }()

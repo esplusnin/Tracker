@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class NewHabitPresenter {
+final class NewTrackerPresenter {
     let buttonsTitleForTableView = ["Категория", "Расписание"]
     let emojiForCollectionView: [String] = []
 }

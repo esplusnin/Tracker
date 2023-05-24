@@ -19,9 +19,6 @@ class TrackersViewController: UIViewController {
         trackersView.searchTextField.delegate = self
         
         setViews()
-        setNavBar()
-        setConstraints()
-        setTargets()
     }
     
     private func setTargets() {
@@ -32,68 +29,6 @@ class TrackersViewController: UIViewController {
         let viewController = CreatingTrackerViewController()
         
         present(viewController, animated: true)
-    }
-    
-    private func setViews() {
-        view.backgroundColor = .white
-        
-        view.addSubview(trackersView.emptyTrackersImageView)
-        view.addSubview(trackersView.emptyTrackersLabel)
-        view.addSubview(trackersView.searchTextField)
-        view.addSubview(trackersView.trackersCollection)
-    }
-    
-    private func setNavBar() {
-        guard let navigationBar = navigationController?.navigationBar else { return }
-        navigationBar.prefersLargeTitles = true
-        
-        navigationBar.addSubview(trackersView.addTrackerButton)
-        navigationBar.addSubview(trackersView.navigationBarTitleLabel)
-        navigationBar.addSubview(trackersView.navigationBarDatePicker)
-    }
-    
-    private func setConstraints() {
-        guard let navigationBar = navigationController?.navigationBar else { return }
-        
-        trackersView.emptyTrackersImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(80)
-            make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        
-        trackersView.emptyTrackersLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.top.equalTo(trackersView.emptyTrackersImageView.snp.bottom).offset(8)
-        }
-        
-        trackersView.addTrackerButton.snp.makeConstraints { make in
-            make.height.equalTo(18)
-            make.width.equalTo(19)
-            make.leading.equalTo(navigationBar.snp.leading).inset(18)
-            make.top.lessThanOrEqualTo(navigationBar.snp.top).inset(20)
-        }
-        
-        trackersView.navigationBarTitleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(navigationBar.snp.leading).inset(16)
-            make.top.equalTo(trackersView.addTrackerButton.snp.bottom).inset(-13)
-        }
-        
-        trackersView.navigationBarDatePicker.snp.makeConstraints { make in
-            make.trailing.equalTo(navigationBar).inset(16)
-            make.centerY.equalTo(trackersView.navigationBarTitleLabel.snp.centerY)
-        }
-        
-        trackersView.searchTextField.snp.makeConstraints { make in
-            make.height.equalTo(36)
-            make.top.equalToSuperview().inset(150)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-        
-        trackersView.trackersCollection.snp.makeConstraints { make in
-            make.top.equalTo(trackersView.searchTextField.snp.bottom)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
     }
     
     private func setMainCollectionSettings() {
@@ -108,7 +43,13 @@ class TrackersViewController: UIViewController {
 }
 
 extension TrackersViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.becomeFirstResponder()
+    }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+    }
 }
 
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
@@ -175,4 +116,80 @@ extension TrackersViewController: UICollectionViewDataSource {
         view.headerLabel.text = "Домашний уют"
         return view
     }
+}
+
+//MARK: Setting Views
+extension TrackersViewController {
+    private func setViews() {
+        view.backgroundColor = .white
+        
+        view.addSubview(trackersView.emptyTrackersImageView)
+        view.addSubview(trackersView.emptyTrackersLabel)
+        view.addSubview(trackersView.searchTextField)
+        view.addSubview(trackersView.trackersCollection)
+        
+        setNavBar()
+        setConstraints()
+        setTargets()
+    }
+}
+
+//MARK: Setting Navigation Bar
+extension TrackersViewController {
+    private func setNavBar() {
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        navigationBar.prefersLargeTitles = true
+        
+        navigationBar.addSubview(trackersView.addTrackerButton)
+        navigationBar.addSubview(trackersView.navigationBarTitleLabel)
+        navigationBar.addSubview(trackersView.navigationBarDatePicker)
+    }
+}
+
+// MARK: Setting Layout
+extension TrackersViewController {
+    private func setConstraints() {
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        
+        trackersView.emptyTrackersImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(80)
+            make.centerY.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
+        trackersView.emptyTrackersLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalTo(trackersView.emptyTrackersImageView.snp.bottom).offset(8)
+        }
+        
+        trackersView.addTrackerButton.snp.makeConstraints { make in
+            make.height.equalTo(18)
+            make.width.equalTo(19)
+            make.leading.equalTo(navigationBar.snp.leading).inset(18)
+            make.top.lessThanOrEqualTo(navigationBar.snp.top).inset(20)
+        }
+        
+        trackersView.navigationBarTitleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(navigationBar.snp.leading).inset(16)
+            make.top.equalTo(trackersView.addTrackerButton.snp.bottom).inset(-13)
+        }
+        
+        trackersView.navigationBarDatePicker.snp.makeConstraints { make in
+            make.trailing.equalTo(navigationBar).inset(16)
+            make.centerY.equalTo(trackersView.navigationBarTitleLabel.snp.centerY)
+        }
+        
+        trackersView.searchTextField.snp.makeConstraints { make in
+            make.height.equalTo(36)
+            make.top.equalToSuperview().inset(150)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        trackersView.trackersCollection.snp.makeConstraints { make in
+            make.top.equalTo(trackersView.searchTextField.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+    }
+    
 }

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class NewHabitCell: UITableViewCell {
+final class NewTrackerCell: UITableViewCell {
     
     lazy var label: UILabel = {
         let label = UILabel()

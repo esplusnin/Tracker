@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class NewHabitSupplementaryView: UICollectionReusableView {
+final class NewTrackerSupplementaryView: UICollectionReusableView {
     lazy var headerLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 19)

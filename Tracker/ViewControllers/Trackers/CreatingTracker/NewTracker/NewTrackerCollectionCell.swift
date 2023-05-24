@@ -8,7 +8,17 @@
 import UIKit
 import SnapKit
 
-final class NewHabitCollectionCell: UICollectionViewCell {
+final class NewTrackerCollectionCell: UICollectionViewCell {
+    
+    override var isSelected: Bool {
+        didSet {
+            if !isSelected {
+                backgroundColor = .none
+                layer.borderWidth = 0
+            }
+        }
+    }
+    
     lazy var emojiLabel: UILabel = {
         let label = UILabel()
         
@@ -22,15 +32,10 @@ final class NewHabitCollectionCell: UICollectionViewCell {
         return imageView
     }()
     
-    //    override init(frame: CGRect) {
-    //        super.init(frame: frame)
-    //        setViews()
-    //        setConstraints()
-    //    }
-    //
-    //    required init?(coder: NSCoder) {
-    //        fatalError("init(coder:) has not been implemented")
-    //    }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.layer.cornerRadius = 12
+    }
     
     func setFirstSection() {
         setFirstSectionViews()
@@ -59,7 +64,7 @@ final class NewHabitCollectionCell: UICollectionViewCell {
     private func setSecondSectionConstraints() {
         colorSectionImageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.top.leading.bottom.trailing.equalToSuperview()
+            make.top.leading.bottom.trailing.equalToSuperview().inset(3)
         }
     }
 }

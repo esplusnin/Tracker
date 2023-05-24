@@ -55,6 +55,7 @@ final class TrackerCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 17
         button.setTitle("+", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         button.setTitleColor(.white, for: .normal)
         
         return button

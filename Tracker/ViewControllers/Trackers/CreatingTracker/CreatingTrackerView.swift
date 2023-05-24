@@ -11,8 +11,8 @@ final class CreatingTrackerView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Создание трекера"
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = UIColor.blackDay
+        label.font = .systemFont(ofSize: 16)
+        label.textColor = .blackDay
         
         return label
     }()
@@ -20,21 +20,21 @@ final class CreatingTrackerView {
     lazy var habitCreateButton: UIButton = {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
-        button.backgroundColor = UIColor.blackDay
+        button.backgroundColor = .blackDay
         button.setTitle("Привычка", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.titleLabel?.font = .systemFont(ofSize: 16)
         button.setTitleColor(UIColor.whiteDay, for: .normal)
         
         return button
     }()
     
     lazy var unregularEventCreateButton: UIButton = {
-            let button = UIButton(type: .system)
+        let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
-        button.backgroundColor = UIColor.blackDay
+        button.backgroundColor = .blackDay
         button.setTitle("Нерегулярные событие", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        button.setTitleColor(UIColor.whiteDay, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 16)
+        button.setTitleColor(.whiteDay, for: .normal)
         
         return button
     }()

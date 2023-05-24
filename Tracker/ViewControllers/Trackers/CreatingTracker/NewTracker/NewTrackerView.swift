@@ -7,13 +7,12 @@
 
 import UIKit
 
-final class NewHabitView {
+final class NewTrackerView {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая привычка"
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = UIColor.blackDay
+        label.font = .systemFont(ofSize: 16)
+        label.textColor = .blackDay
         
         return label
     }()
@@ -21,10 +20,14 @@ final class NewHabitView {
     lazy var textField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 16
-        textField.backgroundColor = UIColor.backgroundDay
+        textField.clearButtonMode = .whileEditing
+        textField.returnKeyType = .go
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
+        textField.leftViewMode = .always
+        textField.backgroundColor = .backgroundDay
         textField.placeholder = "Введите название трекера"
-        textField.textColor = UIColor.gray
-        textField.font = UIFont.systemFont(ofSize: 17)
+        textField.textColor = .blackDay
+        textField.font = .systemFont(ofSize: 17)
         
         return textField
     }()
@@ -39,6 +42,7 @@ final class NewHabitView {
     
     lazy var colorCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.allowsMultipleSelection = true
         
         return collectionView
     }()
@@ -50,7 +54,7 @@ final class NewHabitView {
         button.layer.borderColor = UIColor.red.cgColor
         button.backgroundColor = .white
         button.setTitle("Отменить", for: .normal)
-        button.setTitleColor(UIColor.red, for: .normal)
+        button.setTitleColor(.red, for: .normal)
         
         return button
     }()
@@ -58,7 +62,7 @@ final class NewHabitView {
     lazy var createButton: UIButton = {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
-        button.backgroundColor = UIColor.gray
+        button.backgroundColor = .gray
         button.setTitle("Создать", for: .normal)
         button.setTitleColor(.white, for: .normal)
         
