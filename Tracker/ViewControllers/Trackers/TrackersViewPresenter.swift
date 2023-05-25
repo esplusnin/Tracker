@@ -10,6 +10,8 @@ import Foundation
 final class TrackersViewPresenter {
     
     var categories: [TrackerCategory]?
+    var completedTrackers: [TrackerRecord]?
+    var currentDate: Date?
     
     var emojiArray = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",

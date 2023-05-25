@@ -9,6 +9,11 @@ import UIKit
 
 final class NewTrackerView {
     
+    lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        return scrollView
+    }()
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
@@ -43,6 +48,7 @@ final class NewTrackerView {
     lazy var colorCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.allowsMultipleSelection = true
+        collectionView.isScrollEnabled = false
         
         return collectionView
     }()
@@ -67,5 +73,14 @@ final class NewTrackerView {
         button.setTitleColor(.white, for: .normal)
         
         return button
+    }()
+    
+    lazy var warningTextFieldLimitationLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Ограничение 38 символов"
+        label.textColor = .red
+        label.font = .systemFont(ofSize: 17)
+        
+        return label
     }()
 }

@@ -71,12 +71,28 @@ final class TrackerCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setViews()
         setConstraints()
+        setTarget()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setTarget() {
+        completeTrackerDayButton.addTarget(self, action: #selector(completeTrackerToday), for: .touchUpInside)
+    }
+    
+    @objc private func completeTrackerToday() {
+        if completeTrackerDayButton.titleLabel?.text == "+" {
+            completeTrackerDayButton.setTitle("✓", for: .normal)
+            completeTrackerDayButton.alpha = 0.5
+        } else {
+            completeTrackerDayButton.setTitle("+", for: .normal)
+            completeTrackerDayButton.alpha = 1
+        }
     }
     
     private func setViews() {

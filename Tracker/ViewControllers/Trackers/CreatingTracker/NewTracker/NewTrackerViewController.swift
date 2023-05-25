@@ -42,6 +42,29 @@ final class NewTrackerViewController: UIViewController {
         setConstraints()
         setTableViewMainSettings()
         setCollectionViewMainSetting()
+        setTargets()
+    }
+    
+    @objc private func dismissNewTrackerVC() {
+        dismiss(animated: true)
+    }
+    
+    private func setTargets() {
+        newTracker.cancelButton.addTarget(self, action: #selector(dismissNewTrackerVC), for: .touchUpInside)
+    }
+    
+    private func unlockCreateButton() {
+        newTracker.createButton.isEnabled = true
+        newTracker.createButton.backgroundColor = .blackDay
+    }
+    
+    private func lockCreateButton() {
+        newTracker.createButton.isEnabled = false
+        newTracker.createButton.backgroundColor = .gray
+    }
+    
+    private func checkCreateButtonToUnclock(_ countOfSelectedCell: Int?) {
+        countOfSelectedCell == 2 ? unlockCreateButton() : lockCreateButton()
     }
     
     private func switchToCategoryVC() {
@@ -68,18 +91,35 @@ final class NewTrackerViewController: UIViewController {
         newTracker.colorCollectionView.register(NewTrackerSupplementaryView.self,
                                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                                 withReuseIdentifier: "Header")
+        
         newTracker.colorCollectionView.dataSource = self
         newTracker.colorCollectionView.delegate = self
+    }
+    
+    private func setTextFieldWarning(_ countOfTextFieldLetter: Int?) {
+        guard let countOfTextFieldLetter = countOfTextFieldLetter else { return }
+        if countOfTextFieldLetter >= 38 {
+            view.addSubview(newTracker.warningTextFieldLimitationLabel)
+            
+            newTracker.warningTextFieldLimitationLabel.snp.makeConstraints { make in
+                make.top.equalTo(newTracker.textField.snp.bottom).inset(-8)
+                make.centerX.equalToSuperview()
+            }
+        } else {
+            newTracker.warningTextFieldLimitationLabel.removeFromSuperview()
+        }
     }
     
     private func setViews() {
         view.backgroundColor = .white
         
-        view.addSubview(newTracker.titleLabel)
-        view.addSubview(newTracker.textField)
-        view.addSubview(newTracker.colorCollectionView)
-        view.addSubview(newTracker.cancelButton)
-        view.addSubview(newTracker.createButton)
+        view.addSubview(newTracker.scrollView)
+        
+        newTracker.scrollView.addSubview(newTracker.titleLabel)
+        newTracker.scrollView.addSubview(newTracker.textField)
+        newTracker.scrollView.addSubview(newTracker.colorCollectionView)
+        newTracker.scrollView.addSubview(newTracker.cancelButton)
+        newTracker.scrollView.addSubview(newTracker.createButton)
     }
     
     func setTitle() {
@@ -87,6 +127,10 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private func setConstraints() {
+        newTracker.scrollView.snp.makeConstraints { make in
+            make.top.leading.bottom.trailing.equalToSuperview()
+        }
+        
         newTracker.titleLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
             make.centerX.equalToSuperview()
@@ -100,9 +144,10 @@ final class NewTrackerViewController: UIViewController {
         }
         
         newTracker.colorCollectionView.snp.makeConstraints { make in
+            make.width.equalTo(newTracker.scrollView)
             make.top.equalTo(newTracker.tableView.snp.bottom).inset(-32)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(350)
+            make.height.equalTo(500)
         }
         
         newTracker.cancelButton.snp.makeConstraints { make in
@@ -148,6 +193,10 @@ extension NewTrackerViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
     }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        setTextFieldWarning(textField.text?.count)
+    }
 }
 
 extension NewTrackerViewController: UITableViewDataSource {
@@ -187,6 +236,7 @@ extension NewTrackerViewController: UITableViewDelegate {
         default:
             return
         }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
@@ -314,11 +364,13 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         default:
             cell.backgroundColor = .lightGray
         }
+        checkCreateButtonToUnclock(collectionView.indexPathsForSelectedItems?.count)
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? NewTrackerCollectionCell else { return }
-        
+        checkCreateButtonToUnclock(collectionView.indexPathsForSelectedItems?.count)
+
         cell.backgroundColor = .none
     }
     

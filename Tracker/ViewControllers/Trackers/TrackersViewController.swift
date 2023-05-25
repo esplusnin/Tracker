@@ -23,6 +23,12 @@ class TrackersViewController: UIViewController {
     
     private func setTargets() {
         trackersView.addTrackerButton.addTarget(self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
+        trackersView.navigationBarDatePicker.addTarget(self, action: #selector(setDateFromDatePicker), for: .primaryActionTriggered)
+    }
+    
+    @objc private func setDateFromDatePicker() {
+        presenter.currentDate = trackersView.navigationBarDatePicker.date
+        self.dismiss(animated: true)
     }
     
     @objc func switchToCreatingTrackerVC() {
@@ -85,7 +91,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        5
+        presenter.categories?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
