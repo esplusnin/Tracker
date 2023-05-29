@@ -12,10 +12,11 @@ import SnapKit
 final class ScheduleViewController: UIViewController {
     
     private let scheduleView = ScheduleView()
-    private let presenter = ScheduleViewPresenter()
     var newTrackerViewController: NewTrackerViewControllerProtocol?
     var scheduleService = ScheduleService()
     var schedule: [Int] = []
+    
+    var daysArray = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,46 +39,11 @@ final class ScheduleViewController: UIViewController {
     private func setTarget() {
         scheduleView.completeButton.addTarget(self, action: #selector(setCurrentScheduleForTracker), for: .touchUpInside)
     }
-    
-    private func setViews() {
-        view.backgroundColor = .white
-        
-        view.addSubview(scheduleView.titleLabel)
-        view.addSubview(scheduleView.scheduleTableView)
-        view.addSubview(scheduleView.completeButton)
-    }
-    
-    private func setConstraints() {
-        scheduleView.titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(13)
-            make.centerX.equalToSuperview()
-        }
-        
-        scheduleView.scheduleTableView.snp.makeConstraints { make in
-            make.height.equalTo(524)
-            make.top.equalTo(scheduleView.titleLabel.snp.bottom).inset(-24)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-        
-        scheduleView.completeButton.snp.makeConstraints { make in
-            make.height.equalTo(60)
-            make.top.equalTo(scheduleView.scheduleTableView.snp.bottom).inset(-39)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.bottom.equalToSuperview().inset(50)
-        }
-    }
-    
-    private func settingTableView() {
-        scheduleView.scheduleTableView.dataSource = self
-        scheduleView.scheduleTableView.delegate = self
-        
-        scheduleView.scheduleTableView.register(ScheduleCell.self, forCellReuseIdentifier: "ScheduleCell")
-    }
 }
 
 extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        presenter.daysArray.count
+        daysArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -85,7 +51,7 @@ extension ScheduleViewController: UITableViewDataSource {
             withIdentifier: "ScheduleCell", for: indexPath) as? ScheduleCell else { return UITableViewCell() }
         
         cell.delegate = self
-        cell.label.text = presenter.daysArray[indexPath.row]
+        cell.label.text = daysArray[indexPath.row]
         
         return cell
     }
@@ -110,6 +76,50 @@ extension ScheduleViewController: ScheduleViewControllerDelegate {
         } else {
             guard let index = schedule.firstIndex(of: numberOfDay) else { return }
             schedule.remove(at: index)
+        }
+    }
+}
+
+// MARK: Main Settings of TableView:
+extension ScheduleViewController {
+    private func settingTableView() {
+        scheduleView.scheduleTableView.dataSource = self
+        scheduleView.scheduleTableView.delegate = self
+        
+        scheduleView.scheduleTableView.register(ScheduleCell.self, forCellReuseIdentifier: "ScheduleCell")
+    }
+}
+
+// MARK: Setting views:
+extension ScheduleViewController {
+    private func setViews() {
+        view.backgroundColor = .white
+        
+        view.addSubview(scheduleView.titleLabel)
+        view.addSubview(scheduleView.scheduleTableView)
+        view.addSubview(scheduleView.completeButton)
+    }
+}
+
+// MARK: Setting constraints:
+extension ScheduleViewController {
+    private func setConstraints() {
+        scheduleView.titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(13)
+            make.centerX.equalToSuperview()
+        }
+        
+        scheduleView.scheduleTableView.snp.makeConstraints { make in
+            make.height.equalTo(524)
+            make.top.equalTo(scheduleView.titleLabel.snp.bottom).inset(-24)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        scheduleView.completeButton.snp.makeConstraints { make in
+            make.height.equalTo(60)
+            make.top.equalTo(scheduleView.scheduleTableView.snp.bottom).inset(-39)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().inset(50)
         }
     }
 }

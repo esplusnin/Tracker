@@ -9,9 +9,12 @@ import UIKit
 import SnapKit
 
 final class NewCategoryViewController: UIViewController {
-    private let newCategory = NewCategoryView()
+
     var trackerPresenter: TrackersViewPresenterProtocol?
     var categoryViewController: CategoryViewControllerProtocol?
+    
+    private let newCategory = NewCategoryView()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,14 +41,35 @@ final class NewCategoryViewController: UIViewController {
         dismiss(animated: true)
         categoryViewController?.reloadTableView()
     }
+}
+
+extension NewCategoryViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.becomeFirstResponder()
+    }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        newCategory.completeButton.backgroundColor = textField.text?.count != 0 ? .blackDay : .gray
+    }
+}
+
+
+// MARK: Setting views:
+extension NewCategoryViewController {
     private func setViews() {
         view.backgroundColor = .white
         view.addSubview(newCategory.titleLabel)
         view.addSubview(newCategory.textField)
         view.addSubview(newCategory.completeButton)
     }
-    
+}
+
+// MARK: Setting constraints:
+extension NewCategoryViewController {
     private func setConstraints() {
         newCategory.titleLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
@@ -64,19 +88,5 @@ final class NewCategoryViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(50)
         }
-    }
-}
-
-extension NewCategoryViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.becomeFirstResponder()
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        newCategory.completeButton.backgroundColor = textField.text?.count != 0 ? .blackDay : .gray
     }
 }

@@ -12,6 +12,7 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
 
     var trackerPresenter: TrackersViewPresenterProtocol?
     var trackerViewController: TrackersViewControllerProtocol?
+    
     private let creatingTrackerView = CreatingTrackerView()
     
     override func viewDidLoad() {

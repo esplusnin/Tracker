@@ -9,9 +9,10 @@ import UIKit
 
 final class CategoryViewController: UIViewController, CategoryViewControllerProtocol {
     
-    private let categoryView = CategoryView()
     var trackerPresenter: TrackersViewPresenterProtocol?
     var newTrackerViewController: NewTrackerViewControllerProtocol?
+    
+    private let categoryView = CategoryView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,45 +43,6 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         categoryView.createCategoryButton.addTarget(self,
                                                     action: #selector(switchToNewCategoryVC),
                                                     for: .touchUpInside)
-    }
-    
-    private func setViews() {
-        view.backgroundColor = .white
-        
-        view.addSubview(categoryView.titleLabel)
-        view.addSubview(categoryView.emptyCategoryImageView)
-        view.addSubview(categoryView.emptyCategoryLabel)
-        view.addSubview(categoryView.tableView)
-        view.addSubview(categoryView.createCategoryButton)
-    }
-    
-    private func setConstraints() {
-        categoryView.titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(27)
-            make.centerX.equalToSuperview()
-        }
-        
-        categoryView.emptyCategoryImageView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
-        
-        categoryView.emptyCategoryLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.top.equalTo(categoryView.emptyCategoryImageView.snp.bottom).offset(8)
-        }
-        
-        categoryView.tableView.snp.makeConstraints { make in
-            make.top.equalTo(categoryView.titleLabel.snp.bottom).inset(-24)
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.bottom.equalTo(categoryView.createCategoryButton).inset(-30)
-        }
-        
-        
-        categoryView.createCategoryButton.snp.makeConstraints { make in
-            make.height.equalTo(60)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.bottom.equalToSuperview().inset(50)
-        }
     }
 }
 
@@ -125,5 +87,50 @@ extension CategoryViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         75
+    }
+}
+
+// MARK: Setting views:
+extension CategoryViewController {
+    private func setViews() {
+        view.backgroundColor = .white
+        
+        view.addSubview(categoryView.titleLabel)
+        view.addSubview(categoryView.emptyCategoryImageView)
+        view.addSubview(categoryView.emptyCategoryLabel)
+        view.addSubview(categoryView.tableView)
+        view.addSubview(categoryView.createCategoryButton)
+    }
+}
+
+// MARK: Setting constraints:
+extension CategoryViewController {
+    private func setConstraints() {
+        categoryView.titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(27)
+            make.centerX.equalToSuperview()
+        }
+        
+        categoryView.emptyCategoryImageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+        
+        categoryView.emptyCategoryLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalTo(categoryView.emptyCategoryImageView.snp.bottom).offset(8)
+        }
+        
+        categoryView.tableView.snp.makeConstraints { make in
+            make.top.equalTo(categoryView.titleLabel.snp.bottom).inset(-24)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalTo(categoryView.createCategoryButton).inset(-30)
+        }
+        
+        
+        categoryView.createCategoryButton.snp.makeConstraints { make in
+            make.height.equalTo(60)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().inset(50)
+        }
     }
 }
