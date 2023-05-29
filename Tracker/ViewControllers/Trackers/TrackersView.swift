@@ -53,6 +53,7 @@ final class TrackersView {
     
     lazy var searchTextField: UISearchTextField = {
         let textField = UISearchTextField()
+        textField.clearButtonMode = .never
         textField.returnKeyType = .go
         textField.placeholder = "Поиск..."
         textField.textColor = .blackDay
@@ -64,5 +65,13 @@ final class TrackersView {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         
         return collection
+    }()
+    
+    lazy var cancelationButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Отменить", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 17)
+        
+        return button
     }()
 }

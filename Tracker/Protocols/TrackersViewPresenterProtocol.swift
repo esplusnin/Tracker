@@ -8,6 +8,7 @@
 import Foundation
 
 protocol TrackersViewPresenterProtocol: AnyObject {
-    var view: TrackersViewControllerProtocol? { get set }
-    var emojiArray: [String] { get}
+    var categories: [TrackerCategory]? { get set }
+    var emojiArray: [String] { get }
+    var currentDate: Date? { get set }
 }

@@ -8,18 +8,36 @@
 import UIKit
 import SnapKit
 
+
 final class ScheduleViewController: UIViewController {
     
     private let scheduleView = ScheduleView()
     private let presenter = ScheduleViewPresenter()
+    var newTrackerController: NewTrackerViewControllerProtocol?
+    var scheduleService = ScheduleService()
+    var schedule: [Int] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setViews()
         setConstraints()
         settingTableView()
+        setTarget()
+    }
+    
+    @objc func setCurrentScheduleForTracker() {
+        let string = scheduleService.getScheduleString(schedule)
         
-        view.backgroundColor = .white
+        newTrackerController?.selectedSchedule = string
+        newTrackerController?.reloadTableView()
+        
+        print("string \(string)")
+        
+        dismiss(animated: true)
+    }
+    
+    private func setTarget() {
+        scheduleView.completeButton.addTarget(self, action: #selector(setCurrentScheduleForTracker), for: .touchUpInside)
     }
     
     private func setViews() {
@@ -38,7 +56,7 @@ final class ScheduleViewController: UIViewController {
         
         scheduleView.scheduleTableView.snp.makeConstraints { make in
             make.height.equalTo(524)
-            make.top.equalTo(scheduleView.titleLabel.snp.bottom).inset(-38)
+            make.top.equalTo(scheduleView.titleLabel.snp.bottom).inset(-24)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
@@ -51,8 +69,8 @@ final class ScheduleViewController: UIViewController {
     }
     
     private func settingTableView() {
-        scheduleView.scheduleTableView.delegate = self
         scheduleView.scheduleTableView.dataSource = self
+        scheduleView.scheduleTableView.delegate = self
         
         scheduleView.scheduleTableView.register(ScheduleCell.self, forCellReuseIdentifier: "ScheduleCell")
     }
@@ -67,6 +85,7 @@ extension ScheduleViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "ScheduleCell", for: indexPath) as? ScheduleCell else { return UITableViewCell() }
         
+        cell.delegate = self
         cell.label.text = presenter.daysArray[indexPath.row]
         
         return cell
@@ -79,4 +98,22 @@ extension ScheduleViewController: UITableViewDataSource {
 
 extension ScheduleViewController: UITableViewDelegate {
     
+}
+
+extension ScheduleViewController: ScheduleViewControllerDelegate {
+    func controlScheduleDay(_ cell: ScheduleCell) {
+        guard let dayName = cell.label.text else { return }
+        
+        let numberOfDay = scheduleService.addWeekDayToSchedule(dayName: dayName)
+        
+        if cell.switcher.isOn {
+            schedule.append(numberOfDay)
+        } else {
+            guard let index = schedule.firstIndex(of: numberOfDay) else { return }
+            schedule.remove(at: index)
+        }
+        
+        print(schedule)
+
+    }
 }

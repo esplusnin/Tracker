@@ -9,6 +9,9 @@ import UIKit
 import SnapKit
 
 final class ScheduleCell: UITableViewCell {
+    
+    var delegate: ScheduleViewControllerDelegate?
+    
     lazy var label: UILabel = {
         let label = UILabel()
         
@@ -18,14 +21,20 @@ final class ScheduleCell: UITableViewCell {
     lazy var switcher: UISwitch = {
         let switcher = UISwitch()
         switcher.onTintColor = .systemBlue
+        switcher.addTarget(self, action: #selector(controlSchedule), for: .allTouchEvents)
         
         return switcher
     }()
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
         setViews()
         setConstraints()
+    }
+    
+    @objc private func controlSchedule() {
+        delegate?.controlScheduleDay(self)
     }
     
     private func setViews() {

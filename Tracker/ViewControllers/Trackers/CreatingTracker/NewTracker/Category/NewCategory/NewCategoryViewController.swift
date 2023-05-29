@@ -9,18 +9,34 @@ import UIKit
 import SnapKit
 
 final class NewCategoryViewController: UIViewController {
-    let newCategory = NewCategoryView()
+    private let newCategory = NewCategoryView()
+    var trackerPresenter: TrackersViewPresenterProtocol?
+    var categoryViewController: CategoryViewControllerProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         newCategory.textField.delegate = self
-        
+       
         setViews()
         setConstraints()
+        setTarget()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
+    }
+    
+    private func setTarget() {
+        newCategory.completeButton.addTarget(self, action: #selector(createNewCategory), for: .touchUpInside)
+    }
+    
+    @objc private func createNewCategory() {
+        guard let name = newCategory.textField.text else { return }
+        trackerPresenter?.categories?.append(TrackerCategory(name: name,
+                                                             trackerDictionary: []))
+        
+        dismiss(animated: true)
+        categoryViewController?.reloadTableView()
     }
     
     private func setViews() {

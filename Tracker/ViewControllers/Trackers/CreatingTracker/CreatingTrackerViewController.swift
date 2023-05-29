@@ -8,14 +8,21 @@
 import UIKit
 import SnapKit
 
-final class CreatingTrackerViewController: UIViewController {
+final class CreatingTrackerViewController: UIViewController, CreatingTrackerViewControllerProtocol {
     private let creatingTrackerView = CreatingTrackerView()
+    var trackerPresenter: TrackersViewPresenterProtocol?
+    var trackerViewController: TrackersViewControllerProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setViews()
         setConstraints()
         setTargets()
+    }
+    
+    func backToTrackerViewController() {
+        dismiss(animated: true)
+        trackerViewController?.reloadCollectionView()
     }
     
     private func setTargets() {
@@ -25,14 +32,20 @@ final class CreatingTrackerViewController: UIViewController {
     
     @objc func switchToNewHabitVC() {
         let viewController = NewTrackerViewController()
-        viewController.tracker = .habit
+        viewController.kindOfTracker = .habit
+
+        viewController.trackerPresenter = trackerPresenter
+        viewController.creatingTrackerViewController = self
         
         present(viewController, animated: true)
     }
     
     @objc func switchToNewUnregularVC() {
         let viewController = NewTrackerViewController()
-        viewController.tracker = .unregularEvent
+        viewController.kindOfTracker = .unregularEvent
+        
+        viewController.creatingTrackerViewController = self
+        viewController.trackerPresenter = trackerPresenter
         
         present(viewController, animated: true)
     }

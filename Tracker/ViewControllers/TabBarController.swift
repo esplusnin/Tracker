@@ -22,16 +22,21 @@ final class TabBarController: UITabBarController {
         tabBar.layer.borderWidth = 1
         tabBar.layer.borderColor = UIColor.systemGray.cgColor
         
-        let trackersViewController = UINavigationController(rootViewController: TrackersViewController())
-        let statisticViewController = UINavigationController(rootViewController: StatisticViewController())
+        let trackersViewController = TrackersViewController()
+        let trackersViewPresenter = TrackersViewPresenter()
         
-        trackersViewController.tabBarItem = UITabBarItem(title: "Трекеры",
+        let trackersViewControllerNavigation = UINavigationController(rootViewController: trackersViewController)
+        let statisticViewControllerNavigation = UINavigationController(rootViewController: StatisticViewController())
+        
+        trackersViewController.presenter = trackersViewPresenter
+        
+        trackersViewControllerNavigation.tabBarItem = UITabBarItem(title: "Трекеры",
                                                          image: Resources.Images.trackersTabBar,
                                                          selectedImage: nil)
-        statisticViewController.tabBarItem = UITabBarItem(title: "Cтатистика",
+        statisticViewControllerNavigation.tabBarItem = UITabBarItem(title: "Cтатистика",
                                                           image: Resources.Images.statisticTabBar,
                                                           selectedImage: nil)
         
-        self.viewControllers = [trackersViewController, statisticViewController]
+        self.viewControllers = [trackersViewControllerNavigation, statisticViewControllerNavigation]
     }
 }

@@ -10,7 +10,7 @@ import UIKit
 final class CategoryView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая привычка"
+        label.text = "Категория"
         label.font = .systemFont(ofSize: 16)
         label.textColor = .blackDay
         
@@ -33,6 +33,14 @@ final class CategoryView {
         label.font = .systemFont(ofSize: 12)
         
         return label
+    }()
+    
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.separatorStyle = .singleLine
+        tableView.layer.cornerRadius = 16
+        
+        return tableView
     }()
     
     lazy var createCategoryButton: UIButton = {

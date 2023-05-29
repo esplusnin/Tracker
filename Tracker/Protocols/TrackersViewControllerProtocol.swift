@@ -8,5 +8,6 @@
 import Foundation
 
 protocol TrackersViewControllerProtocol: AnyObject {
-    var presenter: TrackersViewPresenterProtocol { get set }
+    var presenter: TrackersViewPresenterProtocol? { get set }
+    func reloadCollectionView()
 }

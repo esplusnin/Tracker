@@ -8,31 +8,71 @@
 import UIKit
 import SnapKit
 
-class TrackersViewController: UIViewController {
+class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
-    var presenter = TrackersViewPresenter()
+    var presenter: TrackersViewPresenterProtocol?
     private let trackersView = TrackersView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setViews()
         setMainCollectionSettings()
         trackersView.searchTextField.delegate = self
+    }
+    
+    @objc private func addCanceletionButton() {
+        view.addSubview(trackersView.cancelationButton)
         
-        setViews()
+        trackersView.searchTextField.snp.removeConstraints()
+        
+        trackersView.cancelationButton.snp.makeConstraints { make in
+            make.width.equalTo(83)
+            make.height.equalTo(36)
+            make.top.equalToSuperview().inset(150)
+            make.trailing.equalToSuperview().inset(16)
+            make.centerY.equalTo(trackersView.searchTextField)
+        }
+        
+        trackersView.searchTextField.snp.makeConstraints { make in
+            make.height.equalTo(36)
+            make.top.equalToSuperview().inset(150)
+            make.leading.equalToSuperview().inset(16)
+            make.trailing.equalTo(trackersView.cancelationButton.snp.leading).inset(-5)
+        }
+    }
+    
+    @objc private func setSearchFieldWithoutCancelationButton() {
+        trackersView.cancelationButton.removeFromSuperview()
+        trackersView.searchTextField.endEditing(true)
+        trackersView.searchTextField.snp.makeConstraints { make in
+            make.height.equalTo(36)
+            make.top.equalToSuperview().inset(150)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+    }
+    
+    func reloadCollectionView() {
+        trackersView.trackersCollection.reloadData()
     }
     
     private func setTargets() {
         trackersView.addTrackerButton.addTarget(self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
         trackersView.navigationBarDatePicker.addTarget(self, action: #selector(setDateFromDatePicker), for: .primaryActionTriggered)
+        trackersView.searchTextField.addTarget(self, action: #selector(addCanceletionButton), for: .editingDidBegin)
+        trackersView.cancelationButton.addTarget(self, action: #selector(setSearchFieldWithoutCancelationButton), for: .touchUpInside)
     }
     
     @objc private func setDateFromDatePicker() {
-        presenter.currentDate = trackersView.navigationBarDatePicker.date
+        presenter?.currentDate = trackersView.navigationBarDatePicker.date
+
         self.dismiss(animated: true)
     }
     
     @objc func switchToCreatingTrackerVC() {
         let viewController = CreatingTrackerViewController()
+        viewController.trackerPresenter = presenter
+        viewController.trackerViewController = self
+        trackersView.searchTextField.endEditing(true)
         
         present(viewController, animated: true)
     }
@@ -90,17 +130,29 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension TrackersViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        let amountOfElement = presenter?.categories?.count
+        trackersView.trackersCollection.alpha = amountOfElement == 0 ? 0 : 1
+        return amountOfElement ?? 0
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        presenter.categories?.count ?? 0
+        guard let trackerDictionary = presenter?.categories?[section] else { return 0 }
+            
+        return trackerDictionary.trackerDictionary.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = trackersView.trackersCollection.dequeueReusableCell(
-            withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell else { return UICollectionViewCell() }
-        cell.trackerLabel.text = "Полить цветы"
-        cell.cellView.backgroundColor = cell.colorSectionArray[indexPath.row]
-        cell.emojiLabel.text = presenter.emojiArray[indexPath.row]
-        cell.completeTrackerDayButton.backgroundColor = cell.colorSectionArray[indexPath.row]
+            withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell,
+              let currentCategory = presenter?.categories?[indexPath.section] else { return UICollectionViewCell() }
+        
+        let currentTracker = currentCategory.trackerDictionary[indexPath.row]
+        
+        cell.cellView.backgroundColor = currentTracker.color
+        cell.trackerLabel.text = currentTracker.name
+        cell.emojiLabel.text = currentTracker.emoji
+        cell.completeTrackerDayButton.backgroundColor = currentTracker.color
         
         return cell
     }
@@ -119,7 +171,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             withReuseIdentifier: id,
             for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
         
-        view.headerLabel.text = "Домашний уют"
+        view.headerLabel.text = presenter?.categories?[indexPath.section].name
         return view
     }
 }
@@ -185,11 +237,7 @@ extension TrackersViewController {
             make.centerY.equalTo(trackersView.navigationBarTitleLabel.snp.centerY)
         }
         
-        trackersView.searchTextField.snp.makeConstraints { make in
-            make.height.equalTo(36)
-            make.top.equalToSuperview().inset(150)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
+        setSearchFieldWithoutCancelationButton()
         
         trackersView.trackersCollection.snp.makeConstraints { make in
             make.top.equalTo(trackersView.searchTextField.snp.bottom)

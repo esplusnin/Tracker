@@ -7,7 +7,14 @@
 
 import Foundation
 
+enum KindOfTrackers {
+    case habit
+    case unregularEvent
+}
+
 final class NewTrackerPresenter {
     let buttonsTitleForTableView = ["Категория", "Расписание"]
     let emojiForCollectionView: [String] = []
+    
+    var selectedDays: [String] = []
 }
