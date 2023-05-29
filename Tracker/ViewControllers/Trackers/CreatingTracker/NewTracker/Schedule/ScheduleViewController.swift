@@ -13,7 +13,7 @@ final class ScheduleViewController: UIViewController {
     
     private let scheduleView = ScheduleView()
     private let presenter = ScheduleViewPresenter()
-    var newTrackerController: NewTrackerViewControllerProtocol?
+    var newTrackerViewController: NewTrackerViewControllerProtocol?
     var scheduleService = ScheduleService()
     var schedule: [Int] = []
     
@@ -28,9 +28,9 @@ final class ScheduleViewController: UIViewController {
     @objc func setCurrentScheduleForTracker() {
         let string = schedule.count == 7 ? "Каждый день" : scheduleService.getScheduleString(schedule)
         
-        newTrackerController?.selectedScheduleString = string
-        newTrackerController?.trackerSchedule = schedule
-        newTrackerController?.reloadTableView()
+        newTrackerViewController?.selectedScheduleString = string
+        newTrackerViewController?.trackerSchedule = schedule
+        newTrackerViewController?.reloadTableView()
                 
         dismiss(animated: true)
     }

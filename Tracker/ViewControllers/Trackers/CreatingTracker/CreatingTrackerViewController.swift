@@ -9,9 +9,10 @@ import UIKit
 import SnapKit
 
 final class CreatingTrackerViewController: UIViewController, CreatingTrackerViewControllerProtocol {
-    private let creatingTrackerView = CreatingTrackerView()
+
     var trackerPresenter: TrackersViewPresenterProtocol?
     var trackerViewController: TrackersViewControllerProtocol?
+    private let creatingTrackerView = CreatingTrackerView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,17 +31,17 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
         creatingTrackerView.unregularEventCreateButton.addTarget(self, action: #selector(switchToNewUnregularVC), for: .touchUpInside)
     }
     
-    @objc func switchToNewHabitVC() {
+    @objc private func switchToNewHabitVC() {
         let viewController = NewTrackerViewController()
         viewController.kindOfTracker = .habit
-
+        
         viewController.trackerPresenter = trackerPresenter
         viewController.creatingTrackerViewController = self
         
         present(viewController, animated: true)
     }
     
-    @objc func switchToNewUnregularVC() {
+    @objc private func switchToNewUnregularVC() {
         let viewController = NewTrackerViewController()
         viewController.kindOfTracker = .unregularEvent
         
@@ -49,14 +50,20 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
         
         present(viewController, animated: true)
     }
+}
 
+// MARK: Setting Views
+extension CreatingTrackerViewController {
     private func setViews() {
         view.backgroundColor = .white
         view.addSubview(creatingTrackerView.titleLabel)
         view.addSubview(creatingTrackerView.habitCreateButton)
         view.addSubview(creatingTrackerView.unregularEventCreateButton)
     }
-    
+}
+ 
+// MARK: Setting Layout
+extension CreatingTrackerViewController {
     private func setConstraints() {
         creatingTrackerView.titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(27)

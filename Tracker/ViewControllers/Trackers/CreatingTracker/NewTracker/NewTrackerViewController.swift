@@ -9,12 +9,14 @@ import UIKit
 import SnapKit
 
 final class NewTrackerViewController: UIViewController, NewTrackerViewControllerProtocol {
-    private let newTracker = NewTrackerView()
-    private let presenter = NewTrackerPresenter()
+    
+    var presenter: NewTrackerViewPresenterProtocol?
     var trackerPresenter: TrackersViewPresenterProtocol?
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
     var kindOfTracker: KindOfTrackers?
     
+    private let newTracker = NewTrackerView()
+
     var selectedCategoryString: String?
     var selectedScheduleString: String?
     
@@ -35,6 +37,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         newTracker.textField.delegate = self
+        presenter = NewTrackerViewPresenter()
+        presenter?.view = self
         
         setViews()
         setTitle()
@@ -49,38 +53,14 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         newTracker.tableView.reloadData()
     }
     
-    @objc func createNewTracker() {
-        guard let categoryArray = trackerPresenter?.categories,
-              let trackerName = trackerName,
-              let trackerColor = trackerColor,
-              let trackerEmoji = trackerEmoji else { return }
-
-        let tracker = Tracker(id: UUID(),
-                              name: trackerName,
-                              color: trackerColor,
-                              emoji: trackerEmoji,
-                              schedule: trackerSchedule ?? nil)
-
-        var newCategoryArray: [TrackerCategory] = []
-        
-        categoryArray.forEach { category in
-            if selectedCategoryString == category.name {
-                var newTrackersArray = category.trackerDictionary
-                newTrackersArray.append(tracker)
-                newCategoryArray.append(TrackerCategory(name: category.name, trackerDictionary: newTrackersArray))
-            } else {
-                newCategoryArray.append(category)
-            }
-        }
-
-        trackerPresenter?.categories = newCategoryArray
-        
-        dismissNewTrackerVC()
-        creatingTrackerViewController?.backToTrackerViewController()
+    func unlockCreateButton() {
+        newTracker.createButton.isEnabled = true
+        newTracker.createButton.backgroundColor = .blackDay
     }
-
-    @objc private func dismissNewTrackerVC() {
-        dismiss(animated: true)
+    
+    func lockCreateButton() {
+        newTracker.createButton.isEnabled = false
+        newTracker.createButton.backgroundColor = .gray
     }
     
     private func setTargets() {
@@ -88,20 +68,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         newTracker.createButton.addTarget(self, action: #selector(createNewTracker), for: .touchUpInside)
     }
     
-    private func unlockCreateButton() {
-        newTracker.createButton.isEnabled = true
-        newTracker.createButton.backgroundColor = .blackDay
-    }
-    
-    private func lockCreateButton() {
-        newTracker.createButton.isEnabled = false
-        newTracker.createButton.backgroundColor = .gray
-    }
-    
-    private func checkCreateButtonToUnclock() {
-        trackerName != nil &&
-        trackerColor != nil &&
-        trackerEmoji != nil ? unlockCreateButton() : lockCreateButton()
+    private func setTitle() {
+        newTracker.titleLabel.text = kindOfTracker == .habit ? "Новая привычка" : "Новое нерегулярное событие"
     }
     
     private func switchToCategoryVC() {
@@ -114,26 +82,9 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     private func switchToScheduleVC() {
         let viewController = ScheduleViewController()
-        viewController.newTrackerController = self
+        viewController.newTrackerViewController = self
         
         present(viewController,animated: true)
-    }
-    
-    private func setTableViewMainSettings() {
-        newTracker.tableView.register(NewTrackerCell.self, forCellReuseIdentifier: "Cell")
-        newTracker.tableView.dataSource = self
-        newTracker.tableView.delegate = self
-    }
-    
-    private func setCollectionViewMainSetting() {
-        newTracker.colorCollectionView.register(NewTrackerCollectionCell.self,
-                                                forCellWithReuseIdentifier: "CollectionCell")
-        newTracker.colorCollectionView.register(NewTrackerSupplementaryView.self,
-                                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                                withReuseIdentifier: "Header")
-        
-        newTracker.colorCollectionView.dataSource = self
-        newTracker.colorCollectionView.delegate = self
     }
     
     private func setTextFieldWarning(_ countOfTextFieldLetter: Int?) {
@@ -161,10 +112,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         }
     }
     
-    func setTitle() {
-        newTracker.titleLabel.text = kindOfTracker == .habit ? "Новая привычка" : "Новое нерегулярное событие"
-    }
-    
     private func setTableView() {
         view.addSubview(newTracker.tableView)
         
@@ -181,6 +128,19 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
             make.leading.trailing.equalToSuperview().inset(16)
         }
     }
+    
+    @objc func createNewTracker() {
+        let newCategoryArray = presenter?.createNewTracker()
+
+        trackerPresenter?.categories = newCategoryArray
+        
+        dismissNewTrackerVC()
+        creatingTrackerViewController?.backToTrackerViewController()
+    }
+
+    @objc private func dismissNewTrackerVC() {
+        dismiss(animated: true)
+    }
 }
 
 extension NewTrackerViewController: UITextFieldDelegate {
@@ -195,7 +155,7 @@ extension NewTrackerViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         setTextFieldWarning(textField.text?.count)
         trackerName = textField.text
-        checkCreateButtonToUnclock()
+        presenter?.checkCreateButtonToUnclock()
     }
 }
 
@@ -215,7 +175,7 @@ extension NewTrackerViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "Cell", for: indexPath) as? NewTrackerCell else { return UITableViewCell() }
         
-        cell.categoryLabel.text = presenter.buttonsTitleForTableView[indexPath.row]
+        cell.categoryLabel.text = presenter?.buttonsTitleForTableView[indexPath.row]
         cell.accessoryType = .disclosureIndicator
         
         switch indexPath.row {
@@ -254,6 +214,7 @@ extension NewTrackerViewController: UITableViewDelegate {
         default:
             return
         }
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
@@ -268,7 +229,8 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         2
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell",
                                                             for: indexPath) as? NewTrackerCollectionCell,
               let emojiArray = trackerPresenter?.emojiArray else { return UICollectionViewCell() }
@@ -287,7 +249,9 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
         var id: String
         switch kind {
         case UICollectionView.elementKindSectionHeader:
@@ -315,18 +279,15 @@ extension NewTrackerViewController: UICollectionViewDataSource {
 }
 
 extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        switch indexPath.section {
-        case 0:
-            return CGSize(width: 32, height: 38)
-        case 1:
-            return CGSize(width: 46, height: 46)
-        default:
-            return CGSize(width: 32, height: 38)
-        }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        presenter?.calculationSizeForItemAtCollectionView(section: indexPath.section) ?? CGSize(width: 0, height: 0)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         switch section {
         case 0:
             return UIEdgeInsets(top: 0, left: 29, bottom: 47, right: 29)
@@ -337,29 +298,21 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 25
-        case 1:
-            return 12
-        default:
-            return 25
-        }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        presenter?.calculationMinimumInteritemSpacingForSectionAt(section: section) ?? CGFloat(0)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 14
-        case 1:
-            return 6
-        default:
-            return 14
-        }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        presenter?.calculationMinimumLineSpacingForSectionAt(section: section) ?? CGFloat(0)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
         let indexPath = IndexPath(row: 0, section: section)
         let headerView = self.collectionView(collectionView,
                                              viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
@@ -385,12 +338,13 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         default:
             cell.backgroundColor = .lightGray
         }
-        checkCreateButtonToUnclock()
+        presenter?.checkCreateButtonToUnclock()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? NewTrackerCollectionCell else { return }
-        checkCreateButtonToUnclock()
+        
+        presenter?.checkCreateButtonToUnclock()
 
         cell.backgroundColor = .none
     }
@@ -399,7 +353,31 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({
             collectionView.deselectItem(at: $0, animated: true)
         })
+        
         return true
+    }
+}
+
+// MARK: Main Settings of TableView
+extension NewTrackerViewController {
+    private func setTableViewMainSettings() {
+        newTracker.tableView.register(NewTrackerCell.self, forCellReuseIdentifier: "Cell")
+        newTracker.tableView.dataSource = self
+        newTracker.tableView.delegate = self
+    }
+}
+    
+// MARK: Main Settings of CollectionView
+extension NewTrackerViewController {
+    private func setCollectionViewMainSetting() {
+        newTracker.colorCollectionView.register(NewTrackerCollectionCell.self,
+                                                forCellWithReuseIdentifier: "CollectionCell")
+        newTracker.colorCollectionView.register(NewTrackerSupplementaryView.self,
+                                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                                withReuseIdentifier: "Header")
+        
+        newTracker.colorCollectionView.dataSource = self
+        newTracker.colorCollectionView.delegate = self
     }
 }
 
