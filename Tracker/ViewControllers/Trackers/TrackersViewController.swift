@@ -22,76 +22,33 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         trackersView.searchTextField.delegate = self
     }
     
-    func setCellButtonIfTrackerWasCompletedToday(_ id: UUID) -> String {
-        var string = "+"
-        presenter?.completedTrackers?.forEach({ trackers in
-            if trackers.id == id && presenter?.currentDate == trackers.date {
-                string = "✓"
-            }
-        })
-        
-        return string
-    }
-                                              
-                                              
-    
-    private func updateCellDayLabel(_ section: Int, row: Int) -> String {
-        guard let category = presenter?.categories else { return "" }
-        
-        let id = category[section].trackerDictionary[row].id
-        let string = updateNumberOfCompletedDaysLabel(countAmountOfCompleteDays(id: id))
-        
-        return string
+    func reloadCollectionView() {
+        trackersView.trackersCollection.reloadData()
     }
     
-    private func countAmountOfCompleteDays(id: UUID) -> Int {
-        var counter = 0
+    func updateCollectionView() {
+        presenter?.currentDate = trackersView.navigationBarDatePicker.date
+        presenter?.showNewTrackersAfterChanges()
         
-        presenter?.completedTrackers?.forEach({ trackerRecord in
-            if trackerRecord.id == id {
-                counter += 1
-            }
-        })
-        print(counter)
-        return counter
+        trackersView.trackersCollection.reloadData()
     }
     
-    private func updateNumberOfCompletedDaysLabel(_ number: Int) -> String {
-        var string = "\(number) "
-        var array = [number]
+    @objc func switchToCreatingTrackerVC() {
+        let viewController = CreatingTrackerViewController()
+        viewController.trackerPresenter = presenter
+        viewController.trackerViewController = self
+        trackersView.searchTextField.endEditing(true)
         
-        switch number {
-        case 0:
-            string += "Дней"
-        case 1:
-            string += "День"
-        case 2:
-            string += "Дня"
-        case 3, 4:
-            string += "Дня"
-        case 5...20:
-            string += "Дней"
-        case 20...:
-            switch array.removeLast() {
-            case 1:
-                string += "День"
-            case 2:
-                string += "Дня"
-            case 3, 4:
-                string += "Дня"
-            case 5...9:
-                string += "Дней"
-            default:
-                string += "Дней"
-            }
-            
-        default:
-           string = ""
-        }
-        
-        return string
+        present(viewController, animated: true)
     }
     
+    private func setTargets() {
+        trackersView.addTrackerButton.addTarget(self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
+        trackersView.navigationBarDatePicker.addTarget(self, action: #selector(setDateFromDatePicker), for: .primaryActionTriggered)
+        trackersView.searchTextField.addTarget(self, action: #selector(addCanceletionButton), for: .editingDidBegin)
+        trackersView.cancelationButton.addTarget(self, action: #selector(setSearchFieldWithoutCancelationButton), for: .touchUpInside)
+    }
+ 
     @objc private func addCanceletionButton() {
         view.addSubview(trackersView.cancelationButton)
         
@@ -124,47 +81,10 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         }
     }
     
-    func reloadCollectionView() {
-        trackersView.trackersCollection.reloadData()
-    }
-    
-    func updateCollectionView() {
-        presenter?.currentDate = trackersView.navigationBarDatePicker.date
-        presenter?.showNewTrackersAfterChanges()
-        
-        trackersView.trackersCollection.reloadData()
-    }
-    
-    private func setTargets() {
-        trackersView.addTrackerButton.addTarget(self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
-        trackersView.navigationBarDatePicker.addTarget(self, action: #selector(setDateFromDatePicker), for: .primaryActionTriggered)
-        trackersView.searchTextField.addTarget(self, action: #selector(addCanceletionButton), for: .editingDidBegin)
-        trackersView.cancelationButton.addTarget(self, action: #selector(setSearchFieldWithoutCancelationButton), for: .touchUpInside)
-    }
-    
     @objc private func setDateFromDatePicker() {
         updateCollectionView()
         
         self.dismiss(animated: true)
-    }
-    
-    @objc func switchToCreatingTrackerVC() {
-        let viewController = CreatingTrackerViewController()
-        viewController.trackerPresenter = presenter
-        viewController.trackerViewController = self
-        trackersView.searchTextField.endEditing(true)
-        
-        present(viewController, animated: true)
-    }
-    
-    private func setMainCollectionSettings() {
-        trackersView.trackersCollection.register(TrackerCell.self, forCellWithReuseIdentifier: "Cell")
-        trackersView.trackersCollection.register(SupplementaryView.self,
-                                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                                 withReuseIdentifier: "Header")
-        
-        trackersView.trackersCollection.dataSource = self
-        trackersView.trackersCollection.delegate = self
     }
 }
 
@@ -179,23 +99,33 @@ extension TrackersViewController: UITextFieldDelegate {
 }
 
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: 167, height: 132)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         0
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         10
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         UIEdgeInsets(top: 24, left: 16, bottom: 0, right: 16)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
         let indexPath = IndexPath(row: 0, section: section)
         
         let headerView = self.collectionView(collectionView,
@@ -216,40 +146,31 @@ extension TrackersViewController: UICollectionViewDataSource {
         return amountOfElement ?? 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         guard let trackerDictionary = presenter?.visibleCategories?[section] else { return 0 }
             
         return trackerDictionary.trackerDictionary.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = trackersView.trackersCollection.dequeueReusableCell(
-            withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell,
-              let currentCategory = presenter?.visibleCategories?[indexPath.section],
-              let id = presenter?.categories?[indexPath.section].trackerDictionary[indexPath.row].id else { return UICollectionViewCell() }
+            withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell else { return UICollectionViewCell() }
         
         cell.delegate = self
         
-        let currentTracker = currentCategory.trackerDictionary[indexPath.row]
-        let cellButtonString = setCellButtonIfTrackerWasCompletedToday(id)
+        let section = indexPath.section
+        let row = indexPath.row
         
-        cell.cellView.backgroundColor = currentTracker.color
-        cell.trackerLabel.text = currentTracker.name
-        cell.emojiLabel.text = currentTracker.emoji
-        cell.completeTrackerDayButton.backgroundColor = currentTracker.color
-        cell.numberOfDaysLabel.text = updateCellDayLabel(indexPath.section, row: indexPath.row)
-        cell.completeTrackerDayButton.setTitle(cellButtonString, for: .normal)
-        
-        if cellButtonString == "+" {
-            cell.completeTrackerDayButton.alpha = 1
-        } else {
-            cell.completeTrackerDayButton.alpha = 0.5
-        }
+        presenter?.setupParticularCell(cell: cell, section, row)
         
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
         var id: String
         switch kind {
         case UICollectionView.elementKindSectionHeader:
@@ -264,6 +185,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
         
         view.headerLabel.text = presenter?.visibleCategories?[indexPath.section].name
+        
         return view
     }
 }
@@ -271,36 +193,33 @@ extension TrackersViewController: UICollectionViewDataSource {
 extension TrackersViewController: TrackersViewControllerDelegate {
     func addCurrentTrackerToCompletedThisDate(_ cell: TrackerCell, isAddDay: Bool) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell),
-              let category = presenter?.visibleCategories,
               let date = presenter?.currentDate else { return }
         
         let section = indexPath.section
         let row = indexPath.row
         
-        var newTrackerRecordArray: [TrackerRecord] = []
+        presenter?.updateCompletedTrackersArray(isAddDay: isAddDay,
+                                                date: date,
+                                                section, row)
         
-        presenter?.completedTrackers?.forEach({ trackerRecord in
-            newTrackerRecordArray.append(trackerRecord)
-        })
-        
-        if isAddDay {
-            newTrackerRecordArray.append(TrackerRecord(
-                id: category[section].trackerDictionary[row].id,
-                date: date))
-        } else {
-            for trackerRecord in newTrackerRecordArray {
-                if trackerRecord.date == presenter?.currentDate {
-                newTrackerRecordArray.remove(at: row)
-                }
-            }
-        }
-        
-        presenter?.completedTrackers = newTrackerRecordArray
-        cell.numberOfDaysLabel.text = updateCellDayLabel(section, row: row)
+        cell.numberOfDaysLabel.text = presenter?.updateCellDayLabel(section, row: row)
     }
 }
 
-//MARK: Setting Views
+// MARK: Main settings of CollectionView
+extension TrackersViewController {
+    private func setMainCollectionSettings() {
+        trackersView.trackersCollection.register(TrackerCell.self, forCellWithReuseIdentifier: "Cell")
+        trackersView.trackersCollection.register(SupplementaryView.self,
+                                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                                 withReuseIdentifier: "Header")
+        
+        trackersView.trackersCollection.dataSource = self
+        trackersView.trackersCollection.delegate = self
+    }
+}
+
+// MARK: Setting Views
 extension TrackersViewController {
     private func setViews() {
         view.backgroundColor = .white
@@ -316,7 +235,7 @@ extension TrackersViewController {
     }
 }
 
-//MARK: Setting Navigation Bar
+// MARK: Setting Navigation Bar
 extension TrackersViewController {
     private func setNavBar() {
         guard let navigationBar = navigationController?.navigationBar else { return }
@@ -369,5 +288,4 @@ extension TrackersViewController {
             make.bottom.equalToSuperview()
         }
     }
-    
 }

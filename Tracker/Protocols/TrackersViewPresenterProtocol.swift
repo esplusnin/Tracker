@@ -13,5 +13,11 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     var completedTrackers: [TrackerRecord]? { get set }
     var emojiArray: [String] { get }
     var currentDate: Date? { get set }
+    func setupParticularCell(cell: TrackerCell,_ section: Int,_ row: Int)
+    func updateCompletedTrackersArray(isAddDay: Bool, date: Date,_ section: Int,_ row: Int)
+    func setCellButtonIfTrackerWasCompletedToday(_ id: UUID) -> String
+    func countAmountOfCompleteDays(id: UUID) -> Int
+    func updateNumberOfCompletedDaysLabel(_ number: Int) -> String
+    func updateCellDayLabel(_ section: Int, row: Int) -> String
     func showNewTrackersAfterChanges()
 }
