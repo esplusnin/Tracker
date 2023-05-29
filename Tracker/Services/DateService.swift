@@ -16,7 +16,15 @@ final class DateService {
     
     let calendar = Calendar.current
     
-    func getCurrentWeekDayFromDate(_ date: Date?) -> String {
+    func getNumberOfCurrentDate(_ date: Date?) -> Int {
+        guard let date = date else { return 8 }
+        
+        let weekDayNumber = calendar.component(.weekday, from: date)
+        
+        return weekDayNumber
+    }
+    
+    func getCurrentWeekDayStringFromDate(_ date: Date?) -> String {
         guard let date = date else { return "" }
         let weekDay = calendar.component(.weekday, from: date)
         

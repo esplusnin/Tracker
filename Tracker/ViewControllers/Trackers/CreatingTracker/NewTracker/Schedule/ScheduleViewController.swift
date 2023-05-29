@@ -26,13 +26,12 @@ final class ScheduleViewController: UIViewController {
     }
     
     @objc func setCurrentScheduleForTracker() {
-        let string = scheduleService.getScheduleString(schedule)
+        let string = schedule.count == 7 ? "Каждый день" : scheduleService.getScheduleString(schedule)
         
-        newTrackerController?.selectedSchedule = string
+        newTrackerController?.selectedScheduleString = string
+        newTrackerController?.trackerSchedule = schedule
         newTrackerController?.reloadTableView()
-        
-        print("string \(string)")
-        
+                
         dismiss(animated: true)
     }
     
@@ -112,8 +111,5 @@ extension ScheduleViewController: ScheduleViewControllerDelegate {
             guard let index = schedule.firstIndex(of: numberOfDay) else { return }
             schedule.remove(at: index)
         }
-        
-        print(schedule)
-
     }
 }

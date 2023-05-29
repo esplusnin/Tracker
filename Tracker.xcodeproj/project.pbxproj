@@ -10,6 +10,7 @@
 		7E1E541C2A1F79B5006FD792 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1E541B2A1F79B5006FD792 /* CategoryCell.swift */; };
 		7E1E541E2A1F900A006FD792 /* CategoryViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1E541D2A1F900A006FD792 /* CategoryViewControllerProtocol.swift */; };
 		7E1E54202A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1E541F2A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift */; };
+		7EC7CD272A24BC600022541E /* TrackersViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC7CD262A24BC600022541E /* TrackersViewControllerDelegate.swift */; };
 		7ECDD91D2A1B396200771EE4 /* StatisticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD91C2A1B396200771EE4 /* StatisticView.swift */; };
 		7ECDD91F2A1B40B800771EE4 /* TrackersViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD91E2A1B40B800771EE4 /* TrackersViewPresenter.swift */; };
 		7ECDD9212A1B41AB00771EE4 /* TrackersViewPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECDD9202A1B41AB00771EE4 /* TrackersViewPresenterProtocol.swift */; };
@@ -57,6 +58,7 @@
 		7E1E541B2A1F79B5006FD792 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		7E1E541D2A1F900A006FD792 /* CategoryViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewControllerProtocol.swift; sourceTree = "<group>"; };
 		7E1E541F2A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewControllerProtocol.swift; sourceTree = "<group>"; };
+		7EC7CD262A24BC600022541E /* TrackersViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewControllerDelegate.swift; sourceTree = "<group>"; };
 		7ECDD91C2A1B396200771EE4 /* StatisticView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticView.swift; sourceTree = "<group>"; };
 		7ECDD91E2A1B40B800771EE4 /* TrackersViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewPresenter.swift; sourceTree = "<group>"; };
 		7ECDD9202A1B41AB00771EE4 /* TrackersViewPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewPresenterProtocol.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				7E1E541D2A1F900A006FD792 /* CategoryViewControllerProtocol.swift */,
 				7EDABC542A209F8100F39D8E /* CreatingTrackerViewControllerProtocol.swift */,
 				7EDABC5A2A20F56600F39D8E /* ScheduleViewControllerDelegate.swift */,
+				7EC7CD262A24BC600022541E /* TrackersViewControllerDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -396,6 +399,7 @@
 				7ED3D3FB2A1A0E21004C371B /* StatisticViewController.swift in Sources */,
 				7ECDD94A2A1CB45000771EE4 /* TrackerRecord.swift in Sources */,
 				7EF6209E2A1629B900B66A4B /* AppDelegate.swift in Sources */,
+				7EC7CD272A24BC600022541E /* TrackersViewControllerDelegate.swift in Sources */,
 				7EF620A02A1629B900B66A4B /* SceneDelegate.swift in Sources */,
 				7E1E541C2A1F79B5006FD792 /* CategoryCell.swift in Sources */,
 				7ECDD9502A1CBB2900771EE4 /* ScheduleViewPresenter.swift in Sources */,

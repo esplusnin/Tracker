@@ -9,6 +9,9 @@ import UIKit
 import SnapKit
 
 final class TrackerCell: UICollectionViewCell {
+    
+    weak var delegate: TrackersViewControllerDelegate?
+    
     lazy var cellView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 16
@@ -45,8 +48,8 @@ final class TrackerCell: UICollectionViewCell {
     lazy var numberOfDaysLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
-        label.textColor = UIColor.blackDay
-        label.text = "2 дней"
+        label.textColor = .blackDay
+        label.text = "0 дней"
         
         return label
     }()
@@ -54,20 +57,11 @@ final class TrackerCell: UICollectionViewCell {
     lazy var completeTrackerDayButton: UIButton = {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 17
-        button.setTitle("+", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         button.setTitleColor(.white, for: .normal)
         
         return button
     }()
-    
-    var colorSectionArray = [
-        UIColor.colorSelection1, UIColor.colorSelection2,UIColor.colorSelection3, UIColor.colorSelection4,
-        UIColor.colorSelection5, UIColor.colorSelection6, UIColor.colorSelection7, UIColor.colorSelection8,
-        UIColor.colorSelection9, UIColor.colorSelection10, UIColor.colorSelection11, UIColor.colorSelection12,
-        UIColor.colorSelection13, UIColor.colorSelection14, UIColor.colorSelection15, UIColor.colorSelection16,
-        UIColor.colorSelection17, UIColor.colorSelection18,
-    ]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -87,9 +81,11 @@ final class TrackerCell: UICollectionViewCell {
     
     @objc private func completeTrackerToday() {
         if completeTrackerDayButton.titleLabel?.text == "+" {
+            delegate?.addCurrentTrackerToCompletedThisDate(self, isAddDay: true)
             completeTrackerDayButton.setTitle("✓", for: .normal)
             completeTrackerDayButton.alpha = 0.5
         } else {
+            delegate?.addCurrentTrackerToCompletedThisDate(self, isAddDay: false)
             completeTrackerDayButton.setTitle("+", for: .normal)
             completeTrackerDayButton.alpha = 1
         }

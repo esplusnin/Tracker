@@ -15,9 +15,81 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setDateFromDatePicker()
+        
         setViews()
         setMainCollectionSettings()
         trackersView.searchTextField.delegate = self
+    }
+    
+    func setCellButtonIfTrackerWasCompletedToday(_ id: UUID) -> String {
+        var string = "+"
+        presenter?.completedTrackers?.forEach({ trackers in
+            if trackers.id == id && presenter?.currentDate == trackers.date {
+                string = "✓"
+            }
+        })
+        
+        return string
+    }
+                                              
+                                              
+    
+    private func updateCellDayLabel(_ section: Int, row: Int) -> String {
+        guard let category = presenter?.categories else { return "" }
+        
+        let id = category[section].trackerDictionary[row].id
+        let string = updateNumberOfCompletedDaysLabel(countAmountOfCompleteDays(id: id))
+        
+        return string
+    }
+    
+    private func countAmountOfCompleteDays(id: UUID) -> Int {
+        var counter = 0
+        
+        presenter?.completedTrackers?.forEach({ trackerRecord in
+            if trackerRecord.id == id {
+                counter += 1
+            }
+        })
+        print(counter)
+        return counter
+    }
+    
+    private func updateNumberOfCompletedDaysLabel(_ number: Int) -> String {
+        var string = "\(number) "
+        var array = [number]
+        
+        switch number {
+        case 0:
+            string += "Дней"
+        case 1:
+            string += "День"
+        case 2:
+            string += "Дня"
+        case 3, 4:
+            string += "Дня"
+        case 5...20:
+            string += "Дней"
+        case 20...:
+            switch array.removeLast() {
+            case 1:
+                string += "День"
+            case 2:
+                string += "Дня"
+            case 3, 4:
+                string += "Дня"
+            case 5...9:
+                string += "Дней"
+            default:
+                string += "Дней"
+            }
+            
+        default:
+           string = ""
+        }
+        
+        return string
     }
     
     @objc private func addCanceletionButton() {
@@ -42,6 +114,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     @objc private func setSearchFieldWithoutCancelationButton() {
+        trackersView.searchTextField.text = .none
         trackersView.cancelationButton.removeFromSuperview()
         trackersView.searchTextField.endEditing(true)
         trackersView.searchTextField.snp.makeConstraints { make in
@@ -55,6 +128,13 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         trackersView.trackersCollection.reloadData()
     }
     
+    func updateCollectionView() {
+        presenter?.currentDate = trackersView.navigationBarDatePicker.date
+        presenter?.showNewTrackersAfterChanges()
+        
+        trackersView.trackersCollection.reloadData()
+    }
+    
     private func setTargets() {
         trackersView.addTrackerButton.addTarget(self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
         trackersView.navigationBarDatePicker.addTarget(self, action: #selector(setDateFromDatePicker), for: .primaryActionTriggered)
@@ -63,8 +143,8 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     @objc private func setDateFromDatePicker() {
-        presenter?.currentDate = trackersView.navigationBarDatePicker.date
-
+        updateCollectionView()
+        
         self.dismiss(animated: true)
     }
     
@@ -131,13 +211,13 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        let amountOfElement = presenter?.categories?.count
+        let amountOfElement = presenter?.visibleCategories?.count
         trackersView.trackersCollection.alpha = amountOfElement == 0 ? 0 : 1
         return amountOfElement ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let trackerDictionary = presenter?.categories?[section] else { return 0 }
+        guard let trackerDictionary = presenter?.visibleCategories?[section] else { return 0 }
             
         return trackerDictionary.trackerDictionary.count
     }
@@ -145,14 +225,26 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = trackersView.trackersCollection.dequeueReusableCell(
             withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell,
-              let currentCategory = presenter?.categories?[indexPath.section] else { return UICollectionViewCell() }
+              let currentCategory = presenter?.visibleCategories?[indexPath.section],
+              let id = presenter?.categories?[indexPath.section].trackerDictionary[indexPath.row].id else { return UICollectionViewCell() }
+        
+        cell.delegate = self
         
         let currentTracker = currentCategory.trackerDictionary[indexPath.row]
+        let cellButtonString = setCellButtonIfTrackerWasCompletedToday(id)
         
         cell.cellView.backgroundColor = currentTracker.color
         cell.trackerLabel.text = currentTracker.name
         cell.emojiLabel.text = currentTracker.emoji
         cell.completeTrackerDayButton.backgroundColor = currentTracker.color
+        cell.numberOfDaysLabel.text = updateCellDayLabel(indexPath.section, row: indexPath.row)
+        cell.completeTrackerDayButton.setTitle(cellButtonString, for: .normal)
+        
+        if cellButtonString == "+" {
+            cell.completeTrackerDayButton.alpha = 1
+        } else {
+            cell.completeTrackerDayButton.alpha = 0.5
+        }
         
         return cell
     }
@@ -171,8 +263,40 @@ extension TrackersViewController: UICollectionViewDataSource {
             withReuseIdentifier: id,
             for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
         
-        view.headerLabel.text = presenter?.categories?[indexPath.section].name
+        view.headerLabel.text = presenter?.visibleCategories?[indexPath.section].name
         return view
+    }
+}
+
+extension TrackersViewController: TrackersViewControllerDelegate {
+    func addCurrentTrackerToCompletedThisDate(_ cell: TrackerCell, isAddDay: Bool) {
+        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell),
+              let category = presenter?.visibleCategories,
+              let date = presenter?.currentDate else { return }
+        
+        let section = indexPath.section
+        let row = indexPath.row
+        
+        var newTrackerRecordArray: [TrackerRecord] = []
+        
+        presenter?.completedTrackers?.forEach({ trackerRecord in
+            newTrackerRecordArray.append(trackerRecord)
+        })
+        
+        if isAddDay {
+            newTrackerRecordArray.append(TrackerRecord(
+                id: category[section].trackerDictionary[row].id,
+                date: date))
+        } else {
+            for trackerRecord in newTrackerRecordArray {
+                if trackerRecord.date == presenter?.currentDate {
+                newTrackerRecordArray.remove(at: row)
+                }
+            }
+        }
+        
+        presenter?.completedTrackers = newTrackerRecordArray
+        cell.numberOfDaysLabel.text = updateCellDayLabel(section, row: row)
     }
 }
 
@@ -240,7 +364,7 @@ extension TrackersViewController {
         setSearchFieldWithoutCancelationButton()
         
         trackersView.trackersCollection.snp.makeConstraints { make in
-            make.top.equalTo(trackersView.searchTextField.snp.bottom)
+            make.top.equalTo(trackersView.searchTextField.snp.bottom).inset(-14)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }

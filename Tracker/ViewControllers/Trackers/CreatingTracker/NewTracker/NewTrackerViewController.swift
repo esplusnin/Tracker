@@ -15,14 +15,14 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
     var kindOfTracker: KindOfTrackers?
     
-    var selectedCategory: String?
-    var selectedSchedule: String?
+    var selectedCategoryString: String?
+    var selectedScheduleString: String?
     
     // Preparing for create new tracker:
     var trackerName: String?
     var trackerColor: UIColor?
     var trackerEmoji: String?
-    var trackerSchedule: Date?
+    var trackerSchedule: [Int]?
     
     var colorSectionArray: [UIColor] = [
         .colorSelection1, .colorSelection2, .colorSelection3, .colorSelection4,
@@ -64,7 +64,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         var newCategoryArray: [TrackerCategory] = []
         
         categoryArray.forEach { category in
-            if selectedCategory == category.name {
+            if selectedCategoryString == category.name {
                 var newTrackersArray = category.trackerDictionary
                 newTrackersArray.append(tracker)
                 newCategoryArray.append(TrackerCategory(name: category.name, trackerDictionary: newTrackersArray))
@@ -140,13 +140,24 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         guard let countOfTextFieldLetter = countOfTextFieldLetter else { return }
         if countOfTextFieldLetter >= 38 {
             view.addSubview(newTracker.warningTextFieldLimitationLabel)
+            lockCreateButton()
             
             newTracker.warningTextFieldLimitationLabel.snp.makeConstraints { make in
                 make.top.equalTo(newTracker.textField.snp.bottom).inset(-8)
                 make.centerX.equalToSuperview()
             }
+            
+            newTracker.tableView.snp.makeConstraints { make in
+                make.top.equalTo(newTracker.textField.snp.bottom).inset(-66)
+            }
+            
         } else {
             newTracker.warningTextFieldLimitationLabel.removeFromSuperview()
+            unlockCreateButton()
+            
+            newTracker.tableView.snp.makeConstraints { make in
+                make.top.equalTo(newTracker.textField.snp.bottom).inset(-24)
+            }
         }
     }
     
@@ -166,7 +177,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
             }
             
             make.height.equalTo(149)
-            make.top.equalTo(newTracker.textField.snp.bottom).inset(-24)
+            make.top.greaterThanOrEqualTo(newTracker.textField.snp.bottom).inset(-24)
             make.leading.trailing.equalToSuperview().inset(16)
         }
     }
@@ -209,14 +220,14 @@ extension NewTrackerViewController: UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            if let name = selectedCategory {
+            if let name = selectedCategoryString {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(name)
             } else {
                 cell.setViewsWithoutCategory()
             }
         case 1:
-            if let schedule = selectedSchedule {
+            if let schedule = selectedScheduleString {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(schedule)
             } else {

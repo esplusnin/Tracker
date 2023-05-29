@@ -36,5 +36,5 @@ extension UIColor {
     static let colorSelection15 = UIColor(named: "ColorSelection15") ?? UIColor.clear
     static let colorSelection16 = UIColor(named: "ColorSelection16") ?? UIColor.clear
     static let colorSelection17 = UIColor(named: "ColorSelection17") ?? UIColor.clear
-    static let colorSelection18 = UIColor(named: "ColorSelection186") ?? UIColor.clear
+    static let colorSelection18 = UIColor(named: "ColorSelection18") ?? UIColor.clear
 }

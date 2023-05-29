@@ -8,7 +8,8 @@
 import Foundation
 
 protocol NewTrackerViewControllerProtocol: AnyObject {
-    var selectedCategory: String? { get set }
-    var selectedSchedule: String? { get set }
+    var selectedCategoryString: String? { get set }
+    var selectedScheduleString: String? { get set }
+    var trackerSchedule: [Int]? { get set }
     func reloadTableView()
 }

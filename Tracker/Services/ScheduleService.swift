@@ -7,26 +7,7 @@
 
 import Foundation
 
-enum WeekDays: String {
-    case monday = "Понедельник"
-    case tuesday = "Вторник"
-    case wednesday = "Среда"
-    case thoursday  = "Четверг"
-    case friday = "Пятница"
-    case saturday = "Суббота"
-    case sunday = "Воскресенье"
-}
-
 final class ScheduleService {
-    var schedule: [String: Bool] = [
-        "Понедельник": false,
-        "Вторник": false,
-        "Среда": false,
-        "Четверг": false,
-        "Пятница": false,
-        "Суббота": false,
-        "Воскресенье": false,
-    ]
     
     func getScheduleString(_ schedule: [Int]) -> String {
         let scheduleArray = Array(Set(schedule)).sorted()
