@@ -23,13 +23,13 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
               let trackerName = view?.trackerName,
               let trackerColor = view?.trackerColor,
               let trackerEmoji = view?.trackerEmoji else { return [] }
-
+        
         let tracker = Tracker(id: UUID(),
                               name: trackerName,
                               color: trackerColor,
                               emoji: trackerEmoji,
                               schedule: view?.trackerSchedule ?? nil)
-
+        
         var newCategoryArray: [TrackerCategory] = []
         
         categoryArray.forEach { category in
@@ -51,38 +51,5 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         view?.trackerEmoji != nil &&
         view?.selectedCategoryString != nil &&
         view?.selectedScheduleString != nil ? view?.unlockCreateButton() : view?.lockCreateButton()
-    }
-    
-    func calculationSizeForItemAtCollectionView(section: Int) -> CGSize {
-        switch section {
-        case 0:
-            return CGSize(width: 32, height: 38)
-        case 1:
-            return CGSize(width: 46, height: 46)
-        default:
-            return CGSize(width: 32, height: 38)
-        }
-    }
-    
-    func calculationMinimumInteritemSpacingForSectionAt(section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 25
-        case 1:
-            return 12
-        default:
-            return 25
-        }
-    }
-    
-    func calculationMinimumLineSpacingForSectionAt(section: Int) -> CGFloat {
-        switch section {
-        case 0:
-            return 14
-        case 1:
-            return 6
-        default:
-            return 14
-        }
     }
 }

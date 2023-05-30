@@ -21,6 +21,7 @@ final class NewTrackerCollectionCell: UICollectionViewCell {
     
     lazy var emojiLabel: UILabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 32)
         
         return label
     }()
@@ -64,7 +65,7 @@ final class NewTrackerCollectionCell: UICollectionViewCell {
     private func setSecondSectionConstraints() {
         colorSectionImageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.top.leading.bottom.trailing.equalToSuperview().inset(3)
+            make.top.leading.bottom.trailing.equalToSuperview().inset(5)
         }
     }
 }

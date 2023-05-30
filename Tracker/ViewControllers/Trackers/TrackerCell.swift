@@ -40,7 +40,7 @@ final class TrackerCell: UICollectionViewCell {
     
     lazy var emojiLabel: UILabel = {
         let label = UILabel()
-        label.layer.masksToBounds = true
+        label.font = .systemFont(ofSize: 14)
         
         return label
     }()
@@ -75,6 +75,16 @@ final class TrackerCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func lockCompleteButton() {
+        completeTrackerDayButton.isEnabled = false
+        completeTrackerDayButton.setTitle("x", for: .normal)
+        completeTrackerDayButton.alpha = 0.5
+    }
+    
+    func unlockCompleteButton() {
+        completeTrackerDayButton.isEnabled = true
+    }
+    
     private func setTarget() {
         completeTrackerDayButton.addTarget(self, action: #selector(completeTrackerToday), for: .touchUpInside)
     }
@@ -90,7 +100,10 @@ final class TrackerCell: UICollectionViewCell {
             completeTrackerDayButton.alpha = 1
         }
     }
-    
+}
+
+// MARK: Setting Views:
+extension TrackerCell {
     private func setViews() {
         contentView.addSubview(cellView)
         cellView.addSubview(emojiImageView)
@@ -99,7 +112,10 @@ final class TrackerCell: UICollectionViewCell {
         contentView.addSubview(numberOfDaysLabel)
         contentView.addSubview(completeTrackerDayButton)
     }
-    
+}
+
+// MARK: Setting Layout:
+extension TrackerCell {
     private func setConstraints() {
         cellView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()

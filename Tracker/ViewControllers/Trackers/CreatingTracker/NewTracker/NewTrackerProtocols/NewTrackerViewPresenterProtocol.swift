@@ -12,7 +12,4 @@ protocol NewTrackerViewPresenterProtocol: AnyObject {
     var buttonsTitleForTableView: [String] { get }
     func createNewTracker() -> [TrackerCategory]
     func checkCreateButtonToUnclock()
-    func calculationSizeForItemAtCollectionView(section: Int) -> CGSize
-    func calculationMinimumInteritemSpacingForSectionAt(section: Int) -> CGFloat
-    func calculationMinimumLineSpacingForSectionAt(section: Int) -> CGFloat
 }

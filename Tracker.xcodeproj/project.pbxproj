@@ -115,10 +115,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7EC817532A25D7E200527BBB /* NewTrackerProtocols */ = {
+			isa = PBXGroup;
+			children = (
+				7E1E541F2A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift */,
+				7EC7CD282A24FCB10022541E /* NewTrackerViewPresenterProtocol.swift */,
+			);
+			path = NewTrackerProtocols;
+			sourceTree = "<group>";
+		};
+		7EC817542A25D80B00527BBB /* TrackersProtocols */ = {
+			isa = PBXGroup;
+			children = (
+				7ED3D40F2A1A391B004C371B /* TrackersViewControllerProtocol.swift */,
+				7ECDD9202A1B41AB00771EE4 /* TrackersViewPresenterProtocol.swift */,
+				7EC7CD262A24BC600022541E /* TrackersViewControllerDelegate.swift */,
+			);
+			path = TrackersProtocols;
+			sourceTree = "<group>";
+		};
+		7EC817552A25D85200527BBB /* CreatingTrackerProtocols */ = {
+			isa = PBXGroup;
+			children = (
+				7EDABC542A209F8100F39D8E /* CreatingTrackerViewControllerProtocol.swift */,
+			);
+			path = CreatingTrackerProtocols;
+			sourceTree = "<group>";
+		};
+		7EC817562A25D89D00527BBB /* CategoryProtocols */ = {
+			isa = PBXGroup;
+			children = (
+				7E1E541D2A1F900A006FD792 /* CategoryViewControllerProtocol.swift */,
+			);
+			path = CategoryProtocols;
+			sourceTree = "<group>";
+		};
+		7EC817572A25D8B200527BBB /* ScheduleProtocols */ = {
+			isa = PBXGroup;
+			children = (
+				7EDABC5A2A20F56600F39D8E /* ScheduleViewControllerDelegate.swift */,
+			);
+			path = ScheduleProtocols;
+			sourceTree = "<group>";
+		};
 		7ECDD92D2A1BAB3800771EE4 /* CreatingTracker */ = {
 			isa = PBXGroup;
 			children = (
 				7ECDD9342A1BB17800771EE4 /* NewTracker */,
+				7EC817552A25D85200527BBB /* CreatingTrackerProtocols */,
 				7ECDD92B2A1BAB3400771EE4 /* CreatingTrackerView.swift */,
 				7ECDD9292A1BAB0800771EE4 /* CreatingTrackerViewController.swift */,
 			);
@@ -128,6 +172,7 @@
 		7ECDD9342A1BB17800771EE4 /* NewTracker */ = {
 			isa = PBXGroup;
 			children = (
+				7EC817532A25D7E200527BBB /* NewTrackerProtocols */,
 				7ECDD93E2A1BC5F400771EE4 /* Category */,
 				7ECDD93F2A1BC60000771EE4 /* Schedule */,
 				7ECDD9322A1BB15B00771EE4 /* NewTrackerView.swift */,
@@ -144,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				7EDABC532A20930D00F39D8E /* NewCategory */,
+				7EC817562A25D89D00527BBB /* CategoryProtocols */,
 				7ECDD9512A1DEFDA00771EE4 /* CategoryView.swift */,
 				7ECDD93A2A1BC56400771EE4 /* CategoryViewController.swift */,
 				7E1E541B2A1F79B5006FD792 /* CategoryCell.swift */,
@@ -154,6 +200,7 @@
 		7ECDD93F2A1BC60000771EE4 /* Schedule */ = {
 			isa = PBXGroup;
 			children = (
+				7EC817572A25D8B200527BBB /* ScheduleProtocols */,
 				7ECDD94B2A1CB6E100771EE4 /* ScheduleView.swift */,
 				7ECDD93C2A1BC5BD00771EE4 /* ScheduleViewController.swift */,
 				7ECDD94D2A1CB9A100771EE4 /* ScheduleCell.swift */,
@@ -193,6 +240,7 @@
 			isa = PBXGroup;
 			children = (
 				7ECDD92D2A1BAB3800771EE4 /* CreatingTracker */,
+				7EC817542A25D80B00527BBB /* TrackersProtocols */,
 				7ED3D4012A1A19A0004C371B /* TrackersView.swift */,
 				7ECDD91E2A1B40B800771EE4 /* TrackersViewPresenter.swift */,
 				7EF620A12A1629B900B66A4B /* TrackersViewController.swift */,
@@ -229,21 +277,6 @@
 				7EF620AB2A1629BA00B66A4B /* Info.plist */,
 			);
 			path = SupportingFiles;
-			sourceTree = "<group>";
-		};
-		7ED3D4112A1A3933004C371B /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				7ED3D40F2A1A391B004C371B /* TrackersViewControllerProtocol.swift */,
-				7ECDD9202A1B41AB00771EE4 /* TrackersViewPresenterProtocol.swift */,
-				7E1E541F2A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift */,
-				7EC7CD282A24FCB10022541E /* NewTrackerViewPresenterProtocol.swift */,
-				7E1E541D2A1F900A006FD792 /* CategoryViewControllerProtocol.swift */,
-				7EDABC542A209F8100F39D8E /* CreatingTrackerViewControllerProtocol.swift */,
-				7EDABC5A2A20F56600F39D8E /* ScheduleViewControllerDelegate.swift */,
-				7EC7CD262A24BC600022541E /* TrackersViewControllerDelegate.swift */,
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		7ED3D4142A1A8AD4004C371B /* Services */ = {
@@ -285,7 +318,6 @@
 			children = (
 				7ECDD9462A1CB42B00771EE4 /* Models */,
 				7ED3D4142A1A8AD4004C371B /* Services */,
-				7ED3D4112A1A3933004C371B /* Protocols */,
 				7ED3D4002A1A1991004C371B /* ViewControllers */,
 				7ED3D3F72A1A0657004C371B /* Resources */,
 				7EF6209D2A1629B900B66A4B /* AppDelegate.swift */,

@@ -8,11 +8,14 @@
 import Foundation
 
 protocol TrackersViewPresenterProtocol: AnyObject {
+    var view: TrackersViewControllerProtocol? { get }
     var categories: [TrackerCategory]? { get set }
     var visibleCategories: [TrackerCategory]? { get }
     var completedTrackers: [TrackerRecord]? { get set }
     var emojiArray: [String] { get }
     var currentDate: Date? { get set }
+    func checkCurrentDateIsFuture() -> Bool
+    func searchTrackerByName(filledName: String)
     func setupParticularCell(cell: TrackerCell,_ section: Int,_ row: Int)
     func updateCompletedTrackersArray(isAddDay: Bool, date: Date,_ section: Int,_ row: Int)
     func setCellButtonIfTrackerWasCompletedToday(_ id: UUID) -> String

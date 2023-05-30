@@ -9,17 +9,16 @@ import UIKit
 import SnapKit
 
 final class NewCategoryViewController: UIViewController {
-
+    
     var trackerPresenter: TrackersViewPresenterProtocol?
     var categoryViewController: CategoryViewControllerProtocol?
     
     private let newCategory = NewCategoryView()
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         newCategory.textField.delegate = self
-       
+        
         setViews()
         setConstraints()
         setTarget()
@@ -56,7 +55,6 @@ extension NewCategoryViewController: UITextFieldDelegate {
         newCategory.completeButton.backgroundColor = textField.text?.count != 0 ? .blackDay : .gray
     }
 }
-
 
 // MARK: Setting views:
 extension NewCategoryViewController {

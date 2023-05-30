@@ -15,11 +15,12 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        trackersView.searchTextField.delegate = self
+        
         setDateFromDatePicker()
         
         setViews()
         setMainCollectionSettings()
-        trackersView.searchTextField.delegate = self
     }
     
     func reloadCollectionView() {
@@ -43,12 +44,25 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     private func setTargets() {
-        trackersView.addTrackerButton.addTarget(self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
-        trackersView.navigationBarDatePicker.addTarget(self, action: #selector(setDateFromDatePicker), for: .primaryActionTriggered)
-        trackersView.searchTextField.addTarget(self, action: #selector(addCanceletionButton), for: .editingDidBegin)
-        trackersView.cancelationButton.addTarget(self, action: #selector(setSearchFieldWithoutCancelationButton), for: .touchUpInside)
+        trackersView.addTrackerButton.addTarget(
+            self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
+        trackersView.navigationBarDatePicker.addTarget(
+            self, action: #selector(setDateFromDatePicker), for: .primaryActionTriggered)
+        trackersView.searchTextField.addTarget(
+            self, action: #selector(updateVisibleTrackersAfterSearch), for: [.editingChanged, .editingDidEnd])
+        trackersView.searchTextField.addTarget(
+            self, action: #selector(addCanceletionButton), for: .editingDidBegin)
+        trackersView.cancelationButton.addTarget(
+            self, action: #selector(setSearchFieldWithoutCancelationButton), for: .touchUpInside)
     }
- 
+    
+    @objc private func updateVisibleTrackersAfterSearch() {
+        guard let searchFieldText = trackersView.searchTextField.text else { return }
+        
+        presenter?.searchTrackerByName(filledName: searchFieldText)
+        trackersView.trackersCollection.reloadData()
+    }
+    
     @objc private func addCanceletionButton() {
         view.addSubview(trackersView.cancelationButton)
         
@@ -74,11 +88,14 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         trackersView.searchTextField.text = .none
         trackersView.cancelationButton.removeFromSuperview()
         trackersView.searchTextField.endEditing(true)
+        
         trackersView.searchTextField.snp.makeConstraints { make in
             make.height.equalTo(36)
             make.top.equalToSuperview().inset(150)
             make.leading.trailing.equalToSuperview().inset(16)
         }
+        
+        updateCollectionView()
     }
     
     @objc private func setDateFromDatePicker() {
@@ -102,13 +119,16 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 167, height: 132)
+        let availableWidht = trackersView.trackersCollection.frame.width / 2
+        let cellWidht = availableWidht - 24
+        
+        return CGSize(width: cellWidht, height: cellWidht * 0.8)
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        0
+        10
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -120,7 +140,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 24, left: 16, bottom: 0, right: 16)
+        UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 16)
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -149,21 +169,23 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         guard let trackerDictionary = presenter?.visibleCategories?[section] else { return 0 }
-            
+        
         return trackerDictionary.trackerDictionary.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = trackersView.trackersCollection.dequeueReusableCell(
-            withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell else { return UICollectionViewCell() }
+            withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell,
+              let presenter = presenter else { return UICollectionViewCell() }
         
         cell.delegate = self
         
         let section = indexPath.section
         let row = indexPath.row
         
-        presenter?.setupParticularCell(cell: cell, section, row)
+        presenter.setupParticularCell(cell: cell, section, row)
+        presenter.checkCurrentDateIsFuture() ? cell.unlockCompleteButton() : cell.lockCompleteButton()
         
         return cell
     }

@@ -21,10 +21,11 @@ final class SupplementaryView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(headerLabel)
-               
+        
         headerLabel.snp.makeConstraints { make in
-            make.top.equalTo(snp.top).inset(24)
-            make.bottom.equalTo(snp.bottom)
+            make.top.equalTo(snp.top).inset(10)
+            make.centerY.equalToSuperview()
+            make.bottom.equalTo(snp.bottom).inset(12)
             make.leading.equalTo(snp.leading).inset(28)
         }
     }

@@ -9,11 +9,18 @@ import Foundation
 
 final class TrackersViewPresenter: TrackersViewPresenterProtocol {
     
+    weak var view: TrackersViewControllerProtocol?
+    
     var categories: [TrackerCategory]? = [
         TrackerCategory(name: "Важное", trackerDictionary: [Tracker(id: UUID(),
                                                                     name: "Сделать проект как красавчик",
                                                                     color: .colorSelection1,
                                                                     emoji: "🐶",
+                                                                    schedule: [1,2,3,4,5,6,7]),
+                                                            Tracker(id: UUID(),
+                                                                    name: "Закончить Avto Layout",
+                                                                    color: .colorSelection5,
+                                                                    emoji: "🥦",
                                                                     schedule: [1,2,3,4,5,6,7])]),
         TrackerCategory(name: "Английский", trackerDictionary: [Tracker(id: UUID(),
                                                                         name: "Домашка + слова",
@@ -30,6 +37,35 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
         "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
     ]
+    
+    func checkCurrentDateIsFuture() -> Bool {
+        guard let currentDate = currentDate else { return false }
+        let date = Date()
+        
+        return date > currentDate ? true : false
+    }
+    
+    func searchTrackerByName(filledName: String) {
+        guard let visibleCategories = visibleCategories else { return }
+        
+        var newVisibleArray: [TrackerCategory] = []
+        
+        for category in visibleCategories {
+            var newCategory = TrackerCategory(name: category.name, trackerDictionary: [])
+            
+            for tracker in category.trackerDictionary {
+                if tracker.name.contains(filledName) {
+                    newCategory.trackerDictionary.append(tracker)
+                }
+            }
+            
+            if !newCategory.trackerDictionary.isEmpty {
+                newVisibleArray.append(newCategory)
+            }
+        }
+        
+        self.visibleCategories = newVisibleArray
+    }
     
     func setupParticularCell(cell: TrackerCell,_ section: Int,_ row: Int) {
         guard let currentTracker = visibleCategories?[section].trackerDictionary[row],
@@ -67,7 +103,7 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
         } else {
             for trackerRecord in newTrackerRecordArray {
                 if trackerRecord.date == currentDate {
-                newTrackerRecordArray.remove(at: row)
+                    newTrackerRecordArray.remove(at: row)
                 }
             }
         }
@@ -94,7 +130,7 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
                 counter += 1
             }
         })
-        print(counter)
+        
         return counter
     }
     
@@ -128,7 +164,7 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
             }
             
         default:
-           string = ""
+            string = ""
         }
         
         return string

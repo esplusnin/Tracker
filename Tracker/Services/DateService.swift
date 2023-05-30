@@ -8,11 +8,6 @@
 import UIKit
 
 final class DateService {
-    private lazy var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        
-        return dateFormatter
-    }()
     
     let calendar = Calendar.current
     

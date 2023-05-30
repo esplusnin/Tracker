@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class CreatingTrackerViewController: UIViewController, CreatingTrackerViewControllerProtocol {
-
+    
     var trackerPresenter: TrackersViewPresenterProtocol?
     var trackerViewController: TrackersViewControllerProtocol?
     
@@ -62,7 +62,7 @@ extension CreatingTrackerViewController {
         view.addSubview(creatingTrackerView.unregularEventCreateButton)
     }
 }
- 
+
 // MARK: Setting Layout
 extension CreatingTrackerViewController {
     private func setConstraints() {

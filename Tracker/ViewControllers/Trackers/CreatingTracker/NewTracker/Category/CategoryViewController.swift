@@ -13,10 +13,9 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     var newTrackerViewController: NewTrackerViewControllerProtocol?
     
     private let categoryView = CategoryView()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-     
         categoryView.tableView.delegate = self
         categoryView.tableView.dataSource = self
         
@@ -80,6 +79,9 @@ extension CategoryViewController: UITableViewDataSource {
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
             cell.separatorInset = UIEdgeInsets(top: 0, left: 400, bottom: 0, right: 0)
+        } else {
+            cell.layer.cornerRadius = 0
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         }
         
         return cell
@@ -125,7 +127,6 @@ extension CategoryViewController {
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalTo(categoryView.createCategoryButton).inset(-30)
         }
-        
         
         categoryView.createCategoryButton.snp.makeConstraints { make in
             make.height.equalTo(60)

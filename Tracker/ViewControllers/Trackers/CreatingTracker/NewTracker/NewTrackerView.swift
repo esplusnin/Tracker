@@ -41,11 +41,12 @@ final class NewTrackerView {
         let tableView = UITableView()
         tableView.layer.cornerRadius = 17
         tableView.separatorStyle = .singleLine
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         
         return tableView
     }()
     
-    lazy var colorCollectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.allowsMultipleSelection = true
         collectionView.isScrollEnabled = false
