@@ -50,19 +50,15 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
             view?.trackerColor != nil &&
             view?.trackerEmoji != nil &&
             view?.selectedCategoryString != nil {
-            print("зашли")
             switch view?.kindOfTracker {
             case .unregularEvent:
-                print("case unregular")
                 view?.unlockCreateButton()
             case .habit:
                 view?.selectedScheduleString != nil ? view?.unlockCreateButton() : view?.lockCreateButton()
             default:
-                print("case default")
                 view?.lockCreateButton()
             }
         } else {
-            print("case else ")
             view?.lockCreateButton()
         }
     }
