@@ -28,7 +28,7 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
                               name: trackerName,
                               color: trackerColor,
                               emoji: trackerEmoji,
-                              schedule: view?.trackerSchedule ?? nil)
+                              schedule: view?.trackerSchedule ?? [1,2,3,4,5,6,7])
         
         var newCategoryArray: [TrackerCategory] = []
         
@@ -46,10 +46,24 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     }
     
     func checkCreateButtonToUnclock() {
-        view?.trackerName != nil &&
-        view?.trackerColor != nil &&
-        view?.trackerEmoji != nil &&
-        view?.selectedCategoryString != nil &&
-        view?.selectedScheduleString != nil ? view?.unlockCreateButton() : view?.lockCreateButton()
+        if view?.trackerName != nil &&
+            view?.trackerColor != nil &&
+            view?.trackerEmoji != nil &&
+            view?.selectedCategoryString != nil {
+            print("зашли")
+            switch view?.kindOfTracker {
+            case .unregularEvent:
+                print("case unregular")
+                view?.unlockCreateButton()
+            case .habit:
+                view?.selectedScheduleString != nil ? view?.unlockCreateButton() : view?.lockCreateButton()
+            default:
+                print("case default")
+                view?.lockCreateButton()
+            }
+        } else {
+            print("case else ")
+            view?.lockCreateButton()
+        }
     }
 }

@@ -52,6 +52,7 @@ extension CategoryViewController: UITableViewDelegate {
         cell.selectionStyle = .none
         newTrackerViewController?.selectedCategoryString = cell.label.text
         newTrackerViewController?.reloadTableView()
+        newTrackerViewController?.presenter?.checkCreateButtonToUnclock()
         
         self.dismiss(animated: true)
     }

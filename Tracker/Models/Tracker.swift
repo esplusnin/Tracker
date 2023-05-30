@@ -12,6 +12,5 @@ struct Tracker {
     let name: String
     let color: UIColor
     let emoji: String
-    // TODO: select format of schedule  
     let schedule: [Int]?
 }
