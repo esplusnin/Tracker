@@ -16,6 +16,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkToSetupDumb()
         categoryView.tableView.delegate = self
         categoryView.tableView.dataSource = self
         
@@ -27,6 +28,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     }
     
     func reloadTableView() {
+        checkToSetupDumb()
         categoryView.tableView.reloadData()
     }
     
@@ -41,6 +43,10 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         categoryView.createCategoryButton.addTarget(self,
                                                     action: #selector(switchToNewCategoryVC),
                                                     for: .touchUpInside)
+    }
+    
+    private func checkToSetupDumb() {
+        categoryView.tableView.alpha = storage.categories?.count == 0 ? 0 : 1
     }
 }
 
