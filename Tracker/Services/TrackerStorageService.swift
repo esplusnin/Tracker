@@ -22,23 +22,23 @@ final class TrackerStorageService {
     var trackerSchedule: [Int]?
     
     var categories: [TrackerCategory]? = [
-        TrackerCategory(name: "Важное", trackerDictionary: [
-            Tracker(id: UUID(),
-                    name: "Сделать проект как красавчик",
-                    color: .colorSelection1,
-                    emoji: "🐶",
-                    schedule: [1,2,3,4,5,6,7]),
-            Tracker(id: UUID(),
-                    name: "Приготовить обед",
-                    color: .colorSelection5,
-                    emoji: "🥦",
-                    schedule: [1,2,3,4,5,6,7])]),
-        TrackerCategory(name: "Английский", trackerDictionary: [
-            Tracker(id: UUID(),
-                    name: "Домашка + слова",
-                    color: .colorSelection10,
-                    emoji: "🏝",
-                    schedule: [1,2,3,4,5,6,7])])
+//        TrackerCategory(name: "Важное", trackerDictionary: [
+//            Tracker(id: UUID(),
+//                    name: "Сделать проект как красавчик",
+//                    color: .colorSelection1,
+//                    emoji: "🐶",
+//                    schedule: [1,2,3,4,5,6,7]),
+//            Tracker(id: UUID(),
+//                    name: "Приготовить обед",
+//                    color: .colorSelection5,
+//                    emoji: "🥦",
+//                    schedule: [1,2,3,4,5,6,7])]),
+//        TrackerCategory(name: "Английский", trackerDictionary: [
+//            Tracker(id: UUID(),
+//                    name: "Домашка + слова",
+//                    color: .colorSelection10,
+//                    emoji: "🏝",
+//                    schedule: [1,2,3,4,5,6,7])])
     ]
     
     var visibleCategories: [TrackerCategory]?

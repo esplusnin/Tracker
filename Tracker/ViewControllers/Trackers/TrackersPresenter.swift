@@ -172,7 +172,9 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
                     newCategory.trackerDictionary.append(tracker)
                 }
             }
-            newArray.append(newCategory)
+            if !newCategory.trackerDictionary.isEmpty {
+                newArray.append(newCategory)
+            }
         }
         
         return newArray
