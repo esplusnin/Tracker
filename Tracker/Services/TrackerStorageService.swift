@@ -29,7 +29,7 @@ final class TrackerStorageService {
                     emoji: "🐶",
                     schedule: [1,2,3,4,5,6,7]),
             Tracker(id: UUID(),
-                    name: "Закончить Avto Layout",
+                    name: "Приготовить обед",
                     color: .colorSelection5,
                     emoji: "🥦",
                     schedule: [1,2,3,4,5,6,7])]),

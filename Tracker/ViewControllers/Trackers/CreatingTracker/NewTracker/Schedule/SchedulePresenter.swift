@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+final class SchedulePresenter: SchedulePresenterProtocol {
+    
+    var schedule: [Int] = []
+    var daysArray = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+}

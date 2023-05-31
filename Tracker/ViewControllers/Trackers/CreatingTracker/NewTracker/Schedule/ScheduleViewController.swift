@@ -10,17 +10,19 @@ import SnapKit
 
 
 final class ScheduleViewController: UIViewController {
+
+    var newTrackerViewController: NewTrackerViewControllerProtocol?
+    var presenter: SchedulePresenterProtocol?
+    
+    var scheduleService = ScheduleService()
     
     private let scheduleView = ScheduleView()
     private let storage = TrackerStorageService.shared
-    var newTrackerViewController: NewTrackerViewControllerProtocol?
-    var scheduleService = ScheduleService()
-    var schedule: [Int] = []
-    
-    var daysArray = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter = SchedulePresenter()
+        
         setViews()
         setConstraints()
         settingTableView()
@@ -28,6 +30,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     @objc func setCurrentScheduleForTracker() {
+        let schedule = presenter?.schedule ?? []
         let string = schedule.count == 7 ? "Каждый день" : scheduleService.getScheduleString(schedule)
         
         storage.selectedScheduleString = string
@@ -44,7 +47,7 @@ final class ScheduleViewController: UIViewController {
 
 extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        daysArray.count
+        presenter?.daysArray.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -52,7 +55,7 @@ extension ScheduleViewController: UITableViewDataSource {
             withIdentifier: "ScheduleCell", for: indexPath) as? ScheduleCell else { return UITableViewCell() }
         
         cell.delegate = self
-        cell.label.text = daysArray[indexPath.row]
+        cell.label.text = presenter?.daysArray[indexPath.row]
         
         return cell
     }
@@ -73,10 +76,10 @@ extension ScheduleViewController: ScheduleViewControllerDelegate {
         let numberOfDay = scheduleService.addWeekDayToSchedule(dayName: dayName)
         
         if cell.switcher.isOn {
-            schedule.append(numberOfDay)
+            presenter?.schedule.append(numberOfDay)
         } else {
-            guard let index = schedule.firstIndex(of: numberOfDay) else { return }
-            schedule.remove(at: index)
+            guard let index = presenter?.schedule.firstIndex(of: numberOfDay) else { return }
+            presenter?.schedule.remove(at: index)
         }
     }
 }
