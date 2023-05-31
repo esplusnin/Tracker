@@ -32,6 +32,8 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     func updateCollectionView() {
         guard let oldCategories = trackerStorage.categories else { return }
         
+        trackersView.searchTextField.endEditing(true)
+        trackersView.searchTextField.text = .none
         presenter?.currentDate = trackersView.navigationBarDatePicker.date
         
         let newCategories = presenter?.showNewTrackersAfterChanges(oldCategories) ?? []
