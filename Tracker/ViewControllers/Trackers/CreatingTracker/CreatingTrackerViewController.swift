@@ -36,7 +36,6 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
         let viewController = NewTrackerViewController()
         viewController.kindOfTracker = .habit
         
-        viewController.trackerPresenter = trackerPresenter
         viewController.creatingTrackerViewController = self
         
         present(viewController, animated: true)
@@ -47,7 +46,6 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
         viewController.kindOfTracker = .unregularEvent
         
         viewController.creatingTrackerViewController = self
-        viewController.trackerPresenter = trackerPresenter
         
         present(viewController, animated: true)
     }

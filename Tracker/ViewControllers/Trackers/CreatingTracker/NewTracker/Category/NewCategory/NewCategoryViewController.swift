@@ -10,10 +10,11 @@ import SnapKit
 
 final class NewCategoryViewController: UIViewController {
     
-    var trackerPresenter: TrackersViewPresenterProtocol?
+//    var trackerPresenter: TrackersViewPresenterProtocol?
     var categoryViewController: CategoryViewControllerProtocol?
     
     private let newCategory = NewCategoryView()
+    private let storage = TrackerStorageService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +35,7 @@ final class NewCategoryViewController: UIViewController {
     
     @objc private func createNewCategory() {
         guard let name = newCategory.textField.text else { return }
-        trackerPresenter?.categories?.append(TrackerCategory(name: name,
+        storage.categories?.append(TrackerCategory(name: name,
                                                              trackerDictionary: []))
         
         dismiss(animated: true)

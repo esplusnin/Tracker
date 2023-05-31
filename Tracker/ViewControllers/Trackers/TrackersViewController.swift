@@ -11,6 +11,8 @@ import SnapKit
 class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     var presenter: TrackersViewPresenterProtocol?
+    let trackerStorage = TrackerStorageService.shared
+    
     private let trackersView = TrackersView()
     
     override func viewDidLoad() {
@@ -28,9 +30,13 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     func updateCollectionView() {
-        presenter?.currentDate = trackersView.navigationBarDatePicker.date
-        presenter?.showNewTrackersAfterChanges()
+        guard let oldCategories = trackerStorage.categories else { return }
         
+        presenter?.currentDate = trackersView.navigationBarDatePicker.date
+        
+        let newCategories = presenter?.showNewTrackersAfterChanges(oldCategories) ?? []
+        
+        trackerStorage.visibleCategories = newCategories
         trackersView.trackersCollection.reloadData()
     }
     
@@ -57,9 +63,12 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     @objc private func updateVisibleTrackersAfterSearch() {
-        guard let searchFieldText = trackersView.searchTextField.text else { return }
+        guard let searchFieldText = trackersView.searchTextField.text,
+              let categories = trackerStorage.visibleCategories else { return }
         
-        presenter?.searchTrackerByName(filledName: searchFieldText)
+        let newCategories = presenter?.searchTrackerByName(categories: categories, filledName: searchFieldText)
+        
+        trackerStorage.visibleCategories = newCategories
         trackersView.trackersCollection.reloadData()
     }
     
@@ -161,16 +170,18 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        let amountOfElement = presenter?.visibleCategories?.count
+        guard let amountOfElement = trackerStorage.visibleCategories?.count else { return 0 }
+        
         trackersView.trackersCollection.alpha = amountOfElement == 0 ? 0 : 1
-        return amountOfElement ?? 0
+        
+        return amountOfElement
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        guard let trackerDictionary = presenter?.visibleCategories?[section] else { return 0 }
-        
-        return trackerDictionary.trackerDictionary.count
+        guard let categories = trackerStorage.visibleCategories?[section] else { return 0 }
+       
+        return categories.trackerDictionary.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -184,7 +195,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         let section = indexPath.section
         let row = indexPath.row
         
-        presenter.setupParticularCell(cell: cell, section, row)
+        presenter.setupParticularCell(storage: trackerStorage, cell: cell, section, row)
         presenter.checkCurrentDateIsFuture() ? cell.unlockCompleteButton() : cell.lockCompleteButton()
         
         return cell
@@ -206,7 +217,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             withReuseIdentifier: id,
             for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
         
-        view.headerLabel.text = presenter?.visibleCategories?[indexPath.section].name
+        view.headerLabel.text = trackerStorage.visibleCategories?[indexPath.section].name
         
         return view
     }
@@ -220,11 +231,14 @@ extension TrackersViewController: TrackersViewControllerDelegate {
         let section = indexPath.section
         let row = indexPath.row
         
-        presenter?.updateCompletedTrackersArray(isAddDay: isAddDay,
-                                                date: date,
-                                                section, row)
+        let newCompletedTrackers = presenter?.updateCompletedTrackersArray(storage: trackerStorage,
+                                                                           isAddDay: isAddDay,
+                                                                           date: date,
+                                                                           section,
+                                                                           row)
         
-        cell.numberOfDaysLabel.text = presenter?.updateCellDayLabel(section, row: row)
+        trackerStorage.completedTrackers = newCompletedTrackers
+        cell.numberOfDaysLabel.text = presenter?.updateCellDayLabel(trackerStorage, section, row: row)
     }
 }
 

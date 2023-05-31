@@ -19,7 +19,7 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     let buttonsTitleForTableView = ["Категория", "Расписание"]
     
     func createNewTracker() -> [TrackerCategory] {
-        guard let categoryArray = view?.trackerPresenter?.categories,
+        guard let categoryArray = view?.storage.categories,
               let trackerName = view?.trackerName,
               let trackerColor = view?.trackerColor,
               let trackerEmoji = view?.trackerEmoji else { return [] }

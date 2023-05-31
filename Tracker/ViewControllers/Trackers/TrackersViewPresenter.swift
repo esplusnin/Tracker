@@ -11,25 +11,6 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
     
     weak var view: TrackersViewControllerProtocol?
     
-    var categories: [TrackerCategory]? = [
-        TrackerCategory(name: "Важное", trackerDictionary: [Tracker(id: UUID(),
-                                                                    name: "Сделать проект как красавчик",
-                                                                    color: .colorSelection1,
-                                                                    emoji: "🐶",
-                                                                    schedule: [1,2,3,4,5,6,7]),
-                                                            Tracker(id: UUID(),
-                                                                    name: "Закончить Avto Layout",
-                                                                    color: .colorSelection5,
-                                                                    emoji: "🥦",
-                                                                    schedule: [1,2,3,4,5,6,7])]),
-        TrackerCategory(name: "Английский", trackerDictionary: [Tracker(id: UUID(),
-                                                                        name: "Домашка + слова",
-                                                                        color: .colorSelection10,
-                                                                        emoji: "🏝",
-                                                                        schedule: [1,2,3,4,5,6,7])])
-    ]
-    var visibleCategories: [TrackerCategory]?
-    var completedTrackers: [TrackerRecord]?
     var currentDate: Date?
     
     var emojiArray = [
@@ -45,12 +26,10 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
         return date > currentDate ? true : false
     }
     
-    func searchTrackerByName(filledName: String) {
-        guard let visibleCategories = visibleCategories else { return }
-        
+    func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory] {
         var newVisibleArray: [TrackerCategory] = []
         
-        for category in visibleCategories {
+        for category in categories {
             var newCategory = TrackerCategory(name: category.name, trackerDictionary: [])
             
             for tracker in category.trackerDictionary {
@@ -64,20 +43,23 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
             }
         }
         
-        self.visibleCategories = newVisibleArray
+        return newVisibleArray
     }
     
-    func setupParticularCell(cell: TrackerCell,_ section: Int,_ row: Int) {
-        guard let currentTracker = visibleCategories?[section].trackerDictionary[row],
+    func setupParticularCell(storage: TrackerStorageService, cell: TrackerCell,_ section: Int,_ row: Int) {
+        let categories = storage.categories
+        let completedTrackers = storage.completedTrackers
+        
+        guard let currentTracker = categories?[section].trackerDictionary[row],
               let id = categories?[section].trackerDictionary[row].id else { return }
         
-        let cellButtonString = setCellButtonIfTrackerWasCompletedToday(id)
+        let cellButtonString = setCellButtonIfTrackerWasCompletedToday(completedTrackers ?? [], id)
         
         cell.cellView.backgroundColor = currentTracker.color
         cell.trackerLabel.text = currentTracker.name
         cell.emojiLabel.text = currentTracker.emoji
         cell.completeTrackerDayButton.backgroundColor = currentTracker.color
-        cell.numberOfDaysLabel.text = updateCellDayLabel(section, row: row)
+        cell.numberOfDaysLabel.text = updateCellDayLabel(storage, section, row: row)
         cell.completeTrackerDayButton.setTitle(cellButtonString, for: .normal)
         
         if cellButtonString == "+" {
@@ -87,12 +69,15 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
         }
     }
     
-    func updateCompletedTrackersArray(isAddDay: Bool, date: Date,_ section: Int,_ row: Int) {
-        guard let id = visibleCategories?[section].trackerDictionary[row].id else { return }
-        
+    func updateCompletedTrackersArray(storage: TrackerStorageService,
+                                      isAddDay: Bool,
+                                      date: Date,
+                                      _ section: Int,
+                                      _ row: Int) -> [TrackerRecord] {
+        guard let id = storage.visibleCategories?[section].trackerDictionary[row].id else { return [] }
         var newTrackerRecordArray: [TrackerRecord] = []
         
-        completedTrackers?.forEach({ trackerRecord in
+        storage.completedTrackers?.forEach({ trackerRecord in
             newTrackerRecordArray.append(trackerRecord)
         })
         
@@ -101,19 +86,20 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
                 id: id,
                 date: date))
         } else {
-            for trackerRecord in newTrackerRecordArray {
-                if trackerRecord.date == currentDate {
-                    newTrackerRecordArray.remove(at: row)
+            for (index, trackerRecord) in newTrackerRecordArray.enumerated() {
+                if trackerRecord.date == currentDate &&
+                    trackerRecord.id == id {
+                    newTrackerRecordArray.remove(at: index)
                 }
             }
         }
         
-        completedTrackers = newTrackerRecordArray
+        return newTrackerRecordArray
     }
     
-    func setCellButtonIfTrackerWasCompletedToday(_ id: UUID) -> String {
+    func setCellButtonIfTrackerWasCompletedToday(_ completedTrackers: [TrackerRecord], _ id: UUID) -> String {
         var string = "+"
-        completedTrackers?.forEach({ trackers in
+        completedTrackers.forEach({ trackers in
             if trackers.id == id && currentDate == trackers.date {
                 string = "✓"
             }
@@ -122,10 +108,10 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
         return string
     }
     
-    func countAmountOfCompleteDays(id: UUID) -> Int {
+    func countAmountOfCompleteDays(_ completedTrackers: [TrackerRecord], id: UUID) -> Int {
         var counter = 0
         
-        completedTrackers?.forEach({ trackerRecord in
+        completedTrackers.forEach({ trackerRecord in
             if trackerRecord.id == id {
                 counter += 1
             }
@@ -170,27 +156,24 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
         return string
     }
     
-    func updateCellDayLabel(_ section: Int, row: Int) -> String {
-        guard let category = categories else { return "" }
-        
-        let id = category[section].trackerDictionary[row].id
-        let string = updateNumberOfCompletedDaysLabel(countAmountOfCompleteDays(id: id))
+    func updateCellDayLabel(_ storage: TrackerStorageService, _ section: Int, row: Int) -> String {
+        guard let id = storage.visibleCategories?[section].trackerDictionary[row].id else { return "" }
+        let string = updateNumberOfCompletedDaysLabel(countAmountOfCompleteDays(storage.completedTrackers ?? [], id: id))
         
         return string
     }
     
-    func showNewTrackersAfterChanges() {
-        guard let categories = categories,
-              let date = currentDate else { return }
+    func showNewTrackersAfterChanges(_ totalTrackers: [TrackerCategory]) -> [TrackerCategory] {
+        guard let date = currentDate else { return [] }
         
         var newArray: [TrackerCategory] = []
         
-        for category in categories {
+        for category in totalTrackers {
             var newCategory = TrackerCategory(name: category.name, trackerDictionary: [])
             
             
             for tracker in category.trackerDictionary {
-                guard let schedule = tracker.schedule else { return }
+                guard let schedule = tracker.schedule else { return [] }
                 let trackerDate = DateService().getNumberOfCurrentDate(date)
                 
                 if schedule.contains(trackerDate) {
@@ -199,6 +182,7 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
             }
             newArray.append(newCategory)
         }
-        visibleCategories = newArray
+        
+        return newArray
     }
 }

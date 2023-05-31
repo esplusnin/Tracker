@@ -11,9 +11,9 @@ import SnapKit
 final class NewTrackerViewController: UIViewController, NewTrackerViewControllerProtocol {
     
     var presenter: NewTrackerViewPresenterProtocol?
-    var trackerPresenter: TrackersViewPresenterProtocol?
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
     var kindOfTracker: KindOfTrackers?
+    var storage = TrackerStorageService.shared
     
     private let newTrackerView = NewTrackerView()
     
@@ -74,7 +74,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     private func switchToCategoryVC() {
         let viewController = CategoryViewController()
-        viewController.trackerPresenter = trackerPresenter
         viewController.newTrackerViewController = self
         
         present(viewController,animated: true)
@@ -131,7 +130,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     @objc func createNewTracker() {
         let newCategoryArray = presenter?.createNewTracker()
         
-        trackerPresenter?.categories = newCategoryArray
+        storage.categories = newCategoryArray
         
         dismissNewTrackerVC()
         creatingTrackerViewController?.backToTrackerViewController()
@@ -220,7 +219,8 @@ extension NewTrackerViewController: UITableViewDelegate {
 
 extension NewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let emojiArray = trackerPresenter?.emojiArray.count ?? 0
+        let emojiArray = storage.emojiArray.count
+        
         return section == 0 ? emojiArray : colorSectionArray.count
     }
     
@@ -230,9 +230,11 @@ extension NewTrackerViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell",
-                                                            for: indexPath) as? NewTrackerCollectionCell,
-              let emojiArray = trackerPresenter?.emojiArray else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "CollectionCell",
+            for: indexPath) as? NewTrackerCollectionCell else { return UICollectionViewCell() }
+        
+        let emojiArray = storage.emojiArray
         
         switch indexPath.section {
         case 0:

@@ -9,10 +9,10 @@ import UIKit
 
 final class CategoryViewController: UIViewController, CategoryViewControllerProtocol {
     
-    var trackerPresenter: TrackersViewPresenterProtocol?
     var newTrackerViewController: NewTrackerViewControllerProtocol?
     
     private let categoryView = CategoryView()
+    private let storage = TrackerStorageService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,6 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     
     @objc private func switchToNewCategoryVC() {
         let viewController = NewCategoryViewController()
-        viewController.trackerPresenter = trackerPresenter
         viewController.categoryViewController = self
         
         present(viewController,animated: true)
@@ -65,17 +64,17 @@ extension CategoryViewController: UITableViewDelegate {
 
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        trackerPresenter?.categories?.count ?? 0
+        storage.categories?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "CategoryCell", for: indexPath) as? CategoryCell,
-              let trakersCategory = trackerPresenter?.categories else { return UITableViewCell() }
+              let trakersCategory = storage.categories else { return UITableViewCell() }
         
         cell.label.text = trakersCategory[indexPath.row].name
         cell.accessoryType = cell.label.text == newTrackerViewController?.selectedCategoryString ? .checkmark : .none
-        if indexPath.row + 1 == trackerPresenter?.categories?.count {
+        if indexPath.row + 1 == storage.categories?.count {
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]

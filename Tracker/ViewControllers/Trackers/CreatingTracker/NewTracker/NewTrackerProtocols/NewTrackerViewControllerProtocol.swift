@@ -9,7 +9,7 @@ import UIKit
 
 protocol NewTrackerViewControllerProtocol: AnyObject {
     var presenter: NewTrackerViewPresenterProtocol? { get set }
-    var trackerPresenter: TrackersViewPresenterProtocol? { get set }
+    var storage: TrackerStorageService { get set }
     var kindOfTracker: KindOfTrackers? { get }
     var selectedCategoryString: String? { get set }
     var selectedScheduleString: String? { get set }
