@@ -29,7 +29,6 @@ final class TabBarController: UITabBarController {
         let statisticViewControllerNavigation = UINavigationController(rootViewController: StatisticViewController())
         
         trackersViewController.presenter = trackersViewPresenter
-        trackersViewPresenter.view = trackersViewController
         
         trackersViewControllerNavigation.tabBarItem = UITabBarItem(title: "Трекеры",
                                                                    image: Resources.Images.trackersTabBar,

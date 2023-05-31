@@ -8,7 +8,6 @@
 import Foundation
 
 protocol TrackersViewPresenterProtocol: AnyObject {
-    var view: TrackersViewControllerProtocol? { get }
     var currentDate: Date? { get set }
     func checkCurrentDateIsFuture() -> Bool
     func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory]

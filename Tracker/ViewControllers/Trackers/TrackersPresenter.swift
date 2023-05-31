@@ -9,8 +9,6 @@ import Foundation
 
 final class TrackersPresenter: TrackersViewPresenterProtocol {
     
-    weak var view: TrackersViewControllerProtocol?
-    
     var currentDate: Date?
     
     func checkCurrentDateIsFuture() -> Bool {

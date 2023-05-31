@@ -41,6 +41,9 @@ final class TrackerStorageService {
                     schedule: [1,2,3,4,5,6,7])])
     ]
     
+    var visibleCategories: [TrackerCategory]?
+    var completedTrackers: [TrackerRecord]?
+    
     var emojiArray = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
@@ -54,9 +57,6 @@ final class TrackerStorageService {
         .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16,
         .colorSelection17, .colorSelection18,
     ]
-    
-    var visibleCategories: [TrackerCategory]?
-    var completedTrackers: [TrackerRecord]?
     
     func resetNewTrackerInfo() {
         selectedCategoryString = nil
