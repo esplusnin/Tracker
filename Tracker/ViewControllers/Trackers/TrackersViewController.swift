@@ -62,11 +62,22 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             self, action: #selector(setSearchFieldWithoutCancelationButton), for: .touchUpInside)
     }
     
+    private func setDummbImageViewAfterSearch() {
+        trackersView.emptyTrackersImageView.image = Resources.Images.searchedTrackersIsEmpty
+        trackersView.emptyTrackersLabel.text = "Ничего не найдено"
+        
+        trackersView.trackersCollection.alpha = 0
+    }
+    
     @objc private func updateVisibleTrackersAfterSearch() {
         guard let searchFieldText = trackersView.searchTextField.text,
               let categories = trackerStorage.visibleCategories else { return }
         
         let newCategories = presenter?.searchTrackerByName(categories: categories, filledName: searchFieldText)
+        
+        if newCategories?.count == 0 {
+            setDummbImageViewAfterSearch()
+        }
         
         trackerStorage.visibleCategories = newCategories
         trackersView.trackersCollection.reloadData()
