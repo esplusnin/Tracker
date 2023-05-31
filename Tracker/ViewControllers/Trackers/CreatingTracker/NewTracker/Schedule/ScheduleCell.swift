@@ -10,7 +10,7 @@ import SnapKit
 
 final class ScheduleCell: UITableViewCell {
     
-    var delegate: ScheduleViewControllerDelegate?
+    weak var delegate: ScheduleViewControllerDelegate?
     
     lazy var label: UILabel = {
         let label = UILabel()

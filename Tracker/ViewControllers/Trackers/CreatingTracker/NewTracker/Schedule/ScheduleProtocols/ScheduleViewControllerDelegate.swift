@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol ScheduleViewControllerDelegate: Any {
+protocol ScheduleViewControllerDelegate: AnyObject {
     func controlScheduleDay(_ cell: ScheduleCell)
 }
