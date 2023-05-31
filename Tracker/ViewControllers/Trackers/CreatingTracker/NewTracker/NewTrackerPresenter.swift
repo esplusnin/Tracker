@@ -12,28 +12,30 @@ enum KindOfTrackers {
     case unregularEvent
 }
 
-final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
+final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
     
     var view: NewTrackerViewControllerProtocol?
     
     let buttonsTitleForTableView = ["Категория", "Расписание"]
     
+    private let storage = TrackerStorageService.shared
+    
     func createNewTracker() -> [TrackerCategory] {
-        guard let categoryArray = view?.storage.categories,
-              let trackerName = view?.trackerName,
-              let trackerColor = view?.trackerColor,
-              let trackerEmoji = view?.trackerEmoji else { return [] }
+        guard let categoryArray = storage.categories,
+              let trackerName = storage.trackerName,
+              let trackerColor = storage.trackerColor,
+              let trackerEmoji = storage.trackerEmoji else { return [] }
         
         let tracker = Tracker(id: UUID(),
                               name: trackerName,
                               color: trackerColor,
                               emoji: trackerEmoji,
-                              schedule: view?.trackerSchedule ?? [1,2,3,4,5,6,7])
+                              schedule: storage.trackerSchedule ?? [1,2,3,4,5,6,7])
         
         var newCategoryArray: [TrackerCategory] = []
         
         categoryArray.forEach { category in
-            if view?.selectedCategoryString == category.name {
+            if storage.selectedCategoryString == category.name {
                 var newTrackersArray = category.trackerDictionary
                 newTrackersArray.append(tracker)
                 newCategoryArray.append(TrackerCategory(name: category.name, trackerDictionary: newTrackersArray))
@@ -46,15 +48,15 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     }
     
     func checkCreateButtonToUnclock() {
-        if view?.trackerName != nil &&
-            view?.trackerColor != nil &&
-            view?.trackerEmoji != nil &&
-            view?.selectedCategoryString != nil {
+        if storage.trackerName != nil &&
+            storage.trackerColor != nil &&
+            storage.trackerEmoji != nil &&
+            storage.selectedCategoryString != nil {
             switch view?.kindOfTracker {
             case .unregularEvent:
                 view?.unlockCreateButton()
             case .habit:
-                view?.selectedScheduleString != nil ? view?.unlockCreateButton() : view?.lockCreateButton()
+                storage.selectedScheduleString != nil ? view?.unlockCreateButton() : view?.lockCreateButton()
             default:
                 view?.lockCreateButton()
             }

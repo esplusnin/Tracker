@@ -5,13 +5,21 @@
 //  Created by Евгений on 31.05.2023.
 //
 
-import Foundation
+import UIKit
 
 final class TrackerStorageService {
     
     static let shared = TrackerStorageService()
     
     private init() {}
+    
+    // Preparing for create new tracker:
+    var selectedCategoryString: String?
+    var selectedScheduleString: String?
+    var trackerName: String?
+    var trackerColor: UIColor?
+    var trackerEmoji: String?
+    var trackerSchedule: [Int]?
     
     var categories: [TrackerCategory]? = [
         TrackerCategory(name: "Важное", trackerDictionary: [
@@ -39,6 +47,23 @@ final class TrackerStorageService {
         "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
     ]
     
+    var colorSectionArray: [UIColor] = [
+        .colorSelection1, .colorSelection2, .colorSelection3, .colorSelection4,
+        .colorSelection5, .colorSelection6, .colorSelection7, .colorSelection8,
+        .colorSelection9, .colorSelection10, .colorSelection11, .colorSelection12,
+        .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16,
+        .colorSelection17, .colorSelection18,
+    ]
+    
     var visibleCategories: [TrackerCategory]?
     var completedTrackers: [TrackerRecord]?
+    
+    func resetNewTrackerInfo() {
+        selectedCategoryString = nil
+        selectedScheduleString = nil
+        trackerName = nil
+        trackerColor = nil
+        trackerEmoji = nil
+        trackerSchedule = nil
+    }
 }

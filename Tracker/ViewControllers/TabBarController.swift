@@ -23,7 +23,7 @@ final class TabBarController: UITabBarController {
         tabBar.layer.borderColor = UIColor.systemGray.cgColor
         
         let trackersViewController = TrackersViewController()
-        let trackersViewPresenter = TrackersViewPresenter()
+        let trackersViewPresenter = TrackersPresenter()
         
         let trackersViewControllerNavigation = UINavigationController(rootViewController: trackersViewController)
         let statisticViewControllerNavigation = UINavigationController(rootViewController: StatisticViewController())

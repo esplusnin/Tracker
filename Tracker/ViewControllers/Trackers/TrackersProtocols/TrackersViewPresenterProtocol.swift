@@ -9,10 +9,6 @@ import Foundation
 
 protocol TrackersViewPresenterProtocol: AnyObject {
     var view: TrackersViewControllerProtocol? { get }
-//    var categories: [TrackerCategory]? { get set }
-//    var visibleCategories: [TrackerCategory]? { get }
-//    var completedTrackers: [TrackerRecord]? { get set }
-    var emojiArray: [String] { get }
     var currentDate: Date? { get set }
     func checkCurrentDateIsFuture() -> Bool
     func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory]

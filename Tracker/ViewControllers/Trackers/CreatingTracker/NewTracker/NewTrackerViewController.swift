@@ -17,27 +17,10 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     private let newTrackerView = NewTrackerView()
     
-    var selectedCategoryString: String?
-    var selectedScheduleString: String?
-    
-    // Preparing for create new tracker:
-    var trackerName: String?
-    var trackerColor: UIColor?
-    var trackerEmoji: String?
-    var trackerSchedule: [Int]?
-    
-    var colorSectionArray: [UIColor] = [
-        .colorSelection1, .colorSelection2, .colorSelection3, .colorSelection4,
-        .colorSelection5, .colorSelection6, .colorSelection7, .colorSelection8,
-        .colorSelection9, .colorSelection10, .colorSelection11, .colorSelection12,
-        .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16,
-        .colorSelection17, .colorSelection18,
-    ]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         newTrackerView.textField.delegate = self
-        presenter = NewTrackerViewPresenter()
+        presenter = NewTrackerPresenter()
         presenter?.view = self
         
         setViews()
@@ -48,7 +31,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         setCollectionViewMainSetting()
         setTargets()
     }
-    
+        
     func reloadTableView() {
         newTrackerView.tableView.reloadData()
     }
@@ -132,12 +115,14 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         
         storage.categories = newCategoryArray
         
+        storage.resetNewTrackerInfo()
         dismissNewTrackerVC()
         creatingTrackerViewController?.backToTrackerViewController()
     }
     
     @objc private func dismissNewTrackerVC() {
         dismiss(animated: true)
+        creatingTrackerViewController?.backToTrackerViewController()
     }
 }
 
@@ -152,7 +137,7 @@ extension NewTrackerViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         setTextFieldWarning(textField.text?.count)
-        trackerName = textField.text
+        storage.trackerName = textField.text
         presenter?.checkCreateButtonToUnclock()
     }
 }
@@ -178,14 +163,14 @@ extension NewTrackerViewController: UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            if let name = selectedCategoryString {
+            if let name = storage.selectedCategoryString {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(name)
             } else {
                 cell.setViewsWithoutCategory()
             }
         case 1:
-            if let schedule = selectedScheduleString {
+            if let schedule = storage.selectedScheduleString {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(schedule)
             } else {
@@ -221,7 +206,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let emojiArray = storage.emojiArray.count
         
-        return section == 0 ? emojiArray : colorSectionArray.count
+        return section == 0 ? emojiArray : storage.colorSectionArray.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -242,7 +227,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
             cell.emojiLabel.text = emojiArray[indexPath.row]
         case 1:
             cell.setSecondSection()
-            cell.colorSectionImageView.backgroundColor = colorSectionArray[indexPath.row]
+            cell.colorSectionImageView.backgroundColor = storage.colorSectionArray[indexPath.row]
         default:
             return UICollectionViewCell()
         }
@@ -327,12 +312,12 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         switch indexPath.section {
         case 0:
             cell.backgroundColor = .lightGray
-            trackerEmoji = cell.emojiLabel.text
+            storage.trackerEmoji = cell.emojiLabel.text
         case 1:
             let color = cell.colorSectionImageView.backgroundColor?.withAlphaComponent(0.3)
             cell.layer.borderWidth = 3
             cell.layer.borderColor = color?.cgColor
-            trackerColor = cell.colorSectionImageView.backgroundColor
+            storage.trackerColor = cell.colorSectionImageView.backgroundColor
         default:
             cell.backgroundColor = .lightGray
         }

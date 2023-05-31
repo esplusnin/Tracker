@@ -12,6 +12,7 @@ import SnapKit
 final class ScheduleViewController: UIViewController {
     
     private let scheduleView = ScheduleView()
+    private let storage = TrackerStorageService.shared
     var newTrackerViewController: NewTrackerViewControllerProtocol?
     var scheduleService = ScheduleService()
     var schedule: [Int] = []
@@ -29,8 +30,8 @@ final class ScheduleViewController: UIViewController {
     @objc func setCurrentScheduleForTracker() {
         let string = schedule.count == 7 ? "Каждый день" : scheduleService.getScheduleString(schedule)
         
-        newTrackerViewController?.selectedScheduleString = string
-        newTrackerViewController?.trackerSchedule = schedule
+        storage.selectedScheduleString = string
+        storage.trackerSchedule = schedule
         newTrackerViewController?.reloadTableView()
                 
         dismiss(animated: true)

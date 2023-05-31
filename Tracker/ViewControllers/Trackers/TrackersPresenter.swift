@@ -7,17 +7,11 @@
 
 import Foundation
 
-final class TrackersViewPresenter: TrackersViewPresenterProtocol {
+final class TrackersPresenter: TrackersViewPresenterProtocol {
     
     weak var view: TrackersViewControllerProtocol?
     
     var currentDate: Date?
-    
-    var emojiArray = [
-        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
-        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-        "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
-    ]
     
     func checkCurrentDateIsFuture() -> Bool {
         guard let currentDate = currentDate else { return false }

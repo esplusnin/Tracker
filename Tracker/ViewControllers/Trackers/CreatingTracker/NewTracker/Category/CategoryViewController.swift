@@ -49,7 +49,7 @@ extension CategoryViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) as? CategoryCell else { return }
         cell.accessoryType = cell.accessoryType == UITableViewCell.AccessoryType.none ? .checkmark : .none
         cell.selectionStyle = .none
-        newTrackerViewController?.selectedCategoryString = cell.label.text
+        storage.selectedCategoryString = cell.label.text
         newTrackerViewController?.reloadTableView()
         newTrackerViewController?.presenter?.checkCreateButtonToUnclock()
         
@@ -73,7 +73,7 @@ extension CategoryViewController: UITableViewDataSource {
               let trakersCategory = storage.categories else { return UITableViewCell() }
         
         cell.label.text = trakersCategory[indexPath.row].name
-        cell.accessoryType = cell.label.text == newTrackerViewController?.selectedCategoryString ? .checkmark : .none
+        cell.accessoryType = cell.label.text == storage.selectedCategoryString ? .checkmark : .none
         if indexPath.row + 1 == storage.categories?.count {
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 16
