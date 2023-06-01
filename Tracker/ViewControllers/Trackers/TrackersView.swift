@@ -61,12 +61,8 @@ final class TrackersView {
         return textField
     }()
     
-    lazy var trackersCollection: UICollectionView = {
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        
-        return collection
-    }()
-    
+    lazy var trackersCollection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+
     lazy var cancelationButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Отменить", for: .normal)

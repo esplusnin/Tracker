@@ -13,7 +13,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     var presenter: NewTrackerViewPresenterProtocol?
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
     var kindOfTracker: KindOfTrackers?
-    var storage = TrackerStorageService.shared
+    var trackerStorage = TrackerStorageService.shared
     
     private let newTrackerView = NewTrackerView()
     
@@ -31,7 +31,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         setCollectionViewMainSetting()
         setTargets()
     }
-        
+    
     func reloadTableView() {
         newTrackerView.tableView.reloadData()
     }
@@ -110,12 +110,12 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         }
     }
     
-    @objc func createNewTracker() {
+    @objc private func createNewTracker() {
         let newCategoryArray = presenter?.createNewTracker()
         
-        storage.categories = newCategoryArray
+        trackerStorage.categories = newCategoryArray
         
-        storage.resetNewTrackerInfo()
+        trackerStorage.resetNewTrackerInfo()
         dismissNewTrackerVC()
         creatingTrackerViewController?.backToTrackerViewController()
     }
@@ -137,7 +137,7 @@ extension NewTrackerViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         setTextFieldWarning(textField.text?.count)
-        storage.trackerName = textField.text
+        trackerStorage.trackerName = textField.text == "" ? nil : textField.text
         presenter?.checkCreateButtonToUnclock()
     }
 }
@@ -163,14 +163,14 @@ extension NewTrackerViewController: UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            if let name = storage.selectedCategoryString {
+            if let name = trackerStorage.selectedCategoryString {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(name)
             } else {
                 cell.setViewsWithoutCategory()
             }
         case 1:
-            if let schedule = storage.selectedScheduleString {
+            if let schedule = trackerStorage.selectedScheduleString {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(schedule)
             } else {
@@ -204,9 +204,9 @@ extension NewTrackerViewController: UITableViewDelegate {
 
 extension NewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let emojiArray = storage.emojiArray.count
+        let emojiArray = trackerStorage.emojiArray.count
         
-        return section == 0 ? emojiArray : storage.colorSectionArray.count
+        return section == 0 ? emojiArray : trackerStorage.colorSectionArray.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -219,7 +219,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
             withReuseIdentifier: "CollectionCell",
             for: indexPath) as? NewTrackerCollectionCell else { return UICollectionViewCell() }
         
-        let emojiArray = storage.emojiArray
+        let emojiArray = trackerStorage.emojiArray
         
         switch indexPath.section {
         case 0:
@@ -227,7 +227,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
             cell.emojiLabel.text = emojiArray[indexPath.row]
         case 1:
             cell.setSecondSection()
-            cell.colorSectionImageView.backgroundColor = storage.colorSectionArray[indexPath.row]
+            cell.colorSectionImageView.backgroundColor = trackerStorage.colorSectionArray[indexPath.row]
         default:
             return UICollectionViewCell()
         }
@@ -312,12 +312,12 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         switch indexPath.section {
         case 0:
             cell.backgroundColor = .lightGray
-            storage.trackerEmoji = cell.emojiLabel.text
+            trackerStorage.trackerEmoji = cell.emojiLabel.text
         case 1:
             let color = cell.colorSectionImageView.backgroundColor?.withAlphaComponent(0.3)
             cell.layer.borderWidth = 3
             cell.layer.borderColor = color?.cgColor
-            storage.trackerColor = cell.colorSectionImageView.backgroundColor
+            trackerStorage.trackerColor = cell.colorSectionImageView.backgroundColor
         default:
             cell.backgroundColor = .lightGray
         }
@@ -328,9 +328,10 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? NewTrackerCollectionCell else { return }
         
-        presenter?.checkCreateButtonToUnclock()
-        
         cell.backgroundColor = .none
+        
+        presenter?.resetTrackerInfoAfterDeselect(section: indexPath.section)
+        presenter?.checkCreateButtonToUnclock()
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {

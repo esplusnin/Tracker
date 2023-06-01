@@ -18,6 +18,6 @@ enum Resources {
         static let statisticIsEmpty = UIImage(named: "EmptyStatisticError")
         static let searchedTrackersIsEmpty = UIImage(named: "EmptySearchTrackers")
         // Navigation Controller:
-        static let plus = UIImage(named: "Plus")
+        static let plus = UIImage(named: "plus")
     }
 }

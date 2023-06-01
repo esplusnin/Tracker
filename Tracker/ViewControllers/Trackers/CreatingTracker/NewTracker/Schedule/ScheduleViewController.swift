@@ -14,10 +14,10 @@ final class ScheduleViewController: UIViewController {
     var newTrackerViewController: NewTrackerViewControllerProtocol?
     var presenter: SchedulePresenterProtocol?
     
-    var scheduleService = ScheduleService()
+    private var scheduleService = ScheduleService()
     
     private let scheduleView = ScheduleView()
-    private let storage = TrackerStorageService.shared
+    private let trackerStorage = TrackerStorageService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,12 +29,12 @@ final class ScheduleViewController: UIViewController {
         setTarget()
     }
     
-    @objc func setCurrentScheduleForTracker() {
+    @objc private  func setCurrentScheduleForTracker() {
         let schedule = presenter?.schedule ?? []
         let string = schedule.count == 7 ? "Каждый день" : scheduleService.getScheduleString(schedule)
         
-        storage.selectedScheduleString = string
-        storage.trackerSchedule = schedule
+        trackerStorage.selectedScheduleString = string
+        trackerStorage.trackerSchedule = schedule
         newTrackerViewController?.reloadTableView()
                 
         dismiss(animated: true)

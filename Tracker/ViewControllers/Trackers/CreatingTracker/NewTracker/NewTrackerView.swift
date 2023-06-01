@@ -9,10 +9,7 @@ import UIKit
 
 final class NewTrackerView {
     
-    lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
+    lazy var scrollView = UIScrollView()
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()

@@ -12,4 +12,5 @@ protocol NewTrackerViewPresenterProtocol: AnyObject {
     var buttonsTitleForTableView: [String] { get }
     func createNewTracker() -> [TrackerCategory]
     func checkCreateButtonToUnclock()
+    func resetTrackerInfoAfterDeselect(section: Int)
 }
