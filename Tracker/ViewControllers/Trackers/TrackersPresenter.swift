@@ -39,7 +39,7 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
     }
     
     func setupParticularCell(storage: TrackerStorageService, cell: TrackerCell,_ section: Int,_ row: Int) {
-        let categories = storage.categories
+        let categories = storage.visibleCategories
         let completedTrackers = storage.completedTrackers
         
         guard let currentTracker = categories?[section].trackerDictionary[row],
