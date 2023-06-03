@@ -6,11 +6,22 @@
 //
 
 import UIKit
+import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    lazy var persistantContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "Model")
+        
+        container.loadPersistentStores { persistantStore, error in
+            if let error = error {
+                print(error)
+            }
+        }
+        
+        return container
+    }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
