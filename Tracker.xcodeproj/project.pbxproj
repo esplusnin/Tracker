@@ -10,6 +10,8 @@
 		7E1E541C2A1F79B5006FD792 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1E541B2A1F79B5006FD792 /* CategoryCell.swift */; };
 		7E1E541E2A1F900A006FD792 /* CategoryViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1E541D2A1F900A006FD792 /* CategoryViewControllerProtocol.swift */; };
 		7E1E54202A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1E541F2A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift */; };
+		7E916FC32A2B9C6700FA18F3 /* UIColorMarshallingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E916FC22A2B9C6700FA18F3 /* UIColorMarshallingService.swift */; };
+		7E916FC62A2B9FC700FA18F3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7E916FC42A2B9FC700FA18F3 /* Model.xcdatamodeld */; };
 		7EACA7232A274F0B00CFF664 /* SchedulePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EACA7222A274F0B00CFF664 /* SchedulePresenter.swift */; };
 		7EACA7252A274F1500CFF664 /* CategoryPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EACA7242A274F1500CFF664 /* CategoryPresenter.swift */; };
 		7EACA7272A274F2400CFF664 /* NewCategoryPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EACA7262A274F2400CFF664 /* NewCategoryPresenter.swift */; };
@@ -64,6 +66,8 @@
 		7E1E541B2A1F79B5006FD792 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		7E1E541D2A1F900A006FD792 /* CategoryViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewControllerProtocol.swift; sourceTree = "<group>"; };
 		7E1E541F2A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewControllerProtocol.swift; sourceTree = "<group>"; };
+		7E916FC22A2B9C6700FA18F3 /* UIColorMarshallingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorMarshallingService.swift; sourceTree = "<group>"; };
+		7E916FC52A2B9FC700FA18F3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7EACA7222A274F0B00CFF664 /* SchedulePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulePresenter.swift; sourceTree = "<group>"; };
 		7EACA7242A274F1500CFF664 /* CategoryPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPresenter.swift; sourceTree = "<group>"; };
 		7EACA7262A274F2400CFF664 /* NewCategoryPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryPresenter.swift; sourceTree = "<group>"; };
@@ -127,6 +131,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E916FC12A2B9B8A00FA18F3 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				7E916FC42A2B9FC700FA18F3 /* Model.xcdatamodeld */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		7EC817532A25D7E200527BBB /* NewTrackerProtocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -299,8 +311,9 @@
 			isa = PBXGroup;
 			children = (
 				7EDABC562A20DD5200F39D8E /* DateService.swift */,
-				7EC8175C2A2724CF00527BBB /* TrackerStorageService.swift */,
 				7EDABC582A20F0F700F39D8E /* ScheduleService.swift */,
+				7EC8175C2A2724CF00527BBB /* TrackerStorageService.swift */,
+				7E916FC22A2B9C6700FA18F3 /* UIColorMarshallingService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -334,6 +347,7 @@
 		7EF6209C2A1629B800B66A4B /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				7E916FC12A2B9B8A00FA18F3 /* CoreData */,
 				7ECDD9462A1CB42B00771EE4 /* Models */,
 				7ED3D4142A1A8AD4004C371B /* Services */,
 				7ED3D4002A1A1991004C371B /* ViewControllers */,
@@ -421,6 +435,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E916FC32A2B9C6700FA18F3 /* UIColorMarshallingService.swift in Sources */,
 				7EDABC572A20DD5200F39D8E /* DateService.swift in Sources */,
 				7ECDD91F2A1B40B800771EE4 /* TrackersPresenter.swift in Sources */,
 				7ECDD9372A1BBE9500771EE4 /* NewTrackerPresenter.swift in Sources */,
@@ -467,6 +482,7 @@
 				7ECDD9232A1B42A200771EE4 /* TrackerCell.swift in Sources */,
 				7ECDD9392A1BBE9F00771EE4 /* NewTrackerCell.swift in Sources */,
 				7ECDD9332A1BB15B00771EE4 /* NewTrackerView.swift in Sources */,
+				7E916FC62A2B9FC700FA18F3 /* Model.xcdatamodeld in Sources */,
 				7EDABC592A20F0F700F39D8E /* ScheduleService.swift in Sources */,
 				7ED3D4022A1A19A0004C371B /* TrackersView.swift in Sources */,
 			);
@@ -703,6 +719,19 @@
 			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		7E916FC42A2B9FC700FA18F3 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7E916FC52A2B9FC700FA18F3 /* Model.xcdatamodel */,
+			);
+			currentVersion = 7E916FC52A2B9FC700FA18F3 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 7EF620922A1629B800B66A4B /* Project object */;
 }

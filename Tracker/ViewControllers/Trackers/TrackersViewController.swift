@@ -214,7 +214,13 @@ extension TrackersViewController: UICollectionViewDataSource {
         let row = indexPath.row
         
         presenter.setupParticularCell(storage: trackerStorage, cell: cell, section, row)
-        presenter.checkCurrentDateIsFuture() ? cell.unlockCompleteButton() : cell.lockCompleteButton()
+        
+        if presenter.checkCurrentDateIsFuture() {
+            cell.unlockCompleteButton()
+        } else {
+            cell.lockCompleteButton()
+            cell.completeTrackerDayButton.backgroundColor = .colorSelection1
+        }
         
         return cell
     }

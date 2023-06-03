@@ -77,8 +77,9 @@ final class TrackerCell: UICollectionViewCell {
     
     func lockCompleteButton() {
         completeTrackerDayButton.isEnabled = false
-        completeTrackerDayButton.setTitle("x", for: .normal)
-        completeTrackerDayButton.alpha = 0.5
+        completeTrackerDayButton.setTitle("✕", for: .normal)
+        completeTrackerDayButton.titleLabel?.font = .systemFont(ofSize: 15)
+        completeTrackerDayButton.alpha = 0.4
     }
     
     func unlockCompleteButton() {
