@@ -10,7 +10,7 @@ import SnapKit
 
 final class TrackerCell: UICollectionViewCell {
     
-    weak var delegate: TrackersViewControllerDelegate?
+    weak var delegate: TrackersCollectionViewCellDelegate?
     
     lazy var cellView: UIView = {
         let view = UIView()

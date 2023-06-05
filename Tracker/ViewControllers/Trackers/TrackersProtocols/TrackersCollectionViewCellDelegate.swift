@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol TrackersViewControllerDelegate: AnyObject {
+protocol TrackersCollectionViewCellDelegate: AnyObject {
     func addCurrentTrackerToCompletedThisDate(_ cell: TrackerCell, isAddDay: Bool)
 }

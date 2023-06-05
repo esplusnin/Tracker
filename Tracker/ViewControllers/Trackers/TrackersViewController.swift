@@ -247,7 +247,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
 }
 
-extension TrackersViewController: TrackersViewControllerDelegate {
+extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func addCurrentTrackerToCompletedThisDate(_ cell: TrackerCell, isAddDay: Bool) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell),
               let date = presenter?.currentDate else { return }

@@ -36,6 +36,7 @@ final class NewTrackerView {
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.isScrollEnabled = false
         tableView.layer.cornerRadius = 17
         tableView.separatorStyle = .singleLine
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)

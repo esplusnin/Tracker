@@ -22,6 +22,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return container
     }()
+    
+    func saveContext() {
+        let context = persistantContainer.viewContext
+        
+        if context.hasChanges {
+            do {
+                print("попытка сохранить")
+                try context.save()
+            } catch {
+                context.rollback()
+                              let nserror = error as NSError
+                              fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

@@ -29,7 +29,7 @@ final class TrackersView {
         let button = UIButton(type: .system)
         button.tintColor = .blackDay
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Resources.Images.plus, for: .normal)
+        button.setImage(Resources.Images.addTracker, for: .normal)
         
         return button
     }()
