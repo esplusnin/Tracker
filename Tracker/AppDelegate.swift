@@ -17,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         container.loadPersistentStores { persistantStore, error in
             if let error = error {
                 print(error)
+            } else {
+                print("DB url =", persistantStore.url!.absoluteString)
             }
         }
         
@@ -28,12 +30,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if context.hasChanges {
             do {
-                print("попытка сохранить")
                 try context.save()
             } catch {
+                //TODO: Удалить перед отправкой на ревью
                 context.rollback()
-                              let nserror = error as NSError
-                              fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                fatalError()
             }
         }
     }

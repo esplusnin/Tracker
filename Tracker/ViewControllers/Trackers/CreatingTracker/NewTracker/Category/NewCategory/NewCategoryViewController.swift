@@ -15,6 +15,7 @@ final class NewCategoryViewController: UIViewController {
     
     private let newCategory = NewCategoryView()
     private let trackerStorage = TrackerStorageService.shared
+    private let trackerCategoryStore = TrackerCategoryStore.instance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,8 +36,7 @@ final class NewCategoryViewController: UIViewController {
     
     @objc private func createNewCategory() {
         guard let name = newCategory.textField.text else { return }
-        trackerStorage.categories?.append(TrackerCategory(name: name,
-                                                             trackerDictionary: []))
+        trackerCategoryStore.addCategory(name: name)
         
         dismiss(animated: true)
         categoryViewController?.reloadTableView()

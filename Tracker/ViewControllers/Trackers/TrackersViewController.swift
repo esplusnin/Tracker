@@ -12,6 +12,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     var presenter: TrackersViewPresenterProtocol?
     let trackerStorage = TrackerStorageService.shared
+    let trackerCategoryStore = TrackerCategoryStore.instance
     
     private let trackersView = TrackersView()
     

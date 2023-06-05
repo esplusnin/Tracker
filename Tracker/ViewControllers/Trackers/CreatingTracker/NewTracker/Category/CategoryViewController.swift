@@ -14,6 +14,8 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     private let categoryView = CategoryView()
     private let trackerStorage = TrackerStorageService.shared
     
+    private let trackerCategoryStore = TrackerCategoryStore.instance
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         checkToSetupDumb()
@@ -46,7 +48,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     }
     
     private func checkToSetupDumb() {
-        categoryView.tableView.alpha = trackerStorage.categories?.count == 0 ? 0 : 1
+        categoryView.tableView.alpha = trackerCategoryStore.numberOfCategories() == 0 ? 0 : 1
     }
 }
 
@@ -70,17 +72,17 @@ extension CategoryViewController: UITableViewDelegate {
 
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        trackerStorage.categories?.count ?? 0
+        trackerCategoryStore.numberOfCategories()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "CategoryCell", for: indexPath) as? CategoryCell,
-              let trakersCategory = trackerStorage.categories else { return UITableViewCell() }
+            withIdentifier: "CategoryCell",
+            for: indexPath) as? CategoryCell else { return UITableViewCell() }
         
-        cell.label.text = trakersCategory[indexPath.row].name
+        cell.label.text = trackerCategoryStore.getCategoryName(at: indexPath)
         cell.accessoryType = cell.label.text == trackerStorage.selectedCategoryString ? .checkmark : .none
-        if indexPath.row + 1 == trackerStorage.categories?.count {
+        if indexPath.row + 1 == trackerCategoryStore.numberOfCategories() {
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
