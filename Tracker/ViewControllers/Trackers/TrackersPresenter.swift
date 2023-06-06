@@ -38,7 +38,7 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
         return newVisibleArray
     }
     
-    func setupParticularCell(storage: TrackerStorageService, cell: TrackerCell,_ section: Int,_ row: Int) {
+    func setupParticularCell(storage: DataProviderService, cell: TrackerCell,_ section: Int,_ row: Int) {
         let categories = storage.visibleCategories
         let completedTrackers = storage.completedTrackers
         
@@ -61,7 +61,7 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
         }
     }
     
-    func updateCompletedTrackersArray(storage: TrackerStorageService,
+    func updateCompletedTrackersArray(storage: DataProviderService,
                                       isAddDay: Bool,
                                       date: Date,
                                       _ section: Int,
@@ -148,7 +148,7 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
         return string
     }
     
-    func updateCellDayLabel(_ storage: TrackerStorageService, _ section: Int, row: Int) -> String {
+    func updateCellDayLabel(_ storage: DataProviderService, _ section: Int, row: Int) -> String {
         guard let id = storage.visibleCategories?[section].trackerDictionary[row].id else { return "" }
         let string = updateNumberOfCompletedDaysLabel(countAmountOfCompleteDays(storage.completedTrackers ?? [], id: id))
         

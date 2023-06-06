@@ -17,7 +17,7 @@ final class ScheduleViewController: UIViewController {
     private var scheduleService = ScheduleService()
     
     private let scheduleView = ScheduleView()
-    private let trackerStorage = TrackerStorageService.shared
+    private let trackerStorage = DataProviderService.instance
     
     override func viewDidLoad() {
         super.viewDidLoad()

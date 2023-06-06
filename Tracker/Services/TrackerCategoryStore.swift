@@ -20,13 +20,13 @@ final class TrackerCategoryStore: NSObject {
         appDelegate.persistantContainer.viewContext
     }()
     
-    private lazy var fetchResultController: NSFetchedResultsController<TrackerCategoryCoreData> = {
+     lazy var fetchResultController: NSFetchedResultsController<TrackerCategoryCoreData> = {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
         let fetchResultController = NSFetchedResultsController(fetchRequest: request,
                                                                managedObjectContext: context,
-                                                               sectionNameKeyPath: nil,
+                                                               sectionNameKeyPath: "name",
                                                                cacheName: nil)
         
         fetchResultController.delegate = self
@@ -41,15 +41,21 @@ final class TrackerCategoryStore: NSObject {
     }()
     
     func numberOfCategories() -> Int {
-        print("numberOfCategories - \(fetchResultController.sections?.count ?? 0)")
-        return fetchResultController.fetchedObjects?.count ?? 0
+        fetchResultController.sections?.count ?? 0
+    }
+    
+    func numberOfRowsInSection(at section: Int) -> Int {
+        guard let trackers = fetchResultController.object(
+            at: IndexPath(row: 0, section: section)).trackers else { return 0 }
+        
+        return trackers.count
     }
     
     func addCategory(name: String) {
         if !checkCategoryIsExist(name: name) {
             let category = TrackerCategoryCoreData(context: context)
             category.name = name
-            
+
             appDelegate.saveContext()
         }
     }
@@ -59,10 +65,10 @@ final class TrackerCategoryStore: NSObject {
     }
     
     func getCategoryName(at indexPath: IndexPath) -> String {
-        let section = fetchResultController.object(at: indexPath)
-        print(section)
+        let index = IndexPath(row: 0, section: indexPath.row)
+        let category = fetchResultController.object(at: index)
         
-        return section.name ?? ""
+        return category.name ?? ""
     }
     
     func checkCategoryIsExist(name: String) -> Bool {
@@ -76,6 +82,20 @@ final class TrackerCategoryStore: NSObject {
         }
         
         return categoryName == "" ? false : true
+    }
+    
+    func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
+        var wantedCategory: TrackerCategoryCoreData?
+        
+        if let categories = fetchResultController.fetchedObjects {
+            categories.forEach { category in
+                if category.name == name {
+                    wantedCategory = category
+                }
+            }
+        }
+        
+        return wantedCategory
     }
 }
 

@@ -13,8 +13,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     var presenter: NewTrackerViewPresenterProtocol?
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
     var kindOfTracker: KindOfTrackers?
-    var trackerStorage = TrackerStorageService.shared
-    
+    var trackerStorage = DataProviderService.instance
+        
     private let newTrackerView = NewTrackerView()
     
     override func viewDidLoad() {

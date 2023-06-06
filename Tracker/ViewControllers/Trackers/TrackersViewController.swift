@@ -11,10 +11,10 @@ import SnapKit
 class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     var presenter: TrackersViewPresenterProtocol?
-    let trackerStorage = TrackerStorageService.shared
-    let trackerCategoryStore = TrackerCategoryStore.instance
+    let trackerStorage = DataProviderService.instance
     
     private let trackersView = TrackersView()
+    private let trackerCategoryStore = TrackerCategoryStore.instance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -189,7 +189,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        guard let amountOfElement = trackerStorage.visibleCategories?.count else { return 0 }
+        let amountOfElement = trackerCategoryStore.numberOfCategories()
         
         trackersView.trackersCollection.alpha = amountOfElement == 0 ? 0 : 1
         
@@ -198,9 +198,9 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        guard let categories = trackerStorage.visibleCategories?[section] else { return 0 }
+//        guard let categories = trackerStorage.visibleCategories?[section] else { return 0 }
        
-        return categories.trackerDictionary.count
+        return trackerCategoryStore.numberOfRowsInSection(at: section)
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -214,7 +214,9 @@ extension TrackersViewController: UICollectionViewDataSource {
         let section = indexPath.section
         let row = indexPath.row
         
-        presenter.setupParticularCell(storage: trackerStorage, cell: cell, section, row)
+//        presenter.setupParticularCell(storage: trackerStorage, cell: cell, section, row)
+        
+        
         
         if presenter.checkCurrentDateIsFuture() {
             cell.unlockCompleteButton()
@@ -242,7 +244,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             withReuseIdentifier: id,
             for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
         
-        view.headerLabel.text = trackerStorage.visibleCategories?[indexPath.section].name
+        view.headerLabel.text = trackerCategoryStore.fetchResultController.object(at: indexPath).name
         
         return view
     }

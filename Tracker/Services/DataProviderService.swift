@@ -7,9 +7,9 @@
 
 import UIKit
 
-final class TrackerStorageService {
+final class DataProviderService {
     
-    static let shared = TrackerStorageService()
+    static let instance = DataProviderService()
     
     private init() {}
     

@@ -14,7 +14,7 @@ final class NewCategoryViewController: UIViewController {
     var categoryViewController: CategoryViewControllerProtocol?
     
     private let newCategory = NewCategoryView()
-    private let trackerStorage = TrackerStorageService.shared
+    private let trackerStorage = DataProviderService.instance
     private let trackerCategoryStore = TrackerCategoryStore.instance
     
     override func viewDidLoad() {

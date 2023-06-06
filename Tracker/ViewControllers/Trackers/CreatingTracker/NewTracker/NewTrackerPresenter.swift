@@ -18,7 +18,8 @@ final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
     
     let buttonsTitleForTableView = ["Категория", "Расписание"]
     
-    private let trackerStorage = TrackerStorageService.shared
+    private let trackerStorage = DataProviderService.instance
+    private let trackerStore = TrackerStore.instance
     
     func createNewTracker() -> [TrackerCategory] {
         guard let categoryArray = trackerStorage.categories,
@@ -43,6 +44,7 @@ final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
                 newCategoryArray.append(category)
             }
         }
+        trackerStore.addTracker(model: tracker)
         
         return newCategoryArray
     }

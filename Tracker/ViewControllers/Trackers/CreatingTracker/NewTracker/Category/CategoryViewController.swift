@@ -12,7 +12,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     var newTrackerViewController: NewTrackerViewControllerProtocol?
     
     private let categoryView = CategoryView()
-    private let trackerStorage = TrackerStorageService.shared
+    private let trackerStorage = DataProviderService.instance
     
     private let trackerCategoryStore = TrackerCategoryStore.instance
     
