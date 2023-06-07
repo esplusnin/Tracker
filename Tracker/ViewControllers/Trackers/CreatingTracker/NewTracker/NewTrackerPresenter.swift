@@ -14,12 +14,13 @@ enum KindOfTrackers {
 
 final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
     
-    var view: NewTrackerViewControllerProtocol?
+    weak var view: NewTrackerViewControllerProtocol?
+    
+    private let dataProviderService = DataProviderService.instance
     
     let buttonsTitleForTableView = ["Категория", "Расписание"]
     
     private let trackerStorage = DataProviderService.instance
-    private let trackerStore = TrackerStore.instance
     
     func createNewTracker() -> [TrackerCategory] {
         guard let categoryArray = trackerStorage.categories,
@@ -44,7 +45,7 @@ final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
                 newCategoryArray.append(category)
             }
         }
-        trackerStore.addTracker(model: tracker)
+        dataProviderService.addTrackerToStore(model: tracker)
         
         return newCategoryArray
     }

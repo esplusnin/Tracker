@@ -12,10 +12,8 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     var newTrackerViewController: NewTrackerViewControllerProtocol?
     
     private let categoryView = CategoryView()
-    private let trackerStorage = DataProviderService.instance
-    
-    private let trackerCategoryStore = TrackerCategoryStore.instance
-    
+    private let dataProviderService = DataProviderService.instance
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         checkToSetupDumb()
@@ -48,7 +46,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     }
     
     private func checkToSetupDumb() {
-        categoryView.tableView.alpha = trackerCategoryStore.numberOfCategories() == 0 ? 0 : 1
+        categoryView.tableView.alpha = dataProviderService.getNumberOfCategories() == 0 ? 0 : 1
     }
 }
 
@@ -57,7 +55,7 @@ extension CategoryViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) as? CategoryCell else { return }
         cell.accessoryType = cell.accessoryType == UITableViewCell.AccessoryType.none ? .checkmark : .none
         cell.selectionStyle = .none
-        trackerStorage.selectedCategoryString = cell.label.text
+        dataProviderService.selectedCategoryString = cell.label.text
         newTrackerViewController?.reloadTableView()
         newTrackerViewController?.presenter?.checkCreateButtonToUnclock()
         
@@ -72,7 +70,7 @@ extension CategoryViewController: UITableViewDelegate {
 
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        trackerCategoryStore.numberOfCategories()
+        dataProviderService.getNumberOfCategories()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -80,9 +78,9 @@ extension CategoryViewController: UITableViewDataSource {
             withIdentifier: "CategoryCell",
             for: indexPath) as? CategoryCell else { return UITableViewCell() }
         
-        cell.label.text = trackerCategoryStore.getCategoryName(at: indexPath)
-        cell.accessoryType = cell.label.text == trackerStorage.selectedCategoryString ? .checkmark : .none
-        if indexPath.row + 1 == trackerCategoryStore.numberOfCategories() {
+        cell.label.text = dataProviderService.getCategoryNameFromStore(at: indexPath.row)
+        cell.accessoryType = cell.label.text == dataProviderService.selectedCategoryString ? .checkmark : .none
+        if indexPath.row + 1 == dataProviderService.getNumberOfCategories() {
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]

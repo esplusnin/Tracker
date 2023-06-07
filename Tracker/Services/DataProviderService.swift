@@ -7,9 +7,18 @@
 
 import UIKit
 
+struct CollectionStoreUpdates {
+    let insertedIndex: IndexSet
+    let deletedIndex: IndexSet
+}
+
 final class DataProviderService {
     
     static let instance = DataProviderService()
+    
+    var trackerStore: TrackerStoreProtocol?
+    var trackerCategoryStore: TrackerCategoryStoreProtocol?
+    var trackersViewController: TrackersViewControllerProtocol?
     
     private init() {}
     
@@ -65,5 +74,60 @@ final class DataProviderService {
         trackerColor = nil
         trackerEmoji = nil
         trackerSchedule = nil
+    }
+    
+    func setTrackerPredicate(with word: String) {
+        trackerStore?.setPredicate(with: word)
+    }
+    
+    func setupTrackerCategoryDelegate(controller: CategoryViewControllerProtocol) {
+        guard let trackerCategoryStore = trackerCategoryStore else { return }
+        
+        trackerCategoryStore.delegate = controller
+    }
+    
+    func updateTrackersCollection(_ updates: CollectionStoreUpdates) {
+        trackersViewController?.reloadCOll()
+    }
+    
+    //MARK: TrackerStore Block:
+
+    func addTrackerToStore(model: Tracker) {
+        trackerStore?.addTracker(model: model)
+    }
+    
+    func getTrackersFromStore(categoryName: String, index: Int) -> Tracker {
+        let tracker = trackerStore?.getTracker(categoryName: categoryName, searchedindex: index)
+        
+        return Tracker(id: tracker?.id ?? UUID(),
+                       name: tracker?.name ?? "",
+                       color: tracker?.color ?? .clear,
+                       emoji: tracker?.emoji ?? "",
+                       schedule: tracker?.schedule ?? [])
+    }
+    
+    //MARK: TrackerCategoryStore Block:
+    func getNumberOfCategories() -> Int {
+        trackerCategoryStore?.numberOfCategories() ?? 0
+    }
+    
+    func getNumberOfRowsInSection(at section: Int) -> Int {
+        trackerCategoryStore?.numberOfRowsInSection(at: section) ?? 0
+    }
+    
+    func addCategoryToStore(name: String) {
+        trackerCategoryStore?.addCategory(name: name)
+    }
+    
+    func getCategoryNameFromStore(at index: Int) -> String {
+        trackerCategoryStore?.getCategoryName(at: index) ?? ""
+    }
+    
+    func fetchAllCategoriesFromStore() -> [TrackerCategoryCoreData] {
+        trackerCategoryStore?.fetchAllCategories() ?? []
+    }
+    
+    func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
+        trackerCategoryStore?.fetchSpecificCategory(name: name)
     }
 }

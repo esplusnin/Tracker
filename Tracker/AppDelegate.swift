@@ -17,8 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         container.loadPersistentStores { persistantStore, error in
             if let error = error {
                 print(error)
-            } else {
-                print("DB url =", persistantStore.url!.absoluteString)
             }
         }
         
@@ -32,8 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             do {
                 try context.save()
             } catch {
-                //TODO: Удалить перед отправкой на ревью
                 context.rollback()
+                //TODO: Удалить перед отправкой на ревью
                 fatalError()
             }
         }

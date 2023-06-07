@@ -38,27 +38,22 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
         return newVisibleArray
     }
     
-    func setupParticularCell(storage: DataProviderService, cell: TrackerCell,_ section: Int,_ row: Int) {
-        let categories = storage.visibleCategories
-        let completedTrackers = storage.completedTrackers
+    func setupParticularCell(model: Tracker, cell: TrackerCell) {
+//        let cellButtonString = setCellButtonIfTrackerWasCompletedToday(completedTrackers ?? [], id)
         
-        guard let currentTracker = categories?[section].trackerDictionary[row],
-              let id = categories?[section].trackerDictionary[row].id else { return }
+        cell.cellView.backgroundColor = model.color
+        cell.trackerLabel.text = model.name
+        cell.emojiLabel.text = model.emoji
+        cell.completeTrackerDayButton.backgroundColor = model.color
+//        cell.numberOfDaysLabel.text = updateCellDayLabel(storage, section, row: row)
+        cell.numberOfDaysLabel.text = "2 дня"
+        cell.completeTrackerDayButton.setTitle("+", for: .normal)
         
-        let cellButtonString = setCellButtonIfTrackerWasCompletedToday(completedTrackers ?? [], id)
-        
-        cell.cellView.backgroundColor = currentTracker.color
-        cell.trackerLabel.text = currentTracker.name
-        cell.emojiLabel.text = currentTracker.emoji
-        cell.completeTrackerDayButton.backgroundColor = currentTracker.color
-        cell.numberOfDaysLabel.text = updateCellDayLabel(storage, section, row: row)
-        cell.completeTrackerDayButton.setTitle(cellButtonString, for: .normal)
-        
-        if cellButtonString == "+" {
-            cell.completeTrackerDayButton.alpha = 1
-        } else {
-            cell.completeTrackerDayButton.alpha = 0.5
-        }
+//        if cellButtonString == "+" {
+//            cell.completeTrackerDayButton.alpha = 1
+//        } else {
+//            cell.completeTrackerDayButton.alpha = 0.5
+//        }
     }
     
     func updateCompletedTrackersArray(storage: DataProviderService,

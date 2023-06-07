@@ -24,7 +24,6 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
     
     func backToTrackerViewController() {
         dismiss(animated: true)
-        trackerViewController?.updateCollectionView()
     }
     
     private func setTargets() {

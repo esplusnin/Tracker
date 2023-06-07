@@ -11,13 +11,16 @@ import SnapKit
 class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     var presenter: TrackersViewPresenterProtocol?
-    let trackerStorage = DataProviderService.instance
     
+    let dataProviderService = DataProviderService.instance
     private let trackersView = TrackersView()
-    private let trackerCategoryStore = TrackerCategoryStore.instance
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        dataProviderService.trackerStore = TrackerStore()
+        dataProviderService.trackerCategoryStore = TrackerCategoryStore()
+        dataProviderService.trackersViewController = self
+        
         trackersView.searchTextField.delegate = self
         
         setDateFromDatePicker()
@@ -26,21 +29,28 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         setMainCollectionSettings()
     }
     
-    func reloadCollectionView() {
+    func reloadCOll() {
         trackersView.trackersCollection.reloadData()
+        resetTextFieldAndDate()
     }
     
-    func updateCollectionView() {
-        guard let oldCategories = trackerStorage.categories else { return }
-        
+//    func updateCollectionView(_ updates: CollectionStoreUpdates) {
+//        resetTextFieldAndDate()
+//        
+//        print("зашли в updateCollectionView")
+//        trackersView.trackersCollection.performBatchUpdates {
+//            let insertedIndex = updates.insertedIndex.map { IndexPath(row: $0, section: 0) }
+//            let deletedIndex = updates.deletedIndex.map { IndexPath(row: $0, section: 0) }
+//            
+//            trackersView.trackersCollection.insertItems(at: insertedIndex)
+//            trackersView.trackersCollection.deleteItems(at: deletedIndex)
+//        }
+//    }
+    
+    func resetTextFieldAndDate() {
         trackersView.searchTextField.endEditing(true)
         trackersView.searchTextField.text = .none
         presenter?.currentDate = trackersView.navigationBarDatePicker.date
-        
-        let newCategories = presenter?.showNewTrackersAfterChanges(oldCategories) ?? []
-        
-        trackerStorage.visibleCategories = newCategories
-        trackersView.trackersCollection.reloadData()
     }
     
     @objc func switchToCreatingTrackerVC() {
@@ -74,7 +84,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     @objc private func updateVisibleTrackersAfterSearch() {
         guard let searchFieldText = trackersView.searchTextField.text,
-              let categories = trackerStorage.visibleCategories else { return }
+              let categories = dataProviderService.visibleCategories else { return }
         
         let newCategories = presenter?.searchTrackerByName(categories: categories, filledName: searchFieldText)
         
@@ -82,7 +92,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             setDumbImageViewAfterSearch()
         }
         
-        trackerStorage.visibleCategories = newCategories
+        dataProviderService.visibleCategories = newCategories
         trackersView.trackersCollection.reloadData()
     }
     
@@ -118,16 +128,16 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
-        if trackerStorage.visibleCategories?.count == 0 {
+        if dataProviderService.visibleCategories?.count == 0 {
             trackersView.emptyTrackersLabel.text = "Что будем отслеживать?"
             trackersView.emptyTrackersImageView.image = Resources.Images.trackersIsEmpty
         }
         
-        updateCollectionView()
+        resetTextFieldAndDate()
     }
     
     @objc private func setDateFromDatePicker() {
-        updateCollectionView()
+        resetTextFieldAndDate()
         
         self.dismiss(animated: true)
     }
@@ -189,18 +199,16 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        let amountOfElement = trackerCategoryStore.numberOfCategories()
-        
+        let amountOfElement = dataProviderService.getNumberOfCategories()
+
         trackersView.trackersCollection.alpha = amountOfElement == 0 ? 0 : 1
-        
+
         return amountOfElement
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-//        guard let categories = trackerStorage.visibleCategories?[section] else { return 0 }
-       
-        return trackerCategoryStore.numberOfRowsInSection(at: section)
+        dataProviderService.getNumberOfRowsInSection(at: section)
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -209,14 +217,14 @@ extension TrackersViewController: UICollectionViewDataSource {
             withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell,
               let presenter = presenter else { return UICollectionViewCell() }
         
+        let categoryName = dataProviderService.getCategoryNameFromStore(at: indexPath.section)
+        let tracker = dataProviderService.getTrackersFromStore(categoryName: categoryName, index: indexPath.row)
+        
+        presenter.setupParticularCell(model: tracker, cell: cell)
+        
         cell.delegate = self
         
-        let section = indexPath.section
-        let row = indexPath.row
-        
 //        presenter.setupParticularCell(storage: trackerStorage, cell: cell, section, row)
-        
-        
         
         if presenter.checkCurrentDateIsFuture() {
             cell.unlockCompleteButton()
@@ -244,7 +252,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             withReuseIdentifier: id,
             for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
         
-        view.headerLabel.text = trackerCategoryStore.fetchResultController.object(at: indexPath).name
+        view.headerLabel.text = dataProviderService.getCategoryNameFromStore(at: indexPath.section)
         
         return view
     }
@@ -258,14 +266,14 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         let section = indexPath.section
         let row = indexPath.row
         
-        let newCompletedTrackers = presenter?.updateCompletedTrackersArray(storage: trackerStorage,
+        let newCompletedTrackers = presenter?.updateCompletedTrackersArray(storage: dataProviderService,
                                                                            isAddDay: isAddDay,
                                                                            date: date,
                                                                            section,
                                                                            row)
         
-        trackerStorage.completedTrackers = newCompletedTrackers
-        cell.numberOfDaysLabel.text = presenter?.updateCellDayLabel(trackerStorage, section, row: row)
+        dataProviderService.completedTrackers = newCompletedTrackers
+        cell.numberOfDaysLabel.text = presenter?.updateCellDayLabel(dataProviderService, section, row: row)
     }
 }
 

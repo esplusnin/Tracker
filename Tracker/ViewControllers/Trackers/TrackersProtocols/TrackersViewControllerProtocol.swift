@@ -9,5 +9,7 @@ import Foundation
 
 protocol TrackersViewControllerProtocol: AnyObject {
     var presenter: TrackersViewPresenterProtocol? { get set }
-    func updateCollectionView()
+//    func updateCollectionView(_ updates: CollectionStoreUpdates)
+    func resetTextFieldAndDate()
+    func reloadCOll()
 }

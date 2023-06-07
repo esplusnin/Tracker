@@ -11,7 +11,7 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     var currentDate: Date? { get set }
     func checkCurrentDateIsFuture() -> Bool
     func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory]
-    func setupParticularCell(storage: DataProviderService, cell: TrackerCell,_ section: Int,_ row: Int)
+    func setupParticularCell(model: Tracker, cell: TrackerCell)
     func updateCompletedTrackersArray(storage: DataProviderService,
                                       isAddDay: Bool,
                                       date: Date,

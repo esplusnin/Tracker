@@ -8,9 +8,10 @@
 import UIKit
 import CoreData
 
-final class TrackerCategoryStore: NSObject {
+final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     
-    static let instance = TrackerCategoryStore()
+    weak var delegate: CategoryViewControllerProtocol?
+    private let dataProviderServie = DataProviderService.instance
     
     private lazy var appDelegate = {
         (UIApplication.shared.delegate as! AppDelegate)
@@ -20,13 +21,13 @@ final class TrackerCategoryStore: NSObject {
         appDelegate.persistantContainer.viewContext
     }()
     
-     lazy var fetchResultController: NSFetchedResultsController<TrackerCategoryCoreData> = {
+    private lazy var fetchResultController: NSFetchedResultsController<TrackerCategoryCoreData> = {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
         let fetchResultController = NSFetchedResultsController(fetchRequest: request,
                                                                managedObjectContext: context,
-                                                               sectionNameKeyPath: "name",
+                                                               sectionNameKeyPath: nil,
                                                                cacheName: nil)
         
         fetchResultController.delegate = self
@@ -40,14 +41,15 @@ final class TrackerCategoryStore: NSObject {
         return fetchResultController
     }()
     
+    private var insertedSet: IndexSet?
+    private var deletedSet: IndexSet?
+    
     func numberOfCategories() -> Int {
-        fetchResultController.sections?.count ?? 0
+        fetchResultController.fetchedObjects?.count ?? 0
     }
     
     func numberOfRowsInSection(at section: Int) -> Int {
-        guard let trackers = fetchResultController.object(
-            at: IndexPath(row: 0, section: section)).trackers else { return 0 }
-        
+        guard let trackers = fetchResultController.fetchedObjects?[section].trackers else { return 0 }
         return trackers.count
     }
     
@@ -55,33 +57,19 @@ final class TrackerCategoryStore: NSObject {
         if !checkCategoryIsExist(name: name) {
             let category = TrackerCategoryCoreData(context: context)
             category.name = name
-
+            
             appDelegate.saveContext()
         }
     }
     
-    func deleteCategory() {
-        
-    }
-    
-    func getCategoryName(at indexPath: IndexPath) -> String {
-        let index = IndexPath(row: 0, section: indexPath.row)
-        let category = fetchResultController.object(at: index)
+    func getCategoryName(at index: Int) -> String {
+        guard let category = fetchResultController.fetchedObjects?[index] else { return "" }
         
         return category.name ?? ""
     }
     
-    func checkCategoryIsExist(name: String) -> Bool {
-        guard let categories = fetchResultController.fetchedObjects else { return false }
-        var categoryName = ""
-        
-        for category in categories {
-            if category.name == name {
-                categoryName = name
-            }
-        }
-        
-        return categoryName == "" ? false : true
+    func fetchAllCategories() -> [TrackerCategoryCoreData] {
+        fetchResultController.fetchedObjects ?? []
     }
     
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
@@ -97,10 +85,41 @@ final class TrackerCategoryStore: NSObject {
         
         return wantedCategory
     }
+    
+    private func checkCategoryIsExist(name: String) -> Bool {
+        guard let categories = fetchResultController.fetchedObjects else { return false }
+        var categoryName = ""
+        
+        for category in categories {
+            if category.name == name {
+                categoryName = name
+            }
+        }
+        
+        return categoryName == "" ? false : true
+    }
 }
 
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
-    override func didChangeValue(forKey key: String) {
-        print("изменение")
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        insertedSet = IndexSet()
+        deletedSet = IndexSet()
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        delegate?.reloadTableView()
+        // TODO: переделать
+        dataProviderServie.trackersViewController?.reloadCOll()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            if let indexPath = newIndexPath {
+                insertedSet?.insert(indexPath.item)
+            }
+        default:
+            break
+        }
     }
 }
