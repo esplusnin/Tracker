@@ -13,6 +13,5 @@ protocol TrackerCategoryStoreProtocol: AnyObject {
     func numberOfRowsInSection(at section: Int) -> Int
     func addCategory(name: String)
     func getCategoryName(at index: Int) -> String
-    func fetchAllCategories() -> [TrackerCategoryCoreData]
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData?
 }

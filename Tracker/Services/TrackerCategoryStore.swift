@@ -43,6 +43,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     
     private var insertedSet: IndexSet?
     private var deletedSet: IndexSet?
+    private var categoryName: String?
     
     func numberOfCategories() -> Int {
         fetchResultController.fetchedObjects?.count ?? 0
@@ -54,9 +55,12 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     }
     
     func addCategory(name: String) {
+        print("addCategoryToStore")
         if !checkCategoryIsExist(name: name) {
+            print("!checkCategoryIsExist")
             let category = TrackerCategoryCoreData(context: context)
             category.name = name
+            categoryName = name
             
             appDelegate.saveContext()
         }
@@ -66,10 +70,6 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
         guard let category = fetchResultController.fetchedObjects?[index] else { return "" }
         
         return category.name ?? ""
-    }
-    
-    func fetchAllCategories() -> [TrackerCategoryCoreData] {
-        fetchResultController.fetchedObjects ?? []
     }
     
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
@@ -87,7 +87,10 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     }
     
     private func checkCategoryIsExist(name: String) -> Bool {
+        print("зашли в checkCategoryIsExist")
         guard let categories = fetchResultController.fetchedObjects else { return false }
+        print("прошли елсе в checkCategoryIsExist")
+
         var categoryName = ""
         
         for category in categories {
@@ -107,6 +110,8 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("controllerDidChangeContent")
+        dataProviderServie.inizializeVisibleCategories()
         delegate?.reloadTableView()
         // TODO: переделать
         dataProviderServie.trackersViewController?.reloadCOll()

@@ -21,6 +21,8 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         dataProviderService.trackerCategoryStore = TrackerCategoryStore()
         dataProviderService.trackersViewController = self
         
+        dataProviderService.inizializeVisibleCategories()
+        
         trackersView.searchTextField.delegate = self
         
         setDateFromDatePicker()
@@ -199,16 +201,17 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        let amountOfElement = dataProviderService.getNumberOfCategories()
+//        let amountOfElement = dataProviderService.getNumberOfCategories()
+        let amountOfElement = dataProviderService.visibleCategories?.count
 
         trackersView.trackersCollection.alpha = amountOfElement == 0 ? 0 : 1
 
-        return amountOfElement
+        return amountOfElement ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        dataProviderService.getNumberOfRowsInSection(at: section)
+        dataProviderService.visibleCategories?[section].trackerDictionary.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -217,15 +220,14 @@ extension TrackersViewController: UICollectionViewDataSource {
             withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell,
               let presenter = presenter else { return UICollectionViewCell() }
         
-        let categoryName = dataProviderService.getCategoryNameFromStore(at: indexPath.section)
-        let tracker = dataProviderService.getTrackersFromStore(categoryName: categoryName, index: indexPath.row)
+//        let categoryName = dataProviderService.getCategoryNameFromStore(at: indexPath.section)
+//        let tracker = dataProviderService.getTrackersFromStore(categoryName: categoryName, index: indexPath.row)
+        let tracker = dataProviderService.visibleCategories?[indexPath.section].trackerDictionary[indexPath.row]
         
-        presenter.setupParticularCell(model: tracker, cell: cell)
+        presenter.setupParticularCell(model: tracker!, cell: cell)
         
         cell.delegate = self
-        
-//        presenter.setupParticularCell(storage: trackerStorage, cell: cell, section, row)
-        
+
         if presenter.checkCurrentDateIsFuture() {
             cell.unlockCompleteButton()
         } else {

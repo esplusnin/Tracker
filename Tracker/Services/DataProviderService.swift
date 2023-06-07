@@ -30,26 +30,6 @@ final class DataProviderService {
     var trackerEmoji: String?
     var trackerSchedule: [Int]?
     
-    var categories: [TrackerCategory]? = [
-        TrackerCategory(name: "Важное", trackerDictionary: [
-            Tracker(id: UUID(),
-                    name: "Сделать проект как красавчик",
-                    color: .colorSelection1,
-                    emoji: "🐶",
-                    schedule: [1,2,3,4,5,6,7]),
-            Tracker(id: UUID(),
-                    name: "Приготовить обед",
-                    color: .colorSelection5,
-                    emoji: "🥦",
-                    schedule: [1,2,3,4,5,6,7])]),
-        TrackerCategory(name: "Английский", trackerDictionary: [
-            Tracker(id: UUID(),
-                    name: "Домашка + слова",
-                    color: .colorSelection10,
-                    emoji: "🏝",
-                    schedule: [1,2,3,4,5,6,7])])
-    ]
-    
     var visibleCategories: [TrackerCategory]?
     var completedTrackers: [TrackerRecord]?
     
@@ -67,6 +47,10 @@ final class DataProviderService {
         .colorSelection17, .colorSelection18,
     ]
     
+    func inizializeVisibleCategories() {
+        visibleCategories = trackerStore?.fetchTrackers()
+    }
+    
     func resetNewTrackerInfo() {
         selectedCategoryString = nil
         selectedScheduleString = nil
@@ -74,10 +58,6 @@ final class DataProviderService {
         trackerColor = nil
         trackerEmoji = nil
         trackerSchedule = nil
-    }
-    
-    func setTrackerPredicate(with word: String) {
-        trackerStore?.setPredicate(with: word)
     }
     
     func setupTrackerCategoryDelegate(controller: CategoryViewControllerProtocol) {
@@ -116,17 +96,14 @@ final class DataProviderService {
     }
     
     func addCategoryToStore(name: String) {
+        print("addCategoryToStore")
         trackerCategoryStore?.addCategory(name: name)
     }
     
     func getCategoryNameFromStore(at index: Int) -> String {
         trackerCategoryStore?.getCategoryName(at: index) ?? ""
     }
-    
-    func fetchAllCategoriesFromStore() -> [TrackerCategoryCoreData] {
-        trackerCategoryStore?.fetchAllCategories() ?? []
-    }
-    
+
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
         trackerCategoryStore?.fetchSpecificCategory(name: name)
     }

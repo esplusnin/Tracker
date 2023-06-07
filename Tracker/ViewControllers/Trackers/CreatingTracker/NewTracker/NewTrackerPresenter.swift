@@ -22,11 +22,10 @@ final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
     
     private let trackerStorage = DataProviderService.instance
     
-    func createNewTracker() -> [TrackerCategory] {
-        guard let categoryArray = trackerStorage.categories,
-              let trackerName = trackerStorage.trackerName,
+    func createNewTracker() {
+        guard let trackerName = trackerStorage.trackerName,
               let trackerColor = trackerStorage.trackerColor,
-              let trackerEmoji = trackerStorage.trackerEmoji else { return [] }
+              let trackerEmoji = trackerStorage.trackerEmoji else { return }
         
         let tracker = Tracker(id: UUID(),
                               name: trackerName,
@@ -34,20 +33,19 @@ final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
                               emoji: trackerEmoji,
                               schedule: trackerStorage.trackerSchedule ?? [1,2,3,4,5,6,7])
         
-        var newCategoryArray: [TrackerCategory] = []
-        
-        categoryArray.forEach { category in
-            if trackerStorage.selectedCategoryString == category.name {
-                var newTrackersArray = category.trackerDictionary
-                newTrackersArray.append(tracker)
-                newCategoryArray.append(TrackerCategory(name: category.name, trackerDictionary: newTrackersArray))
-            } else {
-                newCategoryArray.append(category)
-            }
-        }
+//        var newCategoryArray: [TrackerCategory] = []
+//
+//        categoryArray.forEach { category in
+//            if trackerStorage.selectedCategoryString == category.name {
+//                var newTrackersArray = category.trackerDictionary
+//                newTrackersArray.append(tracker)
+//                newCategoryArray.append(TrackerCategory(name: category.name, trackerDictionary: newTrackersArray))
+//            } else {
+//                newCategoryArray.append(category)
+//            }
+//        }
         dataProviderService.addTrackerToStore(model: tracker)
-        
-        return newCategoryArray
+
     }
     
     @objc func checkCreateButtonToUnclock() {

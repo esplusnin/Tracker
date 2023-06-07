@@ -112,10 +112,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     @objc private func createNewTracker() {
-        let newCategoryArray = presenter?.createNewTracker()
-        
-        dataProviderService.categories = newCategoryArray
-        
+        presenter?.createNewTracker()
+                
         dataProviderService.resetNewTrackerInfo()
         dismissNewTrackerVC()
         creatingTrackerViewController?.backToTrackerViewController()

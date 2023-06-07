@@ -43,12 +43,28 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         return fetchController
     }()
     
-    private var predicate: String?
-    
-    func setPredicate(with word: String) {
-        predicate = word
+    func fetchTrackers() -> [TrackerCategory] {
+        guard let sections = trackerFetchResultController.sections else { return [] }
+        
+        var currentArray: [TrackerCategory] = []
+        
+        for section in sections {
+            guard let object = section.objects as? [TrackerCoreData] else { return [] }
+            
+            var category = TrackerCategory(name: section.name, trackerDictionary: [])
+            for tracker in object  {
+                let color = colorMarshalling.colorWithHexString(hexString: tracker.color ?? "")
+                category.trackerDictionary.append(Tracker(id: tracker.id ?? UUID(),
+                                                          name: tracker.name ?? "",
+                                                          color: color,
+                                                          emoji: tracker.emoji ?? "",
+                                                          schedule: tracker.schedule ?? []))
+            }
+            currentArray.append(category)
+        }
+        return currentArray
     }
-    
+
     func addTracker(model: Tracker) {
         let category = dataProvider.fetchSpecificCategory(name: dataProvider.selectedCategoryString ?? "")
         let tracker = TrackerCoreData(context: context)
@@ -89,6 +105,7 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let insertedIndex = insertedIndex, let deletedIndex = deletedIndex else { return }
+        dataProvider.inizializeVisibleCategories()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.dataProvider.updateTrackersCollection(CollectionStoreUpdates(insertedIndex: insertedIndex,
                                                                          deletedIndex: deletedIndex))
