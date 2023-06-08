@@ -17,13 +17,11 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        inizializeStores()
-        
-        presenter?.view = self 
-        
+        presenter?.view = self
         trackersView.searchTextField.delegate = self
         
-        presenter?.currentDate = trackersView.navigationBarDatePicker.date
+        inizializeStores()
+        setDate()
         presenter?.showNewTrackersAfterChangeDate()
         
         setViews()
@@ -31,35 +29,17 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     func reloadCOll() {
-        resetTextField()
         trackersView.trackersCollection.reloadData()
     }
-    
-//    func updateCollectionView(_ updates: CollectionStoreUpdates) {
-//        resetTextFieldAndDate()
-//        
-//        print("зашли в updateCollectionView")
-//        trackersView.trackersCollection.performBatchUpdates {
-//            let insertedIndex = updates.insertedIndex.map { IndexPath(row: $0, section: 0) }
-//            let deletedIndex = updates.deletedIndex.map { IndexPath(row: $0, section: 0) }
-//            
-//            trackersView.trackersCollection.insertItems(at: insertedIndex)
-//            trackersView.trackersCollection.deleteItems(at: deletedIndex)
-//        }
-//    }
     
     func resetTextField() {
         trackersView.searchTextField.endEditing(true)
         trackersView.searchTextField.text = .none
     }
     
-    @objc func switchToCreatingTrackerVC() {
-        let viewController = CreatingTrackerViewController()
-        viewController.trackerPresenter = presenter
-        viewController.trackerViewController = self
-        trackersView.searchTextField.endEditing(true)
-        
-        present(viewController, animated: true)
+    private func setDate() {
+        let date = DateService().convertDateWithoutTimes(date: trackersView.navigationBarDatePicker.date)
+        presenter?.currentDate = date
     }
     
     private func inizializeStores() {
@@ -70,6 +50,15 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         
         dataProviderService.inizializeVisibleCategories()
         dataProviderService.setAllTrackerRecords()
+    }
+    
+    @objc func switchToCreatingTrackerVC() {
+        let viewController = CreatingTrackerViewController()
+        viewController.trackerPresenter = presenter
+        viewController.trackerViewController = self
+        trackersView.searchTextField.endEditing(true)
+        
+        present(viewController, animated: true)
     }
     
     private func setTargets() {
@@ -128,9 +117,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     @objc private func setSearchFieldWithoutCancelationButton() {
-        trackersView.searchTextField.text = .none
         trackersView.cancelationButton.removeFromSuperview()
-        trackersView.searchTextField.endEditing(true)
         
         trackersView.searchTextField.snp.makeConstraints { make in
             make.height.equalTo(36)
@@ -144,11 +131,11 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         }
         
         resetTextField()
+        presenter?.showNewTrackersAfterChangeDate()
     }
     
     @objc private func setDateFromDatePicker() {
-        let date = DateService().convertDateWithoutTimes(date: trackersView.navigationBarDatePicker.date)
-        presenter?.currentDate = date
+        setDate()
         resetTextField()
         presenter?.showNewTrackersAfterChangeDate()
         
@@ -163,6 +150,14 @@ extension TrackersViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if range.length == 1 && string.isEmpty || !textField.hasText {
+            presenter?.showNewTrackersAfterChangeDate()
+        }
+        
+        return true
     }
 }
 
@@ -277,15 +272,11 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
               let tracker = dataProviderService.visibleCategories?[indexPath.section].trackerDictionary[indexPath.row]
         else { return }
         
-        dataProviderService.addTrackerRecord(model: TrackerRecord(id: tracker.id,
-                                                                  date: date))
-//        let newCompletedTrackers = presenter?.updateCompletedTrackersArray(isAddDay: isAddDay,
-//                                                                           date: date,
-//                                                                           indexPath: indexPath)
-        
-//        dataProviderService.completedTrackers = newCompletedTrackers
+        dataProviderService.changeStatusTrackerRecord(model: TrackerRecord(id: tracker.id,
+                                                                           date: date),
+                                                      isAddDay: isAddDay)
         cell.numberOfDaysLabel.text = presenter?.updateCellDayLabel(at: indexPath)
-//        trackersView.trackersCollection.reloadItems(at: [indexPath])
+        
     }
 }
 

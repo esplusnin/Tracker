@@ -16,9 +16,6 @@ protocol TrackersViewPresenterProtocol: AnyObject {
                              cell: TrackerCell,
                              _ indexPath: IndexPath,
                              id: UUID) 
-//    func updateCompletedTrackersArray(isAddDay: Bool,
-//                                      date: Date,
-//                                      indexPath: IndexPath) -> [TrackerRecord]
     func setCellButtonIfTrackerWasCompletedToday(id: UUID) -> String
     func countAmountOfCompleteDays(id: UUID) -> Int
     func updateNumberOfCompletedDaysLabel(_ number: Int) -> String

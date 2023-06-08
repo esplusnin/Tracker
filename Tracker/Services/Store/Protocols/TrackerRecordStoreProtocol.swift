@@ -9,4 +9,5 @@ import Foundation
 
 protocol TrackerRecordStoreProtocol {
     func getTrackerRecords() -> [TrackerRecord]
+    func deleteRecord(tracker: TrackerRecord)
 }

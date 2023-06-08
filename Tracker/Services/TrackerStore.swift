@@ -62,6 +62,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
             }
             currentArray.append(category)
         }
+        
         return currentArray
     }
 

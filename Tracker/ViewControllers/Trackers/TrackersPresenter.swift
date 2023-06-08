@@ -63,39 +63,10 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
         }
     }
     
-//    func updateCompletedTrackersArray(isAddDay: Bool,
-//                                      date: Date,
-//                                      indexPath: IndexPath) -> [TrackerRecord] {
-//        guard let id = dataProviderService.visibleCategories?[indexPath.section].trackerDictionary[indexPath.row].id
-//            else { return [] }
-//        
-//        var newTrackerRecordArray: [TrackerRecord] = []
-//        
-//        dataProviderService.completedTrackers?.forEach({ trackerRecord in
-//            newTrackerRecordArray.append(trackerRecord)
-//        })
-//        
-//        if isAddDay {
-//            newTrackerRecordArray.append(TrackerRecord(
-//                id: id,
-//                date: date))
-//        } else {
-//            for (index, trackerRecord) in newTrackerRecordArray.enumerated() {
-//                if trackerRecord.date == currentDate &&
-//                    trackerRecord.id == id {
-//                    newTrackerRecordArray.remove(at: index)
-//                }
-//            }
-//        }
-//        
-//        return newTrackerRecordArray
-//    }
-    
     func setCellButtonIfTrackerWasCompletedToday(id: UUID) -> String {
         var string = "+"
         dataProviderService.completedTrackers?.forEach({ trackers in
-            print(trackers.date, currentDate)
-            if trackers.id == id && currentDate! == trackers.date {
+            if trackers.id == id && currentDate == trackers.date {
                 string = "✓"
             }
         })

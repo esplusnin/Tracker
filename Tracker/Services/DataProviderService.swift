@@ -112,7 +112,11 @@ final class DataProviderService {
         completedTrackers = trackerRecordStore?.getTrackerRecords()
     }
     
-    func addTrackerRecord(model: TrackerRecord) {
-        trackerRecordStore?.addRecord(tracker: model)
+    func changeStatusTrackerRecord(model: TrackerRecord, isAddDay: Bool) {
+        if isAddDay {
+            trackerRecordStore?.addRecord(tracker: model)
+        } else {
+            trackerRecordStore?.deleteRecord(tracker: model)
+        }
     }
 }

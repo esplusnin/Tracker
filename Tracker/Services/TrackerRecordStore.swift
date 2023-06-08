@@ -36,7 +36,7 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         } catch {
             print(error.localizedDescription)
         }
-        
+
         return fetchedController
     }()
     
@@ -48,6 +48,25 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
             record.id = tracker.id
             record.date = date
             
+            appDelegate.saveContext()
+        }
+    }
+    
+    func deleteRecord(tracker: TrackerRecord) {
+        guard let objects = fetchedResultController.fetchedObjects else { return }
+        var recordToDelete: TrackerRecordCoreData?
+        
+        if isTrackerRecordExistToday(tracker: tracker) {
+            objects.forEach { record in
+                if record.id == tracker.id && record.date == tracker.date {
+                    recordToDelete = record
+                }
+            }
+            
+            guard let object = try? context.existingObject(
+                with: recordToDelete?.objectID ?? NSManagedObjectID()) else { return }
+            
+            context.delete(object)
             appDelegate.saveContext()
         }
     }
