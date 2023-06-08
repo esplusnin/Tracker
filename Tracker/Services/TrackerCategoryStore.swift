@@ -21,7 +21,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
         appDelegate.persistantContainer.viewContext
     }()
     
-    private lazy var fetchResultController: NSFetchedResultsController<TrackerCategoryCoreData> = {
+    private lazy var fetchedResultController: NSFetchedResultsController<TrackerCategoryCoreData> = {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
@@ -46,18 +46,16 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     private var categoryName: String?
     
     func numberOfCategories() -> Int {
-        fetchResultController.fetchedObjects?.count ?? 0
+        fetchedResultController.fetchedObjects?.count ?? 0
     }
     
     func numberOfRowsInSection(at section: Int) -> Int {
-        guard let trackers = fetchResultController.fetchedObjects?[section].trackers else { return 0 }
+        guard let trackers = fetchedResultController.fetchedObjects?[section].trackers else { return 0 }
         return trackers.count
     }
     
     func addCategory(name: String) {
-        print("addCategoryToStore")
         if !checkCategoryIsExist(name: name) {
-            print("!checkCategoryIsExist")
             let category = TrackerCategoryCoreData(context: context)
             category.name = name
             categoryName = name
@@ -67,7 +65,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     }
     
     func getCategoryName(at index: Int) -> String {
-        guard let category = fetchResultController.fetchedObjects?[index] else { return "" }
+        guard let category = fetchedResultController.fetchedObjects?[index] else { return "" }
         
         return category.name ?? ""
     }
@@ -75,7 +73,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
         var wantedCategory: TrackerCategoryCoreData?
         
-        if let categories = fetchResultController.fetchedObjects {
+        if let categories = fetchedResultController.fetchedObjects {
             categories.forEach { category in
                 if category.name == name {
                     wantedCategory = category
@@ -87,9 +85,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     }
     
     private func checkCategoryIsExist(name: String) -> Bool {
-        print("зашли в checkCategoryIsExist")
-        guard let categories = fetchResultController.fetchedObjects else { return false }
-        print("прошли елсе в checkCategoryIsExist")
+        guard let categories = fetchedResultController.fetchedObjects else { return false }
 
         var categoryName = ""
         
@@ -104,27 +100,10 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
 }
 
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        insertedSet = IndexSet()
-        deletedSet = IndexSet()
-    }
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("controllerDidChangeContent")
         dataProviderServie.inizializeVisibleCategories()
         delegate?.reloadTableView()
         // TODO: переделать
         dataProviderServie.trackersViewController?.reloadCOll()
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .insert:
-            if let indexPath = newIndexPath {
-                insertedSet?.insert(indexPath.item)
-            }
-        default:
-            break
-        }
     }
 }

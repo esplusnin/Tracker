@@ -18,6 +18,7 @@ final class DataProviderService {
     
     var trackerStore: TrackerStoreProtocol?
     var trackerCategoryStore: TrackerCategoryStoreProtocol?
+    var trackerRecordStore: TrackerRecordStore?
     var trackersViewController: TrackersViewControllerProtocol?
     
     private init() {}
@@ -31,7 +32,7 @@ final class DataProviderService {
     var trackerSchedule: [Int]?
     
     var visibleCategories: [TrackerCategory]?
-    var completedTrackers: [TrackerRecord]?
+    var completedTrackers: [TrackerRecord]? 
     
     var emojiArray = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -60,18 +61,11 @@ final class DataProviderService {
         trackerSchedule = nil
     }
     
-    func setupTrackerCategoryDelegate(controller: CategoryViewControllerProtocol) {
-        guard let trackerCategoryStore = trackerCategoryStore else { return }
-        
-        trackerCategoryStore.delegate = controller
-    }
-    
     func updateTrackersCollection(_ updates: CollectionStoreUpdates) {
         trackersViewController?.reloadCOll()
     }
     
     //MARK: TrackerStore Block:
-
     func addTrackerToStore(model: Tracker) {
         trackerStore?.addTracker(model: model)
     }
@@ -96,7 +90,6 @@ final class DataProviderService {
     }
     
     func addCategoryToStore(name: String) {
-        print("addCategoryToStore")
         trackerCategoryStore?.addCategory(name: name)
     }
     
@@ -106,5 +99,20 @@ final class DataProviderService {
 
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
         trackerCategoryStore?.fetchSpecificCategory(name: name)
+    }
+    
+    func setupTrackerCategoryDelegate(controller: CategoryViewControllerProtocol) {
+        guard let trackerCategoryStore = trackerCategoryStore else { return }
+        
+        trackerCategoryStore.delegate = controller
+    }
+    
+    //MARK: TrackerRecord Block:
+    func setAllTrackerRecords() {
+        completedTrackers = trackerRecordStore?.getTrackerRecords()
+    }
+    
+    func addTrackerRecord(model: TrackerRecord) {
+        trackerRecordStore?.addRecord(tracker: model)
     }
 }

@@ -8,18 +8,20 @@
 import Foundation
 
 protocol TrackersViewPresenterProtocol: AnyObject {
+    var view: TrackersViewControllerProtocol? { get set }
     var currentDate: Date? { get set }
     func checkCurrentDateIsFuture() -> Bool
     func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory]
-    func setupParticularCell(model: Tracker, cell: TrackerCell)
-    func updateCompletedTrackersArray(storage: DataProviderService,
-                                      isAddDay: Bool,
-                                      date: Date,
-                                      _ section: Int,
-                                      _ row: Int) -> [TrackerRecord]
-    func setCellButtonIfTrackerWasCompletedToday(_ completedTrackers: [TrackerRecord], _ id: UUID) -> String
-    func countAmountOfCompleteDays(_ completedTrackers: [TrackerRecord], id: UUID) -> Int
+    func setupParticularCell(model: Tracker,
+                             cell: TrackerCell,
+                             _ indexPath: IndexPath,
+                             id: UUID) 
+//    func updateCompletedTrackersArray(isAddDay: Bool,
+//                                      date: Date,
+//                                      indexPath: IndexPath) -> [TrackerRecord]
+    func setCellButtonIfTrackerWasCompletedToday(id: UUID) -> String
+    func countAmountOfCompleteDays(id: UUID) -> Int
     func updateNumberOfCompletedDaysLabel(_ number: Int) -> String
-    func updateCellDayLabel(_ storage: DataProviderService, _ section: Int, row: Int) -> String
-    func showNewTrackersAfterChanges(_ totalTrackers: [TrackerCategory]) -> [TrackerCategory]
+    func updateCellDayLabel(at indexPath: IndexPath) -> String
+    func showNewTrackersAfterChangeDate()
 }

@@ -49,7 +49,6 @@ final class TrackerCell: UICollectionViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = .blackDay
-        label.text = "0 дней"
         
         return label
     }()

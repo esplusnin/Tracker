@@ -9,7 +9,13 @@ import UIKit
 
 final class DateService {
     
-    let calendar = Calendar.current
+    private let calendar = Calendar.current
+    
+    func convertDateWithoutTimes(date: Date) -> Date {
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
+        
+        return calendar.date(from: components) ?? Date()
+    }
     
     func getNumberOfCurrentDate(_ date: Date?) -> Int {
         guard let date = date else { return 8 }

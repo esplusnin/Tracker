@@ -17,23 +17,22 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        dataProviderService.trackerStore = TrackerStore()
-        dataProviderService.trackerCategoryStore = TrackerCategoryStore()
-        dataProviderService.trackersViewController = self
+        inizializeStores()
         
-        dataProviderService.inizializeVisibleCategories()
+        presenter?.view = self 
         
         trackersView.searchTextField.delegate = self
         
-        setDateFromDatePicker()
+        presenter?.currentDate = trackersView.navigationBarDatePicker.date
+        presenter?.showNewTrackersAfterChangeDate()
         
         setViews()
         setMainCollectionSettings()
     }
     
     func reloadCOll() {
+        resetTextField()
         trackersView.trackersCollection.reloadData()
-        resetTextFieldAndDate()
     }
     
 //    func updateCollectionView(_ updates: CollectionStoreUpdates) {
@@ -49,10 +48,9 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
 //        }
 //    }
     
-    func resetTextFieldAndDate() {
+    func resetTextField() {
         trackersView.searchTextField.endEditing(true)
         trackersView.searchTextField.text = .none
-        presenter?.currentDate = trackersView.navigationBarDatePicker.date
     }
     
     @objc func switchToCreatingTrackerVC() {
@@ -62,6 +60,16 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         trackersView.searchTextField.endEditing(true)
         
         present(viewController, animated: true)
+    }
+    
+    private func inizializeStores() {
+        dataProviderService.trackerStore = TrackerStore()
+        dataProviderService.trackerCategoryStore = TrackerCategoryStore()
+        dataProviderService.trackerRecordStore = TrackerRecordStore()
+        dataProviderService.trackersViewController = self
+        
+        dataProviderService.inizializeVisibleCategories()
+        dataProviderService.setAllTrackerRecords()
     }
     
     private func setTargets() {
@@ -135,11 +143,14 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             trackersView.emptyTrackersImageView.image = Resources.Images.trackersIsEmpty
         }
         
-        resetTextFieldAndDate()
+        resetTextField()
     }
     
     @objc private func setDateFromDatePicker() {
-        resetTextFieldAndDate()
+        let date = DateService().convertDateWithoutTimes(date: trackersView.navigationBarDatePicker.date)
+        presenter?.currentDate = date
+        resetTextField()
+        presenter?.showNewTrackersAfterChangeDate()
         
         self.dismiss(animated: true)
     }
@@ -201,7 +212,6 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        let amountOfElement = dataProviderService.getNumberOfCategories()
         let amountOfElement = dataProviderService.visibleCategories?.count
 
         trackersView.trackersCollection.alpha = amountOfElement == 0 ? 0 : 1
@@ -216,16 +226,16 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = trackersView.trackersCollection.dequeueReusableCell(
-            withReuseIdentifier: "Cell", for: indexPath) as? TrackerCell,
-              let presenter = presenter else { return UICollectionViewCell() }
-        
-//        let categoryName = dataProviderService.getCategoryNameFromStore(at: indexPath.section)
-//        let tracker = dataProviderService.getTrackersFromStore(categoryName: categoryName, index: indexPath.row)
-        let tracker = dataProviderService.visibleCategories?[indexPath.section].trackerDictionary[indexPath.row]
-        
-        presenter.setupParticularCell(model: tracker!, cell: cell)
-        
+        guard let cell = trackersView.trackersCollection.dequeueReusableCell(withReuseIdentifier: "Cell",
+                                                                             for: indexPath) as? TrackerCell,
+              let presenter = presenter,
+              let tracker = dataProviderService.visibleCategories?[indexPath.section].trackerDictionary[indexPath.row]
+        else { return UICollectionViewCell() }
+           
+        presenter.setupParticularCell(model: tracker,
+                                      cell: cell,
+                                      indexPath,
+                                      id: tracker.id)
         cell.delegate = self
 
         if presenter.checkCurrentDateIsFuture() {
@@ -263,19 +273,19 @@ extension TrackersViewController: UICollectionViewDataSource {
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func addCurrentTrackerToCompletedThisDate(_ cell: TrackerCell, isAddDay: Bool) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell),
-              let date = presenter?.currentDate else { return }
+              let date = presenter?.currentDate,
+              let tracker = dataProviderService.visibleCategories?[indexPath.section].trackerDictionary[indexPath.row]
+        else { return }
         
-        let section = indexPath.section
-        let row = indexPath.row
+        dataProviderService.addTrackerRecord(model: TrackerRecord(id: tracker.id,
+                                                                  date: date))
+//        let newCompletedTrackers = presenter?.updateCompletedTrackersArray(isAddDay: isAddDay,
+//                                                                           date: date,
+//                                                                           indexPath: indexPath)
         
-        let newCompletedTrackers = presenter?.updateCompletedTrackersArray(storage: dataProviderService,
-                                                                           isAddDay: isAddDay,
-                                                                           date: date,
-                                                                           section,
-                                                                           row)
-        
-        dataProviderService.completedTrackers = newCompletedTrackers
-        cell.numberOfDaysLabel.text = presenter?.updateCellDayLabel(dataProviderService, section, row: row)
+//        dataProviderService.completedTrackers = newCompletedTrackers
+        cell.numberOfDaysLabel.text = presenter?.updateCellDayLabel(at: indexPath)
+//        trackersView.trackersCollection.reloadItems(at: [indexPath])
     }
 }
 

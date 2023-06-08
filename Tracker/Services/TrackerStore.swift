@@ -24,7 +24,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         appDelegate.persistantContainer.viewContext
     }()
         
-    private lazy var trackerFetchResultController: NSFetchedResultsController<TrackerCoreData> = {
+    private lazy var fetchedResultController: NSFetchedResultsController<TrackerCoreData> = {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.sortDescriptors = [NSSortDescriptor(key: "category.name", ascending: true)]
         
@@ -44,7 +44,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
     }()
     
     func fetchTrackers() -> [TrackerCategory] {
-        guard let sections = trackerFetchResultController.sections else { return [] }
+        guard let sections = fetchedResultController.sections else { return [] }
         
         var currentArray: [TrackerCategory] = []
         
@@ -82,7 +82,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
     }
     
     func getTracker(categoryName: String, searchedindex: Int) -> Tracker {
-        let section = trackerFetchResultController.sections?.first(where: { section in
+        let section = fetchedResultController.sections?.first(where: { section in
             section.name == categoryName
         })
         
