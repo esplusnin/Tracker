@@ -96,6 +96,19 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
                        emoji: tracker?.emoji ?? "",
                        schedule: tracker?.schedule ?? [])
     }
+    
+    func editTracker(id: UUID) {
+        
+    }
+    
+    func deleteTracker(id: UUID) {
+        guard let object = fetchedResultController.fetchedObjects?.first(where: { trackerCoreData in
+            trackerCoreData.id == id
+        }) else { return }
+        
+        context.delete(object)
+        appDelegate.saveContext()
+    }
 }
 
 extension TrackerStore: NSFetchedResultsControllerDelegate {

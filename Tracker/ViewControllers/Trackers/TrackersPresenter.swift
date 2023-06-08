@@ -13,8 +13,36 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
     
     var currentDate: Date?
     
-    
     private let dataProviderService = DataProviderService.instance
+    
+    // Operates with DataProviderSevice:
+    func getVisibleCategoryFromProvider() -> [TrackerCategory] {
+        dataProviderService.getVisiblieCategories()
+    }
+    
+    func setVisibleCategory(_ categories: [TrackerCategory]) {
+        dataProviderService.setVisibleCategory(categories)
+    }
+    
+    func getTrackerRecords() -> [TrackerRecord] {
+        dataProviderService.getTrackerRecords()
+    }
+    
+    func setTrackerRecords(_ records: [TrackerRecord]) {
+        dataProviderService.setTrackerRecords(records)
+    }
+    
+    func changeStatusTrackerRecord(model: TrackerRecord, isAddDay: Bool) {
+        dataProviderService.changeStatusTrackerRecord(model: model, isAddDay: isAddDay)
+    }
+    
+    func editTracker(id: UUID) {
+        dataProviderService.editTrackerFromStore(id: id)
+    }
+    
+    func deleteTracker(id: UUID) {
+        dataProviderService.deleteTrackerFromStore(id: id)
+    }
     
     func checkCurrentDateIsFuture() -> Bool {
         guard let currentDate = currentDate else { return false }
@@ -65,7 +93,9 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
     
     func setCellButtonIfTrackerWasCompletedToday(id: UUID) -> String {
         var string = "+"
-        dataProviderService.completedTrackers?.forEach({ trackers in
+        let completedTrackers = getTrackerRecords()
+        
+        completedTrackers.forEach({ trackers in
             if trackers.id == id && currentDate == trackers.date {
                 string = "✓"
             }
@@ -76,8 +106,9 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
     
     func countAmountOfCompleteDays(id: UUID) -> Int {
         var counter = 0
+        let completedTrackers = getTrackerRecords()
         
-        dataProviderService.completedTrackers?.forEach({ trackerRecord in
+        completedTrackers.forEach({ trackerRecord in
             if trackerRecord.id == id {
                 counter += 1
             }
@@ -123,8 +154,7 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
     }
     
     func updateCellDayLabel(at indexPath: IndexPath) -> String {
-        guard let id = dataProviderService.visibleCategories?[indexPath.section].trackerDictionary[indexPath.row].id
-            else { return "" }
+        let id = getVisibleCategoryFromProvider()[indexPath.section].trackerDictionary[indexPath.row].id
         let string = updateNumberOfCompletedDaysLabel(countAmountOfCompleteDays(id: id))
         
         return string
@@ -132,9 +162,9 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
     
     func showNewTrackersAfterChangeDate() {
         dataProviderService.inizializeVisibleCategories()
-        guard let date = currentDate,
-              let visibleTracker = dataProviderService.visibleCategories else { return }
+        guard let date = currentDate else { return }
         
+        let visibleTracker = getVisibleCategoryFromProvider()
         var newArray: [TrackerCategory] = []
         
         for category in visibleTracker {
@@ -153,7 +183,7 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
             }
         }
         
-        dataProviderService.visibleCategories = newArray
+        setVisibleCategory(newArray)
         view?.reloadCOll()
     }
 }

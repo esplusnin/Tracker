@@ -31,8 +31,8 @@ final class DataProviderService {
     var trackerEmoji: String?
     var trackerSchedule: [Int]?
     
-    var visibleCategories: [TrackerCategory]?
-    var completedTrackers: [TrackerRecord]? 
+    private var visibleCategories: [TrackerCategory]?
+    private var completedTrackers: [TrackerRecord]?
     
     var emojiArray = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -47,6 +47,23 @@ final class DataProviderService {
         .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16,
         .colorSelection17, .colorSelection18,
     ]
+    
+    // Getting and Setting operating arrays:
+    func getVisiblieCategories() -> [TrackerCategory] {
+        visibleCategories ?? []
+    }
+    
+    func setVisibleCategory(_ category: [TrackerCategory]) {
+        visibleCategories = category
+    }
+    
+    func getTrackerRecords() -> [TrackerRecord] {
+        completedTrackers ?? []
+    }
+    
+    func setTrackerRecords(_ records: [TrackerRecord]) {
+        completedTrackers = records
+    }
     
     func inizializeVisibleCategories() {
         visibleCategories = trackerStore?.fetchTrackers()
@@ -68,6 +85,14 @@ final class DataProviderService {
     //MARK: TrackerStore Block:
     func addTrackerToStore(model: Tracker) {
         trackerStore?.addTracker(model: model)
+    }
+    
+    func editTrackerFromStore(id: UUID) {
+        trackerStore?.editTracker(id: id)
+    }
+    
+    func deleteTrackerFromStore(id: UUID) {
+        trackerStore?.deleteTracker(id: id)
     }
     
     func getTrackersFromStore(categoryName: String, index: Int) -> Tracker {
