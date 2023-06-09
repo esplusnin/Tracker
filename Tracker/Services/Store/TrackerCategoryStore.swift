@@ -10,7 +10,7 @@ import CoreData
 
 final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     
-    weak var delegate: CategoryViewControllerProtocol?
+    weak var delegate: TrackersCategoryDelegate?
     private let dataProviderServie = DataProviderService.instance
     
     private lazy var appDelegate = {
@@ -54,6 +54,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
         return trackers.count
     }
     
+    // CRUD TrackerCategory:
     func addCategory(name: String) {
         if !checkCategoryIsExist(name: name) {
             let category = TrackerCategoryCoreData(context: context)
@@ -100,10 +101,32 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
 }
 
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        insertedSet = IndexSet()
+        deletedSet = IndexSet()
+    }
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        guard let insertedSet = insertedSet, let deletedSet = deletedSet else { return }
+        
         dataProviderServie.inizializeVisibleCategories()
-        delegate?.reloadTableView()
-        // TODO: переделать
-        dataProviderServie.trackersViewController?.reloadCOll()
+        delegate?.didUpdate(updates: CollectionStoreUpdates(insertedIndex: insertedSet,
+                                                                  deletedIndex: deletedSet))
+        self.insertedSet = nil
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .delete:
+            if let indexPath = indexPath {
+                deletedSet?.insert(indexPath.item)
+            }
+        case .insert:
+            if let indexPath = newIndexPath {
+                insertedSet?.insert(indexPath.item)
+            }
+        default:
+            break
+        }
     }
 }

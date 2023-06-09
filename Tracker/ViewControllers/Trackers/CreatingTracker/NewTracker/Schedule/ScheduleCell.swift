@@ -12,11 +12,7 @@ final class ScheduleCell: UITableViewCell {
     
     weak var delegate: ScheduleViewControllerDelegate?
     
-    lazy var label: UILabel = {
-        let label = UILabel()
-        
-        return label
-    }()
+    lazy var label = UILabel()
     
     lazy var switcher: UISwitch = {
         let switcher = UISwitch()

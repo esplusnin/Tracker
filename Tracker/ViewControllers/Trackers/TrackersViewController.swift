@@ -28,7 +28,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         setMainCollectionSettings()
     }
     
-    func reloadCOll() {
+    func reloadCollectionView() {
         trackersView.trackersCollection.reloadData()
     }
     
@@ -36,8 +36,6 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         trackersView.searchTextField.endEditing(true)
         trackersView.searchTextField.text = .none
     }
-    
-    
     
     private func setDate() {
         let date = DateService().convertDateWithoutTimes(date: trackersView.navigationBarDatePicker.date)
@@ -49,6 +47,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         dataProviderService.trackerCategoryStore = TrackerCategoryStore()
         dataProviderService.trackerRecordStore = TrackerRecordStore()
         dataProviderService.trackersViewController = self
+        dataProviderService.setTrackerStoreDelegate(view: self)
         
         dataProviderService.inizializeVisibleCategories()
         dataProviderService.setAllTrackerRecords()
@@ -119,6 +118,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     @objc private func setSearchFieldWithoutCancelationButton() {
+        resetTextField()
         let visibleCategories = presenter?.getVisibleCategoryFromProvider() ?? []
         trackersView.cancelationButton.removeFromSuperview()
         
@@ -208,7 +208,6 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-                                          
 
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -304,6 +303,18 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
         
         presenter?.deleteTracker(id: tracker.id)
+    }
+}
+
+// Method tp update the CollectionView
+extension TrackersViewController: TrackersDataProviderDelegate {
+    func didUpdate(_ update: CollectionStoreUpdates) {
+        trackersView.trackersCollection.performBatchUpdates {
+            let insertedIndexPaths = update.insertedIndex.map { IndexPath(item: $0, section: 0) }
+            let deletedIndexPaths = update.deletedIndex.map { IndexPath(item: $0, section: 0) }
+            trackersView.trackersCollection.insertItems(at: insertedIndexPaths)
+            trackersView.trackersCollection.deleteItems(at: deletedIndexPaths)
+        }
     }
 }
 

@@ -15,7 +15,6 @@ final class TrackerCell: UICollectionViewCell {
     lazy var cellView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(tapGesture)
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
         
@@ -64,7 +63,6 @@ final class TrackerCell: UICollectionViewCell {
         return button
     }()
     
-    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showContextMenu(_ :)))
     
     override init(frame: CGRect) {
         super.init(frame: frame)

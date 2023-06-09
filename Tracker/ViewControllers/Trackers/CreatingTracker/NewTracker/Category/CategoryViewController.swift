@@ -50,6 +50,24 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     }
 }
 
+extension CategoryViewController: TrackersCategoryDelegate {
+    func didUpdate(updates: CollectionStoreUpdates) {
+        let insertedIndex = updates.insertedIndex.map { IndexPath(row: $0, section: 0)}
+        let rowToReload = insertedIndex[0].row == 0 ? 1 : insertedIndex[0].row
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if insertedIndex[0].row == 0 {
+                self.categoryView.tableView.alpha = 1
+            }
+            
+            self.categoryView.tableView.insertRows(at: insertedIndex,
+                                                   with: .fade)
+            self.categoryView.tableView.reloadRows(at: [IndexPath(row: rowToReload - 1, section: 0)],
+                                                   with: .automatic)
+        }
+    }
+}
+
 extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? CategoryCell else { return }

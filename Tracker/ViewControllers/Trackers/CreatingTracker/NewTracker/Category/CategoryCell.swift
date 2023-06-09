@@ -9,11 +9,7 @@ import UIKit
 import SnapKit
 
 final class CategoryCell: UITableViewCell {
-    lazy var label: UILabel = {
-        let label = UILabel()
-        
-        return label
-    }()
+    lazy var label = UILabel()
     
     override func layoutSubviews() {
         super.layoutSubviews()

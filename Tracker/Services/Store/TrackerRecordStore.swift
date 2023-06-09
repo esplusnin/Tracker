@@ -40,6 +40,7 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         return fetchedController
     }()
     
+    // CRUD TrackerRecord:
     func addRecord(tracker: TrackerRecord) {
         if !isTrackerRecordExistToday(tracker: tracker) {
             let record = TrackerRecordCoreData(context: context)
@@ -50,6 +51,18 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
             
             appDelegate.saveContext()
         }
+    }
+    
+    func getTrackerRecords() -> [TrackerRecord] {
+        guard let coreRecords = fetchedResultController.fetchedObjects else { return [] }
+        var newRecordsArray: [TrackerRecord] = []
+        
+        for record in coreRecords {
+            newRecordsArray.append(TrackerRecord(id: record.id ?? UUID(),
+                                                 date: record.date ?? Date()))
+        }
+        
+        return newRecordsArray
     }
     
     func deleteRecord(tracker: TrackerRecord) {
@@ -69,18 +82,6 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
             context.delete(object)
             appDelegate.saveContext()
         }
-    }
-    
-    func getTrackerRecords() -> [TrackerRecord] {
-        guard let coreRecords = fetchedResultController.fetchedObjects else { return [] }
-        var newRecordsArray: [TrackerRecord] = []
-        
-        for record in coreRecords {
-            newRecordsArray.append(TrackerRecord(id: record.id ?? UUID(),
-                                                 date: record.date ?? Date()))
-        }
-        
-        return newRecordsArray
     }
     
     private func isTrackerRecordExistToday(tracker: TrackerRecord) -> Bool {

@@ -9,6 +9,7 @@ import Foundation
 
 protocol TrackersViewPresenterProtocol: AnyObject {
     var view: TrackersViewControllerProtocol? { get set }
+    var currentDate: Date? { get set }
     func getVisibleCategoryFromProvider() -> [TrackerCategory]
     func setVisibleCategory(_ categories: [TrackerCategory])
     func getTrackerRecords() -> [TrackerRecord]
@@ -16,7 +17,6 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     func changeStatusTrackerRecord(model: TrackerRecord, isAddDay: Bool)
     func editTracker(id: UUID)
     func deleteTracker(id: UUID)
-    var currentDate: Date? { get set }
     func checkCurrentDateIsFuture() -> Bool
     func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory]
     func setupParticularCell(model: Tracker,

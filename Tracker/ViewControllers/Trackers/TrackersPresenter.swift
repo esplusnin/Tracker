@@ -51,6 +51,33 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
         return date > currentDate ? true : false
     }
     
+    func showNewTrackersAfterChangeDate() {
+        dataProviderService.inizializeVisibleCategories()
+        guard let date = currentDate else { return }
+        
+        let visibleTracker = getVisibleCategoryFromProvider()
+        var newArray: [TrackerCategory] = []
+        
+        for category in visibleTracker {
+            var newCategory = TrackerCategory(name: category.name, trackerDictionary: [])
+            
+            for tracker in category.trackerDictionary {
+                guard let schedule = tracker.schedule else { return }
+                let trackerDate = DateService().getNumberOfCurrentDate(date)
+                
+                if schedule.contains(trackerDate) {
+                    newCategory.trackerDictionary.append(tracker)
+                }
+            }
+            if !newCategory.trackerDictionary.isEmpty {
+                newArray.append(newCategory)
+            }
+        }
+        
+        setVisibleCategory(newArray)
+        view?.reloadCollectionView()
+    }
+    
     func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory] {
         var newVisibleArray: [TrackerCategory] = []
         
@@ -71,6 +98,7 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
         return newVisibleArray
     }
     
+    // Actions for setting Cell:
     func setupParticularCell(model: Tracker,
                              cell: TrackerCell,
                              _ indexPath: IndexPath,
@@ -158,32 +186,5 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
         let string = updateNumberOfCompletedDaysLabel(countAmountOfCompleteDays(id: id))
         
         return string
-    }
-    
-    func showNewTrackersAfterChangeDate() {
-        dataProviderService.inizializeVisibleCategories()
-        guard let date = currentDate else { return }
-        
-        let visibleTracker = getVisibleCategoryFromProvider()
-        var newArray: [TrackerCategory] = []
-        
-        for category in visibleTracker {
-            var newCategory = TrackerCategory(name: category.name, trackerDictionary: [])
-            
-            for tracker in category.trackerDictionary {
-                guard let schedule = tracker.schedule else { return }
-                let trackerDate = DateService().getNumberOfCurrentDate(date)
-                
-                if schedule.contains(trackerDate) {
-                    newCategory.trackerDictionary.append(tracker)
-                }
-            }
-            if !newCategory.trackerDictionary.isEmpty {
-                newArray.append(newCategory)
-            }
-        }
-        
-        setVisibleCategory(newArray)
-        view?.reloadCOll()
     }
 }

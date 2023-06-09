@@ -48,6 +48,10 @@ final class DataProviderService {
         .colorSelection17, .colorSelection18,
     ]
     
+    func setTrackerStoreDelegate(view: TrackersDataProviderDelegate) {
+        trackerStore?.delegate = view
+    }
+    
     // Getting and Setting operating arrays:
     func getVisiblieCategories() -> [TrackerCategory] {
         visibleCategories ?? []
@@ -79,7 +83,7 @@ final class DataProviderService {
     }
     
     func updateTrackersCollection(_ updates: CollectionStoreUpdates) {
-        trackersViewController?.reloadCOll()
+        trackersViewController?.reloadCollectionView()
     }
     
     //MARK: TrackerStore Block:
@@ -126,7 +130,7 @@ final class DataProviderService {
         trackerCategoryStore?.fetchSpecificCategory(name: name)
     }
     
-    func setupTrackerCategoryDelegate(controller: CategoryViewControllerProtocol) {
+    func setupTrackerCategoryDelegate(controller: TrackersCategoryDelegate) {
         guard let trackerCategoryStore = trackerCategoryStore else { return }
         
         trackerCategoryStore.delegate = controller

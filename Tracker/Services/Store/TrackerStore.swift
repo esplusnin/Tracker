@@ -9,6 +9,8 @@ import UIKit
 import CoreData
 
 final class TrackerStore: NSObject, TrackerStoreProtocol {
+    
+    weak var delegate: TrackersDataProviderDelegate?
    
     private let colorMarshalling = UIColorMarshallingService()
     private let dataProvider = DataProviderService.instance
@@ -42,7 +44,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         
         return fetchController
     }()
-    
+        
     func fetchTrackers() -> [TrackerCategory] {
         guard let sections = fetchedResultController.sections else { return [] }
         
@@ -66,6 +68,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         return currentArray
     }
 
+    // CRUD Tracker:
     func addTracker(model: Tracker) {
         let category = dataProvider.fetchSpecificCategory(name: dataProvider.selectedCategoryString ?? "")
         let tracker = TrackerCoreData(context: context)
@@ -89,7 +92,6 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         
         let tracker = section?.objects?[searchedindex] as? TrackerCoreData
         let color = colorMarshalling.colorWithHexString(hexString: tracker?.color ?? "")
-        
         return Tracker(id: tracker?.id ?? UUID(),
                        name: tracker?.name ?? "",
                        color: color,
@@ -117,17 +119,8 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
         deletedIndex = IndexSet()
     }
     
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let insertedIndex = insertedIndex, let deletedIndex = deletedIndex else { return }
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {        
         dataProvider.inizializeVisibleCategories()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.dataProvider.updateTrackersCollection(CollectionStoreUpdates(insertedIndex: insertedIndex,
-                                                                         deletedIndex: deletedIndex))
-
-        }
-        
-        self.insertedIndex = nil
-        self.deletedIndex = nil
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -135,17 +128,11 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
         case .insert:
             if let indexPath = newIndexPath {
                 insertedIndex?.insert(indexPath.item)
-            } else {
-                // TODO: Удалить перед отправкой на ревью
-                fatalError("ошибка в методе controller didChange")
-            }
+            } else { return }
         case .delete:
             if let indexPath = indexPath {
                 deletedIndex?.insert(indexPath.item)
-            } else {
-                // TODO: Удалить перед отправкой на ревью
-                fatalError("ошибка в методе controller didChange")
-            }
+            } else { return }
         default:
             break
         }
