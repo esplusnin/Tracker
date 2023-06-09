@@ -26,12 +26,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         setConstraints()
         setTargets()
     }
-    
-    func reloadTableView() {
-        checkToSetupDumb()
-        categoryView.tableView.reloadData()
-    }
-    
+
     @objc private func switchToNewCategoryVC() {
         let viewController = NewCategoryViewController()
         viewController.categoryViewController = self
@@ -54,7 +49,7 @@ extension CategoryViewController: TrackersCategoryDelegate {
     func didUpdate(updates: CollectionStoreUpdates) {
         let insertedIndex = updates.insertedIndex.map { IndexPath(row: $0, section: 0)}
         let rowToReload = insertedIndex[0].row == 0 ? 1 : insertedIndex[0].row
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             if insertedIndex[0].row == 0 {
                 self.categoryView.tableView.alpha = 1

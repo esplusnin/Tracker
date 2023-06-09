@@ -308,12 +308,24 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
 
 // Method tp update the CollectionView
 extension TrackersViewController: TrackersDataProviderDelegate {
-    func didUpdate(_ update: CollectionStoreUpdates) {
+    func didUpdate(_ update: CollectionStoreUpdates, section: Int) {
         trackersView.trackersCollection.performBatchUpdates {
-            let insertedIndexPaths = update.insertedIndex.map { IndexPath(item: $0, section: 0) }
-            let deletedIndexPaths = update.deletedIndex.map { IndexPath(item: $0, section: 0) }
-            trackersView.trackersCollection.insertItems(at: insertedIndexPaths)
-            trackersView.trackersCollection.deleteItems(at: deletedIndexPaths)
+            let insertedIndexPaths = update.insertedIndex.map { IndexPath(item: $0, section: section) }
+            let deletedIndexPaths = update.deletedIndex.map { IndexPath(item: $0, section: section) }
+            
+            let trackers = dataProviderService.getVisiblieCategories()
+            
+            if trackers.indices.contains(section) {
+                if trackersView.trackersCollection.numberOfSections < trackers.count {
+                    trackersView.trackersCollection.insertSections(IndexSet(integer: section))
+                    trackersView.trackersCollection.insertItems(at: insertedIndexPaths)
+                } else {
+                    trackersView.trackersCollection.insertItems(at: insertedIndexPaths)
+                    trackersView.trackersCollection.deleteItems(at: deletedIndexPaths)
+                }
+            } else {
+                trackersView.trackersCollection.deleteSections(IndexSet(integer: section))
+            }
         }
     }
 }

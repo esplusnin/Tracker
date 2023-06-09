@@ -35,6 +35,17 @@ final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
         dataProviderService.addTrackerToStore(model: tracker)
     }
     
+    func resetTrackerInfoAfterDeselect(section: Int) {
+        switch section {
+        case 0:
+            dataProviderService.trackerEmoji = nil
+        case 1:
+            dataProviderService.trackerColor = nil
+        default:
+            return
+        }
+    }
+    
     @objc func checkCreateButtonToUnclock() {
         if dataProviderService.trackerName != nil &&
             dataProviderService.trackerColor != nil &&
@@ -50,17 +61,6 @@ final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
             }
         } else {
             view?.lockCreateButton()
-        }
-    }
-    
-    func resetTrackerInfoAfterDeselect(section: Int) {
-        switch section {
-        case 0:
-            dataProviderService.trackerEmoji = nil
-        case 1:
-            dataProviderService.trackerColor = nil
-        default:
-            return
         }
     }
 }

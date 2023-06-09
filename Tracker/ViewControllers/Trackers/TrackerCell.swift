@@ -71,6 +71,11 @@ final class TrackerCell: UICollectionViewCell {
         setTarget()
         
         addContextMenuInteraction()
+        
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowOpacity = 0.4
+        contentView.layer.shadowOffset = CGSize(width: 10, height: 10)
+        contentView.layer.shadowRadius = 4
     }
     
     required init?(coder: NSCoder) {

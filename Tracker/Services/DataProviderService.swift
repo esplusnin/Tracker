@@ -82,10 +82,6 @@ final class DataProviderService {
         trackerSchedule = nil
     }
     
-    func updateTrackersCollection(_ updates: CollectionStoreUpdates) {
-        trackersViewController?.reloadCollectionView()
-    }
-    
     //MARK: TrackerStore Block:
     func addTrackerToStore(model: Tracker) {
         trackerStore?.addTracker(model: model)

@@ -11,6 +11,7 @@ import CoreData
 final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     
     weak var delegate: TrackersCategoryDelegate?
+    
     private let dataProviderServie = DataProviderService.instance
     
     private lazy var appDelegate = {
@@ -123,6 +124,10 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
             }
         case .insert:
             if let indexPath = newIndexPath {
+                insertedSet?.insert(indexPath.item)
+            }
+        case .update:
+            if let indexPath = indexPath {
                 insertedSet?.insert(indexPath.item)
             }
         default:
