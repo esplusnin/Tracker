@@ -254,6 +254,8 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let visibleCategories = presenter?.getVisibleCategoryFromProvider() else { return UICollectionReusableView() }
+        
         var id: String
         switch kind {
         case UICollectionView.elementKindSectionHeader:
@@ -267,7 +269,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             withReuseIdentifier: id,
             for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
         
-        view.headerLabel.text = dataProviderService.getCategoryNameFromStore(at: indexPath.section)
+        view.headerLabel.text = visibleCategories[indexPath.section].name
         
         return view
     }
@@ -319,6 +321,8 @@ extension TrackersViewController: TrackersDataProviderDelegate {
                 if trackersView.trackersCollection.numberOfSections < trackers.count {
                     trackersView.trackersCollection.insertSections(IndexSet(integer: section))
                     trackersView.trackersCollection.insertItems(at: insertedIndexPaths)
+                } else if trackersView.trackersCollection.numberOfSections > trackers.count {
+                    trackersView.trackersCollection.deleteSections(IndexSet(integer: section))
                 } else {
                     trackersView.trackersCollection.insertItems(at: insertedIndexPaths)
                     trackersView.trackersCollection.deleteItems(at: deletedIndexPaths)
@@ -400,6 +404,7 @@ extension TrackersViewController {
         }
         
         trackersView.navigationBarDatePicker.snp.makeConstraints { make in
+            make.width.equalTo(100)
             make.trailing.equalTo(navigationBar).inset(16)
             make.centerY.equalTo(trackersView.navigationBarTitleLabel.snp.centerY)
         }
