@@ -36,7 +36,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
         do {
             try fetchResultController.performFetch()
         } catch {
-            print(error.localizedDescription)
+            assertionFailure("Load TrackerCategory fetchedResultController")
         }
         
         return fetchResultController
@@ -46,7 +46,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     private var deletedSet: IndexSet?
     private var categoryName: String?
     
-    func numberOfCategories() -> Int {
+    func getNumberOfCategories() -> Int {
         fetchedResultController.fetchedObjects?.count ?? 0
     }
     

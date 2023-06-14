@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         container.loadPersistentStores { persistantStore, error in
             if let error = error {
-                print(error)
+                assertionFailure("failure loadPersistentStores")
             }
         }
         
@@ -31,8 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 try context.save()
             } catch {
                 context.rollback()
-                //TODO: Удалить перед отправкой на ревью
-                fatalError()
             }
         }
     }

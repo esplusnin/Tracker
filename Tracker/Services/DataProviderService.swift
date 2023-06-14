@@ -7,11 +7,6 @@
 
 import UIKit
 
-struct CollectionStoreUpdates {
-    let insertedIndex: IndexSet
-    let deletedIndex: IndexSet
-}
-
 final class DataProviderService {
     
     static let instance = DataProviderService()
@@ -51,6 +46,13 @@ final class DataProviderService {
     func setTrackerStoreDelegate(view: TrackersDataProviderDelegate) {
         trackerStore?.delegate = view
     }
+    
+    func isCurrentDayFromScheduleExist(_ day: Int) -> Bool {
+        guard let trackerSchedule = trackerSchedule else { return false }
+        
+        return trackerSchedule.contains(day) ? true : false
+    }
+
     
     // Getting and Setting operating arrays:
     func getVisiblieCategories() -> [TrackerCategory] {
@@ -107,7 +109,7 @@ final class DataProviderService {
     
     //MARK: TrackerCategoryStore Block:
     func getNumberOfCategories() -> Int {
-        trackerCategoryStore?.numberOfCategories() ?? 0
+        trackerCategoryStore?.getNumberOfCategories() ?? 0
     }
     
     func getNumberOfRowsInSection(at section: Int) -> Int {

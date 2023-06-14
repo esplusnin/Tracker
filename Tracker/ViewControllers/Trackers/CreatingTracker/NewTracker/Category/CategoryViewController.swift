@@ -50,7 +50,8 @@ extension CategoryViewController: TrackersCategoryDelegate {
         let insertedIndex = updates.insertedIndex.map { IndexPath(row: $0, section: 0)}
         let rowToReload = insertedIndex[0].row == 0 ? 1 : insertedIndex[0].row
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self = self else { return }
             if insertedIndex[0].row == 0 {
                 self.categoryView.tableView.alpha = 1
             }

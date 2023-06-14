@@ -30,8 +30,7 @@ final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
                               color: trackerColor,
                               emoji: trackerEmoji,
                               schedule: dataProviderService.trackerSchedule ?? [1,2,3,4,5,6,7])
-        
-
+        print(dataProviderService.trackerSchedule)
         dataProviderService.addTrackerToStore(model: tracker)
     }
     

@@ -57,10 +57,10 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         guard let coreRecords = fetchedResultController.fetchedObjects else { return [] }
         var newRecordsArray: [TrackerRecord] = []
         
-        for record in coreRecords {
+        coreRecords.forEach({ record in
             newRecordsArray.append(TrackerRecord(id: record.id ?? UUID(),
                                                  date: record.date ?? Date()))
-        }
+        })
         
         return newRecordsArray
     }
@@ -70,9 +70,9 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         var recordToDelete: TrackerRecordCoreData?
         
         if isTrackerRecordExistToday(tracker: tracker) {
-            objects.forEach { record in
-                if record.id == tracker.id && record.date == tracker.date {
-                    recordToDelete = record
+            objects.forEach {
+                if $0.id == tracker.id && $0.date == tracker.date {
+                    recordToDelete = $0
                 }
             }
             

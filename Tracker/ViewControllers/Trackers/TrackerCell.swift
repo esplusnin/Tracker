@@ -88,7 +88,7 @@ final class TrackerCell: UICollectionViewCell {
         completeTrackerDayButton.titleLabel?.font = .systemFont(ofSize: 15)
         completeTrackerDayButton.alpha = 0.4
     }
-    
+     
     func unlockCompleteButton() {
         completeTrackerDayButton.isEnabled = true
     }
@@ -105,7 +105,7 @@ final class TrackerCell: UICollectionViewCell {
         delegate?.deleteTracker(from: cell)
     }
     
-    @objc func showContextMenu(_ sender: UITapGestureRecognizer) {
+    @objc private func showContextMenu(_ sender: UITapGestureRecognizer) {
      
     }
     
@@ -182,11 +182,13 @@ extension TrackerCell: UIContextMenuInteractionDelegate {
         
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
             let editAction = UIAction(
-                title: "Редактировать", image: editImage) { action in
+                title: "Редактировать", image: editImage) { [weak self] action in
+                    guard let self = self else { return }
                     self.editTracker(from: self)
                 }
             let deleteAction = UIAction(
-                title: "Удалить", image: deleteImage, attributes: .destructive) { action in
+                title: "Удалить", image: deleteImage, attributes: .destructive) { [weak self] action in
+                    guard let self = self else { return }
                     self.deleteTracker(from: self)
                 }
             

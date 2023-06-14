@@ -14,11 +14,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
    
     private let colorMarshalling = UIColorMarshallingService()
     private let dataProvider = DataProviderService.instance
-    
-    private var insertedIndex: IndexSet?
-    private var deletedIndex: IndexSet?
-    private var section: Int?
-    
+  
     private lazy var appDelegate = {
         (UIApplication.shared.delegate as! AppDelegate)
     }()
@@ -115,44 +111,8 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
 }
 
 extension TrackerStore: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        insertedIndex = IndexSet()
-        deletedIndex = IndexSet()
-    }
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let insertedIndex = insertedIndex,
-              let deletedIndex = deletedIndex,
-              let section = section else { return }
-        
         dataProvider.inizializeVisibleCategories()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.delegate?.didUpdate(CollectionStoreUpdates(insertedIndex: insertedIndex,
-                                                            deletedIndex: deletedIndex),
-                                     section: section)
-        }
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .delete:
-            if let indexPath = indexPath {
-                section = indexPath.section
-                deletedIndex?.insert(indexPath.item)
-            }
-        case .insert:
-            if let indexPath = newIndexPath {
-                section = indexPath.section
-                insertedIndex?.insert(indexPath.item)
-            }
-        case .update:
-            if let indexPath = indexPath {
-                section = indexPath.section
-                insertedIndex?.insert(indexPath.item)
-            }
-        default:
-            break
-        }
+        delegate?.didUpdate()
     }
 }

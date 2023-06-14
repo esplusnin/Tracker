@@ -48,7 +48,7 @@ final class TrackersPresenter: TrackersViewPresenterProtocol {
         guard let currentDate = currentDate else { return false }
         let date = Date()
         
-        return date > currentDate ? true : false
+        return date > currentDate 
     }
     
     func showNewTrackersAfterChangeDate() {
