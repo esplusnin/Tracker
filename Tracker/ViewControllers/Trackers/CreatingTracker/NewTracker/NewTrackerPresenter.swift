@@ -14,65 +14,52 @@ enum KindOfTrackers {
 
 final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
     
-    var view: NewTrackerViewControllerProtocol?
+    weak var view: NewTrackerViewControllerProtocol?
+    
+    private let dataProviderService = DataProviderService.instance
     
     let buttonsTitleForTableView = ["Категория", "Расписание"]
-    
-    private let trackerStorage = TrackerStorageService.shared
-    
-    func createNewTracker() -> [TrackerCategory] {
-        guard let categoryArray = trackerStorage.categories,
-              let trackerName = trackerStorage.trackerName,
-              let trackerColor = trackerStorage.trackerColor,
-              let trackerEmoji = trackerStorage.trackerEmoji else { return [] }
+        
+    func createNewTracker() {
+        guard let trackerName = dataProviderService.trackerName,
+              let trackerColor = dataProviderService.trackerColor,
+              let trackerEmoji = dataProviderService.trackerEmoji else { return }
         
         let tracker = Tracker(id: UUID(),
                               name: trackerName,
                               color: trackerColor,
                               emoji: trackerEmoji,
-                              schedule: trackerStorage.trackerSchedule ?? [1,2,3,4,5,6,7])
-        
-        var newCategoryArray: [TrackerCategory] = []
-        
-        categoryArray.forEach { category in
-            if trackerStorage.selectedCategoryString == category.name {
-                var newTrackersArray = category.trackerDictionary
-                newTrackersArray.append(tracker)
-                newCategoryArray.append(TrackerCategory(name: category.name, trackerDictionary: newTrackersArray))
-            } else {
-                newCategoryArray.append(category)
-            }
-        }
-        
-        return newCategoryArray
-    }
-    
-    @objc func checkCreateButtonToUnclock() {
-        if trackerStorage.trackerName != nil &&
-            trackerStorage.trackerColor != nil &&
-            trackerStorage.trackerEmoji != nil &&
-            trackerStorage.selectedCategoryString != nil {
-            switch view?.kindOfTracker {
-            case .unregularEvent:
-                view?.unlockCreateButton()
-            case .habit:
-                trackerStorage.selectedScheduleString != nil ? view?.unlockCreateButton() : view?.lockCreateButton()
-            default:
-                view?.lockCreateButton()
-            }
-        } else {
-            view?.lockCreateButton()
-        }
+                              schedule: dataProviderService.trackerSchedule ?? [1,2,3,4,5,6,7])
+        print(dataProviderService.trackerSchedule)
+        dataProviderService.addTrackerToStore(model: tracker)
     }
     
     func resetTrackerInfoAfterDeselect(section: Int) {
         switch section {
         case 0:
-            trackerStorage.trackerEmoji = nil
+            dataProviderService.trackerEmoji = nil
         case 1:
-            trackerStorage.trackerColor = nil
+            dataProviderService.trackerColor = nil
         default:
             return
+        }
+    }
+    
+    @objc func checkCreateButtonToUnclock() {
+        if dataProviderService.trackerName != nil &&
+            dataProviderService.trackerColor != nil &&
+            dataProviderService.trackerEmoji != nil &&
+            dataProviderService.selectedCategoryString != nil {
+            switch view?.kindOfTracker {
+            case .unregularEvent:
+                view?.unlockCreateButton()
+            case .habit:
+                dataProviderService.selectedScheduleString != nil ? view?.unlockCreateButton() : view?.lockCreateButton()
+            default:
+                view?.lockCreateButton()
+            }
+        } else {
+            view?.lockCreateButton()
         }
     }
 }

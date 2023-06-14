@@ -8,18 +8,24 @@
 import Foundation
 
 protocol TrackersViewPresenterProtocol: AnyObject {
+    var view: TrackersViewControllerProtocol? { get set }
     var currentDate: Date? { get set }
+    func getVisibleCategoryFromProvider() -> [TrackerCategory]
+    func setVisibleCategory(_ categories: [TrackerCategory])
+    func getTrackerRecords() -> [TrackerRecord]
+    func setTrackerRecords(_ records: [TrackerRecord])
+    func changeStatusTrackerRecord(model: TrackerRecord, isAddDay: Bool)
+    func editTracker(id: UUID)
+    func deleteTracker(id: UUID)
     func checkCurrentDateIsFuture() -> Bool
     func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory]
-    func setupParticularCell(storage: TrackerStorageService, cell: TrackerCell,_ section: Int,_ row: Int)
-    func updateCompletedTrackersArray(storage: TrackerStorageService,
-                                      isAddDay: Bool,
-                                      date: Date,
-                                      _ section: Int,
-                                      _ row: Int) -> [TrackerRecord]
-    func setCellButtonIfTrackerWasCompletedToday(_ completedTrackers: [TrackerRecord], _ id: UUID) -> String
-    func countAmountOfCompleteDays(_ completedTrackers: [TrackerRecord], id: UUID) -> Int
+    func setupParticularCell(model: Tracker,
+                             cell: TrackerCell,
+                             _ indexPath: IndexPath,
+                             id: UUID) 
+    func setCellButtonIfTrackerWasCompletedToday(id: UUID) -> String
+    func countAmountOfCompleteDays(id: UUID) -> Int
     func updateNumberOfCompletedDaysLabel(_ number: Int) -> String
-    func updateCellDayLabel(_ storage: TrackerStorageService, _ section: Int, row: Int) -> String
-    func showNewTrackersAfterChanges(_ totalTrackers: [TrackerCategory]) -> [TrackerCategory]
+    func updateCellDayLabel(at indexPath: IndexPath) -> String
+    func showNewTrackersAfterChangeDate()
 }

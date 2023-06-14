@@ -10,7 +10,7 @@ import UIKit
 protocol NewTrackerViewPresenterProtocol: AnyObject {
     var view: NewTrackerViewControllerProtocol? { get set }
     var buttonsTitleForTableView: [String] { get }
-    func createNewTracker() -> [TrackerCategory]
+    func createNewTracker()
     func checkCreateButtonToUnclock()
     func resetTrackerInfoAfterDeselect(section: Int)
 }
