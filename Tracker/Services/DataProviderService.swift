@@ -7,6 +7,11 @@
 
 import UIKit
 
+struct CollectionStoreUpdates {
+     let insertedIndex: IndexSet
+     let deletedIndex: IndexSet
+ }
+
 final class DataProviderService {
     
     static let instance = DataProviderService()

@@ -122,6 +122,34 @@ final class TrackerCell: UICollectionViewCell {
     }
 }
 
+extension TrackerCell: UIContextMenuInteractionDelegate {
+    func addContextMenuInteraction() {
+        let interaction = UIContextMenuInteraction(delegate: self)
+        cellView.addInteraction(interaction)
+    }
+    
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        let editImage = UIImage(systemName: "square.and.pencil")
+        let deleteImage = UIImage(systemName: "trash")
+        
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
+            let editAction = UIAction(
+                title: "Редактировать", image: editImage) { [weak self] action in
+                    guard let self = self else { return }
+                    self.editTracker(from: self)
+                }
+            let deleteAction = UIAction(
+                title: "Удалить", image: deleteImage, attributes: .destructive) { [weak self] action in
+                    guard let self = self else { return }
+                    self.deleteTracker(from: self)
+                }
+            
+            return UIMenu(children: [editAction, deleteAction])
+        }
+    }
+}
+
+
 // MARK: Setting Views:
 extension TrackerCell {
     private func setViews() {
@@ -166,33 +194,6 @@ extension TrackerCell {
             make.top.equalTo(cellView.snp.bottom).inset(-8)
             make.trailing.equalToSuperview().inset(12)
             make.centerY.equalTo(numberOfDaysLabel.snp.centerY)
-        }
-    }
-}
-
-extension TrackerCell: UIContextMenuInteractionDelegate {
-    func addContextMenuInteraction() {
-        let interaction = UIContextMenuInteraction(delegate: self)
-        cellView.addInteraction(interaction)
-    }
-    
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        let editImage = UIImage(systemName: "square.and.pencil")
-        let deleteImage = UIImage(systemName: "trash")
-        
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
-            let editAction = UIAction(
-                title: "Редактировать", image: editImage) { [weak self] action in
-                    guard let self = self else { return }
-                    self.editTracker(from: self)
-                }
-            let deleteAction = UIAction(
-                title: "Удалить", image: deleteImage, attributes: .destructive) { [weak self] action in
-                    guard let self = self else { return }
-                    self.deleteTracker(from: self)
-                }
-            
-            return UIMenu(children: [editAction, deleteAction])
         }
     }
 }
