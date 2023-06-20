@@ -17,7 +17,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     override func viewDidLoad() {
         super.viewDidLoad()
         bindViewModel()
-        DataProviderService.instance.bindTrackerCategoryViewModel(controller: categoryViewModel)
+        DataProviderService.instance.bindCategoryViewModel(controller: categoryViewModel)
         
         checkToSetupDumb()
         categoryView.tableView.delegate = self

@@ -13,8 +13,6 @@
 		7E1E541E2A1F900A006FD792 /* CategoryViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1E541D2A1F900A006FD792 /* CategoryViewControllerProtocol.swift */; };
 		7E1E54202A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1E541F2A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift */; };
 		7E916FC32A2B9C6700FA18F3 /* UIColorMarshallingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E916FC22A2B9C6700FA18F3 /* UIColorMarshallingService.swift */; };
-		7EACA7232A274F0B00CFF664 /* SchedulePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EACA7222A274F0B00CFF664 /* SchedulePresenter.swift */; };
-		7EACA72B2A27502100CFF664 /* SchedulePresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EACA72A2A27502100CFF664 /* SchedulePresenterProtocol.swift */; };
 		7EB1D68F2A405CAB00106032 /* OnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D68E2A405CAB00106032 /* OnboardingPageViewController.swift */; };
 		7EB1D6912A405CED00106032 /* FirstOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D6902A405CED00106032 /* FirstOnboardingViewController.swift */; };
 		7EB1D6932A405CF900106032 /* SecondOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D6922A405CF900106032 /* SecondOnboardingViewController.swift */; };
@@ -68,6 +66,9 @@
 		7EDABC572A20DD5200F39D8E /* DateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDABC562A20DD5200F39D8E /* DateService.swift */; };
 		7EDABC592A20F0F700F39D8E /* ScheduleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDABC582A20F0F700F39D8E /* ScheduleService.swift */; };
 		7EDABC5B2A20F56600F39D8E /* ScheduleViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDABC5A2A20F56600F39D8E /* ScheduleViewControllerDelegate.swift */; };
+		7EDAE2812A41BEA400A75A69 /* ScheduleObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDAE2802A41BEA400A75A69 /* ScheduleObservable.swift */; };
+		7EDAE2832A41BFD400A75A69 /* ScheduleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDAE2822A41BFD400A75A69 /* ScheduleViewModel.swift */; };
+		7EDAE2852A41D1B200A75A69 /* ScheduleViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDAE2842A41D1B200A75A69 /* ScheduleViewModelProtocol.swift */; };
 		7EF6209E2A1629B900B66A4B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF6209D2A1629B900B66A4B /* AppDelegate.swift */; };
 		7EF620A02A1629B900B66A4B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF6209F2A1629B900B66A4B /* SceneDelegate.swift */; };
 		7EF620A22A1629B900B66A4B /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF620A12A1629B900B66A4B /* TrackersViewController.swift */; };
@@ -82,8 +83,6 @@
 		7E1E541D2A1F900A006FD792 /* CategoryViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewControllerProtocol.swift; sourceTree = "<group>"; };
 		7E1E541F2A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewControllerProtocol.swift; sourceTree = "<group>"; };
 		7E916FC22A2B9C6700FA18F3 /* UIColorMarshallingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorMarshallingService.swift; sourceTree = "<group>"; };
-		7EACA7222A274F0B00CFF664 /* SchedulePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulePresenter.swift; sourceTree = "<group>"; };
-		7EACA72A2A27502100CFF664 /* SchedulePresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulePresenterProtocol.swift; sourceTree = "<group>"; };
 		7EB1D68E2A405CAB00106032 /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
 		7EB1D6902A405CED00106032 /* FirstOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstOnboardingViewController.swift; sourceTree = "<group>"; };
 		7EB1D6922A405CF900106032 /* SecondOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondOnboardingViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +135,9 @@
 		7EDABC562A20DD5200F39D8E /* DateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateService.swift; sourceTree = "<group>"; };
 		7EDABC582A20F0F700F39D8E /* ScheduleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleService.swift; sourceTree = "<group>"; };
 		7EDABC5A2A20F56600F39D8E /* ScheduleViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewControllerDelegate.swift; sourceTree = "<group>"; };
+		7EDAE2802A41BEA400A75A69 /* ScheduleObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleObservable.swift; sourceTree = "<group>"; };
+		7EDAE2822A41BFD400A75A69 /* ScheduleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewModel.swift; sourceTree = "<group>"; };
+		7EDAE2842A41D1B200A75A69 /* ScheduleViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewModelProtocol.swift; sourceTree = "<group>"; };
 		7EF6209A2A1629B800B66A4B /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF6209D2A1629B900B66A4B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7EF6209F2A1629B900B66A4B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -243,7 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				7EDABC5A2A20F56600F39D8E /* ScheduleViewControllerDelegate.swift */,
-				7EACA72A2A27502100CFF664 /* SchedulePresenterProtocol.swift */,
+				7EDAE2842A41D1B200A75A69 /* ScheduleViewModelProtocol.swift */,
 			);
 			path = ScheduleProtocols;
 			sourceTree = "<group>";
@@ -289,10 +291,10 @@
 				7EDABC532A20930D00F39D8E /* NewCategory */,
 				7EC817562A25D89D00527BBB /* CategoryProtocols */,
 				7ECDD9512A1DEFDA00771EE4 /* CategoryView.swift */,
-				7EB1D6C12A4095E400106032 /* CategoryViewModel.swift */,
-				7EB1D6C32A40988100106032 /* CategoryObservable.swift */,
 				7ECDD93A2A1BC56400771EE4 /* CategoryViewController.swift */,
+				7EB1D6C12A4095E400106032 /* CategoryViewModel.swift */,
 				7E1E541B2A1F79B5006FD792 /* CategoryCell.swift */,
+				7EB1D6C32A40988100106032 /* CategoryObservable.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -302,9 +304,10 @@
 			children = (
 				7EC817572A25D8B200527BBB /* ScheduleProtocols */,
 				7ECDD94B2A1CB6E100771EE4 /* ScheduleView.swift */,
-				7EACA7222A274F0B00CFF664 /* SchedulePresenter.swift */,
 				7ECDD93C2A1BC5BD00771EE4 /* ScheduleViewController.swift */,
+				7EDAE2822A41BFD400A75A69 /* ScheduleViewModel.swift */,
 				7ECDD94D2A1CB9A100771EE4 /* ScheduleCell.swift */,
+				7EDAE2802A41BEA400A75A69 /* ScheduleObservable.swift */,
 			);
 			path = Schedule;
 			sourceTree = "<group>";
@@ -549,19 +552,19 @@
 				7EC993502A2CCCF00053F34D /* TrackersDataProviderDelegate.swift in Sources */,
 				7ED3D40A2A1A20BB004C371B /* Colors.swift in Sources */,
 				7EC8175D2A2724CF00527BBB /* DataProviderService.swift in Sources */,
-				7EACA72B2A27502100CFF664 /* SchedulePresenterProtocol.swift in Sources */,
 				7ECDD92C2A1BAB3400771EE4 /* CreatingTrackerView.swift in Sources */,
 				7EC7CD292A24FCB10022541E /* NewTrackerViewPresenterProtocol.swift in Sources */,
 				7ECDD93B2A1BC56400771EE4 /* CategoryViewController.swift in Sources */,
+				7EDAE2852A41D1B200A75A69 /* ScheduleViewModelProtocol.swift in Sources */,
 				7ED3D4102A1A391B004C371B /* TrackersViewControllerProtocol.swift in Sources */,
 				7ECDD9542A1DF60A00771EE4 /* NewCategoryViewController.swift in Sources */,
 				7ED3D3F92A1A0C0C004C371B /* TabBarController.swift in Sources */,
 				7ECDD92A2A1BAB0800771EE4 /* CreatingTrackerViewController.swift in Sources */,
 				7EDABC5B2A20F56600F39D8E /* ScheduleViewControllerDelegate.swift in Sources */,
 				7ED3D3FD2A1A1035004C371B /* Resources.swift in Sources */,
+				7EDAE2812A41BEA400A75A69 /* ScheduleObservable.swift in Sources */,
 				7EB1D6C22A4095E400106032 /* CategoryViewModel.swift in Sources */,
 				7ED3D3F52A1A0643004C371B /* UIColor + Extension.swift in Sources */,
-				7EACA7232A274F0B00CFF664 /* SchedulePresenter.swift in Sources */,
 				7ED3D3FB2A1A0E21004C371B /* StatisticViewController.swift in Sources */,
 				7ECDDA272A2F577600B8167A /* TrackerStoreProtocol.swift in Sources */,
 				7ECDD94A2A1CB45000771EE4 /* TrackerRecord.swift in Sources */,
@@ -584,6 +587,7 @@
 				7EB1D6972A405D1F00106032 /* SecondOnboardingView.swift in Sources */,
 				7EC577AC2A2E2E67000837E8 /* TrackerCategoryStore.swift in Sources */,
 				7EDABC592A20F0F700F39D8E /* ScheduleService.swift in Sources */,
+				7EDAE2832A41BFD400A75A69 /* ScheduleViewModel.swift in Sources */,
 				7ED3D4022A1A19A0004C371B /* TrackersView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

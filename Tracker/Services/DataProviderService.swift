@@ -20,16 +20,25 @@ final class DataProviderService {
     
     // ViewModels:
     var categoryViewModel: CategoryViewModelProtocol?
+    var scheduleViewModel: ScheduleViewModelProtocol?
     
     private init() {}
     
     // Preparing for create new tracker:
     var selectedCategoryString: String?
-    var selectedScheduleString: String?
+    var selectedScheduleString: String? {
+        didSet {
+            isScheduleDidCreate()
+        }
+    }
     var trackerName: String?
     var trackerColor: UIColor?
     var trackerEmoji: String?
-    var trackerSchedule: [Int]?
+    var trackerSchedule: [Int]? {
+        didSet {
+            isScheduleDidCreate()
+        }
+    }
     
     private var visibleCategories: [TrackerCategory]?
     private var completedTrackers: [TrackerRecord]?
@@ -62,7 +71,12 @@ final class DataProviderService {
         
         return trackerSchedule.contains(day) ? true : false
     }
-
+    
+    func isScheduleDidCreate() {
+        if trackerSchedule != nil && selectedScheduleString != nil {
+            scheduleViewModel?.changeStatusToCloseSchedule()
+        }
+    }
     
     // Getting and Setting operating arrays:
     func getVisiblieCategories() -> [TrackerCategory] {
@@ -147,10 +161,6 @@ final class DataProviderService {
         trackerCategoryStore?.fetchSpecificCategory(name: name)
     }
     
-    func bindTrackerCategoryViewModel(controller: CategoryViewModelProtocol) {
-        categoryViewModel = controller
-    }
-    
     //MARK: TrackerRecord Block:
     func setAllTrackerRecords() {
         completedTrackers = trackerRecordStore?.getTrackerRecords()
@@ -162,5 +172,14 @@ final class DataProviderService {
         } else {
             trackerRecordStore?.deleteRecord(tracker: model)
         }
+    }
+    
+    //MARK: Setting Controller protocols:
+    func bindCategoryViewModel(controller: CategoryViewModelProtocol) {
+        categoryViewModel = controller
+    }
+    
+    func bindScheduleViewModel(controller: ScheduleViewModelProtocol) {
+        scheduleViewModel = controller
     }
 }
