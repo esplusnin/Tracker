@@ -7,19 +7,19 @@
 
 import UIKit
 
-struct CollectionStoreUpdates {
-     let insertedIndex: IndexSet
-     let deletedIndex: IndexSet
- }
-
 final class DataProviderService {
     
     static let instance = DataProviderService()
     
+    var trackersViewController: TrackersViewControllerProtocol?
+    
+    //CoreData Stores:
     var trackerStore: TrackerStoreProtocol?
     var trackerCategoryStore: TrackerCategoryStoreProtocol?
     var trackerRecordStore: TrackerRecordStore?
-    var trackersViewController: TrackersViewControllerProtocol?
+    
+    // ViewModels:
+    var categoryViewModel: CategoryViewModelProtocol?
     
     private init() {}
     
@@ -33,6 +33,11 @@ final class DataProviderService {
     
     private var visibleCategories: [TrackerCategory]?
     private var completedTrackers: [TrackerRecord]?
+    private var categoryNames: [String]? {
+        didSet {
+            categoryViewModel?.updateVisibleCategories()
+        }
+    }
     
     var emojiArray = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -61,7 +66,7 @@ final class DataProviderService {
     
     // Getting and Setting operating arrays:
     func getVisiblieCategories() -> [TrackerCategory] {
-        visibleCategories ?? []
+        return visibleCategories ?? []
     }
     
     func setVisibleCategory(_ category: [TrackerCategory]) {
@@ -87,6 +92,11 @@ final class DataProviderService {
         trackerColor = nil
         trackerEmoji = nil
         trackerSchedule = nil
+    }
+    
+    //MARK: ViewModels Block:
+    func updateCategoryViewModel() -> [String] {
+        categoryNames ?? []
     }
     
     //MARK: TrackerStore Block:
@@ -125,6 +135,10 @@ final class DataProviderService {
         trackerCategoryStore?.addCategory(name: name)
     }
     
+    func getCategoryNames() {
+        categoryNames = trackerCategoryStore?.fetchCategoryNames()
+    }
+    
     func getCategoryNameFromStore(at index: Int) -> String {
         trackerCategoryStore?.getCategoryName(at: index) ?? ""
     }
@@ -133,10 +147,8 @@ final class DataProviderService {
         trackerCategoryStore?.fetchSpecificCategory(name: name)
     }
     
-    func setupTrackerCategoryDelegate(controller: TrackersCategoryDelegate) {
-        guard let trackerCategoryStore = trackerCategoryStore else { return }
-        
-        trackerCategoryStore.delegate = controller
+    func bindTrackerCategoryViewModel(controller: CategoryViewModelProtocol) {
+        categoryViewModel = controller
     }
     
     //MARK: TrackerRecord Block:

@@ -58,7 +58,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     private func switchToCategoryVC() {
         let viewController = CategoryViewController()
         viewController.newTrackerViewController = self
-        dataProviderService.setupTrackerCategoryDelegate(controller: viewController)
         
         present(viewController,animated: true)
     }

@@ -50,6 +50,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         dataProviderService.setTrackerStoreDelegate(view: self)
         
         dataProviderService.inizializeVisibleCategories()
+        dataProviderService.getCategoryNames()
         dataProviderService.setAllTrackerRecords()
     }
     
