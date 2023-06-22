@@ -17,6 +17,10 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     private(set) var schedule: [Int] = []
     private(set) var daysArray = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
     
+    init() {
+        dataProviderService.bindScheduleViewModel(controller: self)
+    }
+    
     func addDayToSchedule(day: Int) {
         schedule.append(day)
     }

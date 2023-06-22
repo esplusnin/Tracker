@@ -20,6 +20,9 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
     @NewTrackerObservable
     private(set) var isTrackerDidCreate = false
     
+    init() {
+        dataProviderService.bindNewTrackerViewModel(controller: self)
+    }
     
     func createNewTracker() {
         guard let trackerName = dataProviderService.trackerName,
@@ -38,6 +41,14 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
     func trackerDidCreate() {
         isTrackerDidCreate = true
     }
+    
+    func setTrackerName(name: String) {
+        dataProviderService.trackerName = name == "" ? nil : name
+    }
+    
+    func clearTrackerName() {
+        dataProviderService.trackerName = nil
+    }
         
     func resetTrackerInfoAfterDeselect(section: Int) {
         switch section {
@@ -48,6 +59,10 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
         default:
             return
         }
+    }
+    
+    func resetTrackerInfoAfterCreate() {
+        dataProviderService.resetNewTrackerInfo()
     }
     
     func isControllerReadyToCreateNewTracker() {

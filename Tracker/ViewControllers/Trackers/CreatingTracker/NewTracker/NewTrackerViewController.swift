@@ -24,7 +24,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        dataProviderService.bindNewTrackerViewModel(controller: newTrackerViewModel)
         newTrackerViewModel.view = self
         newTrackerView.textField.delegate = self
         
@@ -130,7 +129,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     @objc private func createNewTracker() {
         newTrackerViewModel.createNewTracker()
-        dataProviderService.resetNewTrackerInfo()
+        newTrackerViewModel.resetTrackerInfoAfterCreate()
     }
     
     @objc private func dismissNewTrackerVC() {
@@ -150,7 +149,12 @@ extension NewTrackerViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         setTextFieldWarning(textField.text?.count)
-        dataProviderService.trackerName = textField.text == "" ? nil : textField.text
+        let name = textField.text == "" ? nil : textField.text
+        guard let name = name else { return }
+        
+        if name.count < 38 {
+            newTrackerViewModel.setTrackerName(name: name)
+        }
     }
 }
 

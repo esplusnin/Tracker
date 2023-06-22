@@ -16,12 +16,9 @@ final class ScheduleViewController: UIViewController {
     private let scheduleView = ScheduleView()
     private let scheduleViewModel = ScheduleViewModel()
     private var scheduleService = ScheduleService()
-    private let dataProviderService = DataProviderService.instance
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        dataProviderService.bindScheduleViewModel(controller: scheduleViewModel)
-        
+        super.viewDidLoad()        
         setViews()
         setConstraints()
         settingTableView()
