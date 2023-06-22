@@ -11,8 +11,6 @@ final class DataProviderService {
     
     static let instance = DataProviderService()
     
-    var trackersViewController: TrackersViewControllerProtocol?
-    
     //CoreData Stores:
     var trackerStore: TrackerStoreProtocol?
     var trackerCategoryStore: TrackerCategoryStoreProtocol?
@@ -22,6 +20,7 @@ final class DataProviderService {
     var categoryViewModel: CategoryViewModelProtocol?
     var scheduleViewModel: ScheduleViewModelProtocol?
     var newTrackerViewModel: NewTrackerViewModelProtocol?
+    var trackersViewModel: TrackersViewModelProtocol?
     
     private init() {}
     
@@ -80,10 +79,6 @@ final class DataProviderService {
         .colorSelection17, .colorSelection18,
     ]
     
-    func setTrackerStoreDelegate(view: TrackersDataProviderDelegate) {
-        trackerStore?.delegate = view
-    }
-    
     func isCurrentDayFromScheduleExist(_ day: Int) -> Bool {
         guard let trackerSchedule = trackerSchedule else { return false }
         
@@ -106,8 +101,8 @@ final class DataProviderService {
     
     func isTrackerParametersWasFilled() -> Bool {
         return trackerName != nil && trackerColor != nil &&
-                trackerEmoji != nil && selectedCategoryString != nil ? true : false
-     }
+        trackerEmoji != nil && selectedCategoryString != nil ? true : false
+    }
     
     // Getting and Setting operating arrays:
     func getVisiblieCategories() -> [TrackerCategory] {
@@ -145,7 +140,12 @@ final class DataProviderService {
     }
     
     func trackerDidCreate() {
+        trackersViewModel?.setVisibleTrackersFromProvider()
         newTrackerViewModel?.trackerDidCreate()
+    }
+    
+    func recordDidUpdate() {
+        trackersViewModel?.recordDidUpdate()
     }
     
     //MARK: TrackerStore Block:
@@ -191,7 +191,7 @@ final class DataProviderService {
     func getCategoryNameFromStore(at index: Int) -> String {
         trackerCategoryStore?.getCategoryName(at: index) ?? ""
     }
-
+    
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
         trackerCategoryStore?.fetchSpecificCategory(name: name)
     }
@@ -220,5 +220,9 @@ final class DataProviderService {
     
     func bindNewTrackerViewModel(controller: NewTrackerViewModelProtocol) {
         newTrackerViewModel = controller
+    }
+    
+    func bindTrackersViewModel(controller: TrackersViewModelProtocol) {
+        trackersViewModel = controller
     }
 }

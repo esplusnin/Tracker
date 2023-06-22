@@ -10,7 +10,6 @@ import SnapKit
 
 final class CreatingTrackerViewController: UIViewController, CreatingTrackerViewControllerProtocol {
     
-    var trackerPresenter: TrackersViewPresenterProtocol?
     var trackerViewController: TrackersViewControllerProtocol?
     
     private let creatingTrackerView = CreatingTrackerView()

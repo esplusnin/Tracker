@@ -8,7 +8,6 @@
 import Foundation
 
 protocol CreatingTrackerViewControllerProtocol: AnyObject {
-    var trackerPresenter: TrackersViewPresenterProtocol? { get }
     var trackerViewController: TrackersViewControllerProtocol? { get }
     func backToTrackerViewController()
 }

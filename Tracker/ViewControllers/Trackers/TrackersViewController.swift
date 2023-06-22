@@ -10,22 +10,55 @@ import SnapKit
 
 class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
-    var presenter: TrackersViewPresenterProtocol?
-    
-    let dataProviderService = DataProviderService.instance
+    var trackerViewModel = TrackersViewModel()
     private let trackersView = TrackersView()
-
+    private var indexToUpdate: IndexPath?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter?.view = self
         trackersView.searchTextField.delegate = self
         
-        inizializeStores()
+        bind()
         setDate()
-        presenter?.showNewTrackersAfterChangeDate()
+        
+        trackerViewModel.showNewTrackersAfterChangeDate()
         
         setViews()
         setMainCollectionSettings()
+        
+        DataProviderService.instance.bindTrackersViewModel(controller: trackerViewModel)
+        trackerViewModel.setVisibleTrackersFromProvider()
+        
+    }
+    
+    func bind() {
+        trackerViewModel.$visibleTrackers.bind { [weak self] _ in
+            guard let self = self else { return }
+            self.reloadCollectionView()
+            self.trackersView.trackersCollection.alpha = self.trackerViewModel.visibleTrackers.count == 0 ? 0 : 1
+        }
+        
+        trackerViewModel.$isRecordUpdate.bind { [weak self] _ in
+            guard let self = self,
+                  let indexToUpdate = indexToUpdate,
+                  let cell = trackersView.trackersCollection.dequeueReusableCell(withReuseIdentifier: "Cell",
+                                                                                 for: indexToUpdate) as? TrackerCell else { return }
+            cell.numberOfDaysLabel.reloadInputViews()
+        }
+        
+        trackerViewModel.$isVisibleCategoryEmptyAfterSearch.bind { [weak self] value in
+            guard let self = self else { return }
+            self.setDumbImageViewAfterSearch()
+        }
+        
+        trackerViewModel.$isVisibleCategoryEmpty.bind { [weak self] value in
+            guard let self = self else { return }
+            self.setDumbWithNoTrackers()
+        }
+    }
+    
+    func reloadCollectionItem(at indexPath: IndexPath) {
+        trackersView.trackersCollection.reloadItems(at: [indexPath])
     }
     
     func reloadCollectionView() {
@@ -39,19 +72,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     private func setDate() {
         let date = DateService().convertDateWithoutTimes(date: trackersView.navigationBarDatePicker.date)
-        presenter?.currentDate = date
-    }
-    
-    private func inizializeStores() {
-        dataProviderService.trackerStore = TrackerStore()
-        dataProviderService.trackerCategoryStore = TrackerCategoryStore()
-        dataProviderService.trackerRecordStore = TrackerRecordStore()
-        dataProviderService.trackersViewController = self
-        dataProviderService.setTrackerStoreDelegate(view: self)
-        
-        dataProviderService.inizializeVisibleCategories()
-        dataProviderService.getCategoryNames()
-        dataProviderService.setAllTrackerRecords()
+        trackerViewModel.currentDate = date
     }
     
     private func setTargets() {
@@ -70,13 +91,15 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     private func setDumbImageViewAfterSearch() {
         trackersView.emptyTrackersImageView.image = Resources.Images.searchedTrackersIsEmpty
         trackersView.emptyTrackersLabel.text = "Ничего не найдено"
-        
-        trackersView.trackersCollection.alpha = 0
+    }
+    
+    private func setDumbWithNoTrackers() {
+        trackersView.emptyTrackersImageView.image = Resources.Images.trackersIsEmpty
+        trackersView.emptyTrackersLabel.text = "Что будем отслеживать?"
     }
     
     @objc private func switchToCreatingTrackerVC() {
         let viewController = CreatingTrackerViewController()
-        viewController.trackerPresenter = presenter
         viewController.trackerViewController = self
         trackersView.searchTextField.endEditing(true)
         
@@ -84,17 +107,9 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     @objc private func updateVisibleTrackersAfterSearch() {
-        guard let searchFieldText = trackersView.searchTextField.text,
-              let categories = presenter?.getVisibleCategoryFromProvider() else { return }
+        guard let searchFieldText = trackersView.searchTextField.text else { return }
         
-        let newCategories = presenter?.searchTrackerByName(categories: categories, filledName: searchFieldText)
-        
-        if newCategories?.count == 0 {
-            setDumbImageViewAfterSearch()
-        }
-        
-        presenter?.setVisibleCategory(newCategories ?? [])
-        trackersView.trackersCollection.reloadData()
+        trackerViewModel.updateVisibleTrackersAfterSearch(filledName: searchFieldText)
     }
     
     @objc private func addCanceletionButton() {
@@ -120,7 +135,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     @objc private func setSearchFieldWithoutCancelationButton() {
         resetTextField()
-        let visibleCategories = presenter?.getVisibleCategoryFromProvider() ?? []
+        let visibleCategories = trackerViewModel.visibleTrackers
         trackersView.cancelationButton.removeFromSuperview()
         
         trackersView.searchTextField.snp.makeConstraints { make in
@@ -130,18 +145,17 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         }
         
         if visibleCategories.count == 0 {
-            trackersView.emptyTrackersLabel.text = "Что будем отслеживать?"
-            trackersView.emptyTrackersImageView.image = Resources.Images.trackersIsEmpty
+            setDumbWithNoTrackers()
         }
         
-        resetTextField()
-        presenter?.showNewTrackersAfterChangeDate()
+        trackerViewModel.showNewTrackersAfterChangeDate()
     }
     
     @objc private func setDateFromDatePicker() {
         setDate()
         resetTextField()
-        presenter?.showNewTrackersAfterChangeDate()
+        trackerViewModel.showNewTrackersAfterChangeDate()
+        reloadCollectionView()
         
         self.dismiss(animated: true)
     }
@@ -158,7 +172,7 @@ extension TrackersViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if range.length == 1 && string.isEmpty || !textField.hasText {
-            presenter?.showNewTrackersAfterChangeDate()
+            trackerViewModel.showNewTrackersAfterChangeDate()
         }
         
         return true
@@ -212,42 +226,29 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        let visibleCategories = presenter?.getVisibleCategoryFromProvider() ?? []
-        let amountOfElement = visibleCategories.count
-
-        trackersView.trackersCollection.alpha = amountOfElement == 0 ? 0 : 1
-
-        return amountOfElement
+        trackerViewModel.visibleTrackers.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        let visibleCategories = presenter?.getVisibleCategoryFromProvider() ?? []
-        
-        return visibleCategories[section].trackerDictionary.count
+        trackerViewModel.visibleTrackers[section].trackerDictionary.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = trackersView.trackersCollection.dequeueReusableCell(withReuseIdentifier: "Cell",
-                                                                             for: indexPath) as? TrackerCell,
-              let presenter = presenter else { return UICollectionViewCell() }
+        guard let cell = trackersView.trackersCollection.dequeueReusableCell(
+            withReuseIdentifier: "Cell",
+            for: indexPath) as? TrackerCell else { return UICollectionViewCell() }
         
-        let visibleCategories = presenter.getVisibleCategoryFromProvider()
+        let visibleCategories = trackerViewModel.visibleTrackers
         let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
-           
-        presenter.setupParticularCell(model: tracker,
-                                      cell: cell,
-                                      indexPath,
-                                      id: tracker.id)
+        
+        trackerViewModel.fillAdditionalInfo(id: tracker.id)
+        let additionalInfo = trackerViewModel.additionTrackerInfo
+        
+        cell.trackerModel = tracker
+        cell.additionalTrackerInfo = additionalInfo
         cell.delegate = self
-
-        if presenter.checkCurrentDateIsFuture() {
-            cell.unlockCompleteButton()
-        } else {
-            cell.lockCompleteButton()
-            cell.completeTrackerDayButton.backgroundColor = .colorSelection1
-        }
         
         return cell
     }
@@ -255,7 +256,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let visibleCategories = presenter?.getVisibleCategoryFromProvider() else { return UICollectionReusableView() }
+        let visibleCategories = trackerViewModel.visibleTrackers
         
         var id: String
         switch kind {
@@ -279,40 +280,33 @@ extension TrackersViewController: UICollectionViewDataSource {
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func addCurrentTrackerToCompletedThisDate(_ cell: TrackerCell, isAddDay: Bool) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell),
-              let date = presenter?.currentDate,
-              let tracker = presenter?.getVisibleCategoryFromProvider()[indexPath.section].trackerDictionary[indexPath.row]
-        else { return }
+              let date = trackerViewModel.currentDate else { return }
         
-        presenter?.changeStatusTrackerRecord(model: TrackerRecord(id: tracker.id,
-                                                                           date: date),
-                                                      isAddDay: isAddDay)
-        cell.numberOfDaysLabel.text = presenter?.updateCellDayLabel(at: indexPath)
+        let tracker = trackerViewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row]
+        indexToUpdate = indexPath
+        trackerViewModel.changeStatusTrackerRecord(model: TrackerRecord(id: tracker.id,
+                                                                        date: date), isAddDay: isAddDay)
+        trackerViewModel.fillAdditionalInfo(id: tracker.id)
+        cell.additionalTrackerInfo = trackerViewModel.additionTrackerInfo
         
     }
     
     func editTracker(from cell: TrackerCell) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-                
-        let visibleCategories = presenter?.getVisibleCategoryFromProvider() ?? []
+        
+        let visibleCategories = trackerViewModel.visibleTrackers
         let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
         
-        presenter?.editTracker(id: tracker.id)
+        trackerViewModel.editTracker(id: tracker.id)
     }
     
     func deleteTracker(from cell: TrackerCell) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-                
-        let visibleCategories = presenter?.getVisibleCategoryFromProvider() ?? []
+        
+        let visibleCategories = trackerViewModel.visibleTrackers
         let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
         
-        presenter?.deleteTracker(id: tracker.id)
-    }
-}
-
-// Method tp update the CollectionView
-extension TrackersViewController: TrackersDataProviderDelegate {
-    func didUpdate() {
-        reloadCollectionView()
+        trackerViewModel.deleteTracker(id: tracker.id)
     }
 }
 

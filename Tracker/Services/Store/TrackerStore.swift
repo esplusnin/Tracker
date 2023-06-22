@@ -9,9 +9,7 @@ import UIKit
 import CoreData
 
 final class TrackerStore: NSObject, TrackerStoreProtocol {
-    
-    weak var delegate: TrackersDataProviderDelegate?
-   
+       
     private let colorMarshalling = UIColorMarshallingService()
     private let dataProvider = DataProviderService.instance
   
@@ -112,8 +110,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
 
 extension TrackerStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        dataProvider.trackerDidCreate()
         dataProvider.inizializeVisibleCategories()
-        delegate?.didUpdate()
+        dataProvider.trackerDidCreate()
     }
 }

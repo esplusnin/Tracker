@@ -12,6 +12,30 @@ final class TrackerCell: UICollectionViewCell {
     
     weak var delegate: TrackersCollectionViewCellDelegate?
     
+    var trackerModel: Tracker? {
+        didSet {
+            guard let trackerModel = trackerModel else { return }
+            cellView.backgroundColor = trackerModel.color
+            trackerLabel.text = trackerModel.name
+            emojiLabel.text = trackerModel.emoji
+            completeTrackerDayButton.backgroundColor = trackerModel.color
+        }
+    }
+    
+    var additionalTrackerInfo: AdditionTrackerInfo? {
+        didSet {
+            guard let additionalTrackerInfo = additionalTrackerInfo else { return }
+            completeTrackerDayButton.setTitle(additionalTrackerInfo.buttonString, for: .normal)
+            numberOfDaysLabel.text = additionalTrackerInfo.countOfDays
+            if additionalTrackerInfo.isTodayFuture {
+                unlockCompleteButton()
+                completeTrackerDayButton.alpha = additionalTrackerInfo.isCompleteToday ? 0.5 : 1
+            } else {
+                lockCompleteButton()
+            }
+        }
+    }
+    
     lazy var cellView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = true
@@ -83,13 +107,15 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     func lockCompleteButton() {
+        completeTrackerDayButton.backgroundColor = .colorSelection1
         completeTrackerDayButton.isEnabled = false
         completeTrackerDayButton.setTitle("✕", for: .normal)
         completeTrackerDayButton.titleLabel?.font = .systemFont(ofSize: 15)
         completeTrackerDayButton.alpha = 0.4
     }
-     
+    
     func unlockCompleteButton() {
+        completeTrackerDayButton.alpha = 1
         completeTrackerDayButton.isEnabled = true
     }
     
@@ -103,10 +129,6 @@ final class TrackerCell: UICollectionViewCell {
     
     private func deleteTracker(from cell: TrackerCell) {
         delegate?.deleteTracker(from: cell)
-    }
-    
-    @objc private func showContextMenu(_ sender: UITapGestureRecognizer) {
-     
     }
     
     @objc private func completeTrackerToday() {
