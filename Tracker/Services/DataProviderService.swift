@@ -21,22 +21,40 @@ final class DataProviderService {
     // ViewModels:
     var categoryViewModel: CategoryViewModelProtocol?
     var scheduleViewModel: ScheduleViewModelProtocol?
+    var newTrackerViewModel: NewTrackerViewModelProtocol?
     
     private init() {}
     
     // Preparing for create new tracker:
-    var selectedCategoryString: String?
-    var selectedScheduleString: String? {
+    var selectedCategoryString: String? {
         didSet {
-            isScheduleDidCreate()
+            newTrackerViewModel?.isControllerReadyToCreateNewTracker()
         }
     }
-    var trackerName: String?
-    var trackerColor: UIColor?
-    var trackerEmoji: String?
+    var selectedScheduleString: String? {
+        didSet {
+            isScheduleViewModelReadyToSave()
+            newTrackerViewModel?.isControllerReadyToCreateNewTracker()
+        }
+    }
+    var trackerName: String? {
+        didSet {
+            newTrackerViewModel?.isControllerReadyToCreateNewTracker()
+        }
+    }
+    var trackerColor: UIColor? {
+        didSet {
+            newTrackerViewModel?.isControllerReadyToCreateNewTracker()
+        }
+    }
+    var trackerEmoji: String? {
+        didSet {
+            newTrackerViewModel?.isControllerReadyToCreateNewTracker()
+        }
+    }
     var trackerSchedule: [Int]? {
         didSet {
-            isScheduleDidCreate()
+            isScheduleViewModelReadyToSave()
         }
     }
     
@@ -72,11 +90,24 @@ final class DataProviderService {
         return trackerSchedule.contains(day) ? true : false
     }
     
-    func isScheduleDidCreate() {
-        if trackerSchedule != nil && selectedScheduleString != nil {
+    func isScheduleDidCreate() -> Bool{
+        trackerSchedule != nil
+    }
+    
+    func isScheduleStringDidFilled() -> Bool {
+        selectedScheduleString != nil
+    }
+    
+    func isScheduleViewModelReadyToSave() {
+        if isScheduleDidCreate() && isScheduleStringDidFilled() {
             scheduleViewModel?.changeStatusToCloseSchedule()
         }
     }
+    
+    func isTrackerParametersWasFilled() -> Bool {
+        return trackerName != nil && trackerColor != nil &&
+                trackerEmoji != nil && selectedCategoryString != nil ? true : false
+     }
     
     // Getting and Setting operating arrays:
     func getVisiblieCategories() -> [TrackerCategory] {
@@ -111,6 +142,10 @@ final class DataProviderService {
     //MARK: ViewModels Block:
     func updateCategoryViewModel() -> [String] {
         categoryNames ?? []
+    }
+    
+    func trackerDidCreate() {
+        newTrackerViewModel?.trackerDidCreate()
     }
     
     //MARK: TrackerStore Block:
@@ -181,5 +216,9 @@ final class DataProviderService {
     
     func bindScheduleViewModel(controller: ScheduleViewModelProtocol) {
         scheduleViewModel = controller
+    }
+    
+    func bindNewTrackerViewModel(controller: NewTrackerViewModelProtocol) {
+        newTrackerViewModel = controller
     }
 }

@@ -8,9 +8,14 @@
 import UIKit
 import SnapKit
 
+enum KindOfTrackers {
+    case habit
+    case unregularEvent
+}
+
 final class NewTrackerViewController: UIViewController, NewTrackerViewControllerProtocol {
     
-    var presenter: NewTrackerViewPresenterProtocol?
+    var newTrackerViewModel = NewTrackerViewModel()
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
     var kindOfTracker: KindOfTrackers?
     var dataProviderService = DataProviderService.instance
@@ -19,9 +24,9 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        dataProviderService.bindNewTrackerViewModel(controller: newTrackerViewModel)
+        newTrackerViewModel.view = self
         newTrackerView.textField.delegate = self
-        presenter = NewTrackerPresenter()
-        presenter?.view = self
         
         setViews()
         setTitle()
@@ -30,6 +35,21 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         setTableViewMainSettings()
         setCollectionViewMainSetting()
         setTargets()
+        bind()
+    }
+    
+    func bind() {
+        newTrackerViewModel.$isReadyToCreateNewTracker.bind { [weak self] value in
+            guard let self = self else { return }
+            value == true ? self.unlockCreateButton() : self.lockCreateButton()
+        }
+        
+        newTrackerViewModel.$isTrackerDidCreate.bind { [weak self] value in
+            guard let self = self else { return }
+            if value == true {
+                dismissNewTrackerVC()
+            }
+        }
     }
     
     func reloadTableView() {
@@ -85,8 +105,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
             }
         } else {
             newTrackerView.warningTextFieldLimitationLabel.removeFromSuperview()
-            unlockCreateButton()
-            
             newTrackerView.tableView.snp.makeConstraints { make in
                 make.top.equalTo(newTrackerView.textField.snp.bottom).inset(-24)
             }
@@ -111,11 +129,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     @objc private func createNewTracker() {
-        presenter?.createNewTracker()
-                
+        newTrackerViewModel.createNewTracker()
         dataProviderService.resetNewTrackerInfo()
-        dismissNewTrackerVC()
-        creatingTrackerViewController?.backToTrackerViewController()
     }
     
     @objc private func dismissNewTrackerVC() {
@@ -136,7 +151,6 @@ extension NewTrackerViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         setTextFieldWarning(textField.text?.count)
         dataProviderService.trackerName = textField.text == "" ? nil : textField.text
-        presenter?.checkCreateButtonToUnclock()
     }
 }
 
@@ -156,7 +170,7 @@ extension NewTrackerViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "Cell", for: indexPath) as? NewTrackerCell else { return UITableViewCell() }
         
-        cell.categoryLabel.text = presenter?.buttonsTitleForTableView[indexPath.row]
+        cell.categoryLabel.text = newTrackerViewModel.buttonsTitleForTableView[indexPath.row]
         cell.accessoryType = .disclosureIndicator
         
         switch indexPath.row {
@@ -319,8 +333,6 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         default:
             cell.backgroundColor = .lightGray
         }
-        
-        presenter?.checkCreateButtonToUnclock()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -328,8 +340,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         
         cell.backgroundColor = .none
         
-        presenter?.resetTrackerInfoAfterDeselect(section: indexPath.section)
-        presenter?.checkCreateButtonToUnclock()
+        newTrackerViewModel.resetTrackerInfoAfterDeselect(section: indexPath.section)
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {

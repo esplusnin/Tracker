@@ -1,25 +1,26 @@
 //
-//  NewHabitPresenter.swift
+//  NewTrackerViewModel.swift
 //  Tracker
 //
-//  Created by Евгений on 22.05.2023.
+//  Created by Евгений on 20.06.2023.
 //
 
 import Foundation
 
-enum KindOfTrackers {
-    case habit
-    case unregularEvent
-}
-
-final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
+final class NewTrackerViewModel: NewTrackerViewModelProtocol {
     
     weak var view: NewTrackerViewControllerProtocol?
     
     private let dataProviderService = DataProviderService.instance
     
     let buttonsTitleForTableView = ["Категория", "Расписание"]
-        
+    
+    @NewTrackerObservable
+    private(set) var isReadyToCreateNewTracker = false
+    @NewTrackerObservable
+    private(set) var isTrackerDidCreate = false
+    
+    
     func createNewTracker() {
         guard let trackerName = dataProviderService.trackerName,
               let trackerColor = dataProviderService.trackerColor,
@@ -34,6 +35,10 @@ final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
         dataProviderService.addTrackerToStore(model: tracker)
     }
     
+    func trackerDidCreate() {
+        isTrackerDidCreate = true
+    }
+        
     func resetTrackerInfoAfterDeselect(section: Int) {
         switch section {
         case 0:
@@ -45,21 +50,22 @@ final class NewTrackerPresenter: NewTrackerViewPresenterProtocol {
         }
     }
     
-    @objc func checkCreateButtonToUnclock() {
-        if dataProviderService.trackerName != nil &&
-            dataProviderService.trackerColor != nil &&
-            dataProviderService.trackerEmoji != nil &&
-            dataProviderService.selectedCategoryString != nil {
+    func isControllerReadyToCreateNewTracker() {
+        if dataProviderService.isTrackerParametersWasFilled() {
             switch view?.kindOfTracker {
             case .unregularEvent:
-                view?.unlockCreateButton()
+                isReadyToCreateNewTracker = true
             case .habit:
-                dataProviderService.selectedScheduleString != nil ? view?.unlockCreateButton() : view?.lockCreateButton()
+                isReadyToCreateNewTracker = dataProviderService.selectedScheduleString != nil ? true : false
             default:
-                view?.lockCreateButton()
+                isReadyToCreateNewTracker = false
             }
         } else {
-            view?.lockCreateButton()
+            isReadyToCreateNewTracker = false
         }
+    }
+    
+    func changeStatusToCreateTracker() {
+        isReadyToCreateNewTracker = true
     }
 }
