@@ -9,11 +9,11 @@ import UIKit
 import SnapKit
 
 final class CategoryCell: UITableViewCell {
-    var label = UILabel()
+    var titleLabel = UILabel()
     
     var viewModel: String? {
         didSet {
-            label.text = viewModel
+            titleLabel.text = viewModel
         }
     }
     
@@ -25,11 +25,11 @@ final class CategoryCell: UITableViewCell {
     }
     
     private func setViews() {
-        contentView.addSubview(label)
+        contentView.addSubview(titleLabel)
     }
     
     private func setConstraints() {
-        label.snp.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.top.centerY.equalToSuperview()
             make.leading.equalToSuperview().inset(16)
         }

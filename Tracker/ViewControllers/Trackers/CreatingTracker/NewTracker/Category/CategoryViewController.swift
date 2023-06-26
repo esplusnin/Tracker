@@ -17,7 +17,6 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     override func viewDidLoad() {
         super.viewDidLoad()
         bindViewModel()
-        DataProviderService.instance.bindCategoryViewModel(controller: categoryViewModel)
         
         checkToSetupDumb()
         categoryView.tableView.delegate = self
@@ -63,7 +62,7 @@ extension CategoryViewController: UITableViewDelegate {
         cell.accessoryType = cell.accessoryType == UITableViewCell.AccessoryType.none ? .checkmark : .none
         cell.selectionStyle = .none
         
-        categoryViewModel.setSelectedCategory(name: cell.label.text ?? "")
+        categoryViewModel.setSelectedCategory(name: cell.titleLabel.text ?? "")
         newTrackerViewController?.reloadTableView()
         
         self.dismiss(animated: true)
@@ -86,7 +85,7 @@ extension CategoryViewController: UITableViewDataSource {
             for: indexPath) as? CategoryCell else { return UITableViewCell() }
         
         cell.viewModel = categoryViewModel.visibleCategories[indexPath.row]
-        cell.accessoryType = cell.label.text == categoryViewModel.getSelectedCategory() ? .checkmark : .none
+        cell.accessoryType = cell.titleLabel.text == categoryViewModel.getSelectedCategory() ? .checkmark : .none
         if indexPath.row + 1 == categoryViewModel.numberOfCategories {
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 16

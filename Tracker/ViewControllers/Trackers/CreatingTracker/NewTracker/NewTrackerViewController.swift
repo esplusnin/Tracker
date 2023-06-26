@@ -18,7 +18,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     var newTrackerViewModel = NewTrackerViewModel()
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
     var kindOfTracker: KindOfTrackers?
-    var dataProviderService = DataProviderService.instance
         
     private let newTrackerView = NewTrackerView()
     
@@ -179,14 +178,14 @@ extension NewTrackerViewController: UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            if let name = dataProviderService.selectedCategoryString {
+             if let name = newTrackerViewModel.getSelectedCategoryName() {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(name)
             } else {
                 cell.setViewsWithoutCategory()
             }
         case 1:
-            if let schedule = dataProviderService.selectedScheduleString {
+            if let schedule = newTrackerViewModel.getSelectedScheduleString() {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(schedule)
             } else {
@@ -220,9 +219,9 @@ extension NewTrackerViewController: UITableViewDelegate {
 
 extension NewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let emojiArray = dataProviderService.emojiArray.count
+        let emojiArray = newTrackerViewModel.emojiArray.count
         
-        return section == 0 ? emojiArray : dataProviderService.colorSectionArray.count
+        return section == 0 ? emojiArray : newTrackerViewModel.colorSectionArray.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -235,7 +234,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
             withReuseIdentifier: "CollectionCell",
             for: indexPath) as? NewTrackerCollectionCell else { return UICollectionViewCell() }
         
-        let emojiArray = dataProviderService.emojiArray
+        let emojiArray = newTrackerViewModel.emojiArray
         
         switch indexPath.section {
         case 0:
@@ -243,7 +242,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
             cell.emojiLabel.text = emojiArray[indexPath.row]
         case 1:
             cell.setSecondSection()
-            cell.colorSectionImageView.backgroundColor = dataProviderService.colorSectionArray[indexPath.row]
+            cell.colorSectionImageView.backgroundColor = newTrackerViewModel.colorSectionArray[indexPath.row]
         default:
             return UICollectionViewCell()
         }
@@ -328,12 +327,12 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         switch indexPath.section {
         case 0:
             cell.backgroundColor = .lightGray
-            dataProviderService.trackerEmoji = cell.emojiLabel.text
+            newTrackerViewModel.setTrackerEmoji(emoji: cell.emojiLabel.text ?? "")
         case 1:
             let color = cell.colorSectionImageView.backgroundColor?.withAlphaComponent(0.3)
             cell.layer.borderWidth = 3
             cell.layer.borderColor = color?.cgColor
-            dataProviderService.trackerColor = cell.colorSectionImageView.backgroundColor
+            newTrackerViewModel.setTrackerColor(color: cell.colorSectionImageView.backgroundColor ?? UIColor())
         default:
             cell.backgroundColor = .lightGray
         }

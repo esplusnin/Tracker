@@ -8,7 +8,6 @@
 import UIKit
 
 protocol NewTrackerViewControllerProtocol: AnyObject {
-    var dataProviderService: DataProviderService { get set }
     var kindOfTracker: KindOfTrackers? { get }
     func bind()
     func reloadTableView()

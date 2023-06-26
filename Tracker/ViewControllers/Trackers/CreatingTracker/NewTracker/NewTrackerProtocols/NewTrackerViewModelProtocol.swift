@@ -5,10 +5,12 @@
 //  Created by Евгений on 20.06.2023.
 //
 
-import Foundation
+import UIKit
 
 protocol NewTrackerViewModelProtocol: AnyObject {
     var view: NewTrackerViewControllerProtocol? { get set }
+    var emojiArray: [String] { get }
+    var colorSectionArray: [UIColor] { get }
     var buttonsTitleForTableView: [String] { get }
     func createNewTracker()
     func trackerDidCreate()
@@ -18,4 +20,8 @@ protocol NewTrackerViewModelProtocol: AnyObject {
     func resetTrackerInfoAfterCreate()
     func isControllerReadyToCreateNewTracker()
     func changeStatusToCreateTracker()
+    func setTrackerEmoji(emoji: String)
+    func setTrackerColor(color: UIColor)
+    func getSelectedCategoryName() -> String?
+    func getSelectedScheduleString() -> String?
 }

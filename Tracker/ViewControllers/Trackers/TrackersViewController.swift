@@ -26,7 +26,6 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         setViews()
         setMainCollectionSettings()
         
-        DataProviderService.instance.bindTrackersViewModel(controller: trackerViewModel)
         trackerViewModel.setVisibleTrackersFromProvider()
         
     }

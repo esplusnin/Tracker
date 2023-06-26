@@ -38,6 +38,7 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         dataProviderService.inizializeVisibleCategories()
         dataProviderService.getCategoryNames()
         dataProviderService.setAllTrackerRecords()
+        dataProviderService.bindTrackersViewModel(controller: self)
     }
     
     func setVisibleTrackersFromProvider() {

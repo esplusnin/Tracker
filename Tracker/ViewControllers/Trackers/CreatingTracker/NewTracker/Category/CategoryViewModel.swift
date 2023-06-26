@@ -18,6 +18,7 @@ final class CategoryViewModel: CategoryViewModelProtocol {
     }
     
     init() {
+        dataProviderService.bindCategoryViewModel(controller: self)
         updateVisibleCategories()
     }
     
