@@ -11,40 +11,58 @@ final class DataProviderService {
     
     static let instance = DataProviderService()
     
+    //CoreData Stores:
     var trackerStore: TrackerStoreProtocol?
     var trackerCategoryStore: TrackerCategoryStoreProtocol?
     var trackerRecordStore: TrackerRecordStore?
-    var trackersViewController: TrackersViewControllerProtocol?
+    
+    // ViewModels:
+    var categoryViewModel: CategoryViewModelProtocol?
+    var scheduleViewModel: ScheduleViewModelProtocol?
+    var newTrackerViewModel: NewTrackerViewModelProtocol?
+    var trackersViewModel: TrackersViewModelProtocol?
     
     private init() {}
     
     // Preparing for create new tracker:
-    var selectedCategoryString: String?
-    var selectedScheduleString: String?
-    var trackerName: String?
-    var trackerColor: UIColor?
-    var trackerEmoji: String?
-    var trackerSchedule: [Int]?
+    var selectedCategoryString: String? {
+        didSet {
+            newTrackerViewModel?.isControllerReadyToCreateNewTracker()
+        }
+    }
+    var selectedScheduleString: String? {
+        didSet {
+            isScheduleViewModelReadyToSave()
+            newTrackerViewModel?.isControllerReadyToCreateNewTracker()
+        }
+    }
+    var trackerName: String? {
+        didSet {
+            newTrackerViewModel?.isControllerReadyToCreateNewTracker()
+        }
+    }
+    var trackerColor: UIColor? {
+        didSet {
+            newTrackerViewModel?.isControllerReadyToCreateNewTracker()
+        }
+    }
+    var trackerEmoji: String? {
+        didSet {
+            newTrackerViewModel?.isControllerReadyToCreateNewTracker()
+        }
+    }
+    var trackerSchedule: [Int]? {
+        didSet {
+            isScheduleViewModelReadyToSave()
+        }
+    }
     
     private var visibleCategories: [TrackerCategory]?
     private var completedTrackers: [TrackerRecord]?
-    
-    var emojiArray = [
-        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
-        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-        "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
-    ]
-    
-    var colorSectionArray: [UIColor] = [
-        .colorSelection1, .colorSelection2, .colorSelection3, .colorSelection4,
-        .colorSelection5, .colorSelection6, .colorSelection7, .colorSelection8,
-        .colorSelection9, .colorSelection10, .colorSelection11, .colorSelection12,
-        .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16,
-        .colorSelection17, .colorSelection18,
-    ]
-    
-    func setTrackerStoreDelegate(view: TrackersDataProviderDelegate) {
-        trackerStore?.delegate = view
+    private var categoryNames: [String]? {
+        didSet {
+            categoryViewModel?.updateVisibleCategories()
+        }
     }
     
     func isCurrentDayFromScheduleExist(_ day: Int) -> Bool {
@@ -52,11 +70,29 @@ final class DataProviderService {
         
         return trackerSchedule.contains(day) ? true : false
     }
-
+    
+    func isScheduleDidCreate() -> Bool{
+        trackerSchedule != nil
+    }
+    
+    func isScheduleStringDidFilled() -> Bool {
+        selectedScheduleString != nil
+    }
+    
+    func isScheduleViewModelReadyToSave() {
+        if isScheduleDidCreate() && isScheduleStringDidFilled() {
+            scheduleViewModel?.changeStatusToCloseSchedule()
+        }
+    }
+    
+    func isTrackerParametersWasFilled() -> Bool {
+        return trackerName != nil && trackerColor != nil &&
+        trackerEmoji != nil && selectedCategoryString != nil ? true : false
+    }
     
     // Getting and Setting operating arrays:
     func getVisiblieCategories() -> [TrackerCategory] {
-        visibleCategories ?? []
+        return visibleCategories ?? []
     }
     
     func setVisibleCategory(_ category: [TrackerCategory]) {
@@ -82,6 +118,20 @@ final class DataProviderService {
         trackerColor = nil
         trackerEmoji = nil
         trackerSchedule = nil
+    }
+    
+    //MARK: ViewModels Block:
+    func updateCategoryViewModel() -> [String] {
+        categoryNames ?? []
+    }
+    
+    func trackerDidCreate() {
+        trackersViewModel?.setVisibleTrackersFromProvider()
+        newTrackerViewModel?.trackerDidCreate()
+    }
+    
+    func recordDidUpdate() {
+        trackersViewModel?.recordDidUpdate()
     }
     
     //MARK: TrackerStore Block:
@@ -120,18 +170,16 @@ final class DataProviderService {
         trackerCategoryStore?.addCategory(name: name)
     }
     
+    func getCategoryNames() {
+        categoryNames = trackerCategoryStore?.fetchCategoryNames()
+    }
+    
     func getCategoryNameFromStore(at index: Int) -> String {
         trackerCategoryStore?.getCategoryName(at: index) ?? ""
     }
-
+    
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
         trackerCategoryStore?.fetchSpecificCategory(name: name)
-    }
-    
-    func setupTrackerCategoryDelegate(controller: TrackersCategoryDelegate) {
-        guard let trackerCategoryStore = trackerCategoryStore else { return }
-        
-        trackerCategoryStore.delegate = controller
     }
     
     //MARK: TrackerRecord Block:
@@ -145,5 +193,22 @@ final class DataProviderService {
         } else {
             trackerRecordStore?.deleteRecord(tracker: model)
         }
+    }
+    
+    //MARK: Setting Controller protocols:
+    func bindCategoryViewModel(controller: CategoryViewModelProtocol) {
+        categoryViewModel = controller
+    }
+    
+    func bindScheduleViewModel(controller: ScheduleViewModelProtocol) {
+        scheduleViewModel = controller
+    }
+    
+    func bindNewTrackerViewModel(controller: NewTrackerViewModelProtocol) {
+        newTrackerViewModel = controller
+    }
+    
+    func bindTrackersViewModel(controller: TrackersViewModelProtocol) {
+        trackersViewModel = controller
     }
 }

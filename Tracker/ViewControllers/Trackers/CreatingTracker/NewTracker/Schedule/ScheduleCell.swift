@@ -12,6 +12,12 @@ final class ScheduleCell: UITableViewCell {
     
     weak var delegate: ScheduleViewControllerDelegate?
     
+    var viewModel: String? {
+        didSet {
+            label.text = viewModel
+        }
+    }
+    
     lazy var label = UILabel()
     
     lazy var switcher: UISwitch = {

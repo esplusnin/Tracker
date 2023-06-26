@@ -8,7 +8,6 @@
 import Foundation
 
 protocol TrackerStoreProtocol: AnyObject {
-    var delegate: TrackersDataProviderDelegate? { get set }
     func fetchTrackers() -> [TrackerCategory]
     func addTracker(model: Tracker)
     func getTracker(categoryName: String, searchedindex: Int) -> Tracker

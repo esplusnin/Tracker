@@ -12,6 +12,30 @@ final class TrackerCell: UICollectionViewCell {
     
     weak var delegate: TrackersCollectionViewCellDelegate?
     
+    var trackerModel: Tracker? {
+        didSet {
+            guard let trackerModel = trackerModel else { return }
+            cellView.backgroundColor = trackerModel.color
+            trackerLabel.text = trackerModel.name
+            emojiLabel.text = trackerModel.emoji
+            completeTrackerDayButton.backgroundColor = trackerModel.color
+        }
+    }
+    
+    var additionalTrackerInfo: AdditionTrackerInfo? {
+        didSet {
+            guard let additionalTrackerInfo = additionalTrackerInfo else { return }
+            completeTrackerDayButton.setTitle(additionalTrackerInfo.buttonString, for: .normal)
+            numberOfDaysLabel.text = additionalTrackerInfo.countOfDays
+            if additionalTrackerInfo.isTodayFuture {
+                unlockCompleteButton()
+                completeTrackerDayButton.alpha = additionalTrackerInfo.isCompleteToday ? 0.5 : 1
+            } else {
+                lockCompleteButton()
+            }
+        }
+    }
+    
     lazy var cellView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = true
@@ -83,13 +107,15 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     func lockCompleteButton() {
+        completeTrackerDayButton.backgroundColor = .colorSelection1
         completeTrackerDayButton.isEnabled = false
         completeTrackerDayButton.setTitle("✕", for: .normal)
         completeTrackerDayButton.titleLabel?.font = .systemFont(ofSize: 15)
         completeTrackerDayButton.alpha = 0.4
     }
-     
+    
     func unlockCompleteButton() {
+        completeTrackerDayButton.alpha = 1
         completeTrackerDayButton.isEnabled = true
     }
     
@@ -105,10 +131,6 @@ final class TrackerCell: UICollectionViewCell {
         delegate?.deleteTracker(from: cell)
     }
     
-    @objc private func showContextMenu(_ sender: UITapGestureRecognizer) {
-     
-    }
-    
     @objc private func completeTrackerToday() {
         if completeTrackerDayButton.titleLabel?.text == "+" {
             delegate?.addCurrentTrackerToCompletedThisDate(self, isAddDay: true)
@@ -121,6 +143,34 @@ final class TrackerCell: UICollectionViewCell {
         }
     }
 }
+
+extension TrackerCell: UIContextMenuInteractionDelegate {
+    func addContextMenuInteraction() {
+        let interaction = UIContextMenuInteraction(delegate: self)
+        cellView.addInteraction(interaction)
+    }
+    
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        let editImage = UIImage(systemName: "square.and.pencil")
+        let deleteImage = UIImage(systemName: "trash")
+        
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
+            let editAction = UIAction(
+                title: "Редактировать", image: editImage) { [weak self] action in
+                    guard let self = self else { return }
+                    self.editTracker(from: self)
+                }
+            let deleteAction = UIAction(
+                title: "Удалить", image: deleteImage, attributes: .destructive) { [weak self] action in
+                    guard let self = self else { return }
+                    self.deleteTracker(from: self)
+                }
+            
+            return UIMenu(children: [editAction, deleteAction])
+        }
+    }
+}
+
 
 // MARK: Setting Views:
 extension TrackerCell {
@@ -166,33 +216,6 @@ extension TrackerCell {
             make.top.equalTo(cellView.snp.bottom).inset(-8)
             make.trailing.equalToSuperview().inset(12)
             make.centerY.equalTo(numberOfDaysLabel.snp.centerY)
-        }
-    }
-}
-
-extension TrackerCell: UIContextMenuInteractionDelegate {
-    func addContextMenuInteraction() {
-        let interaction = UIContextMenuInteraction(delegate: self)
-        cellView.addInteraction(interaction)
-    }
-    
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        let editImage = UIImage(systemName: "square.and.pencil")
-        let deleteImage = UIImage(systemName: "trash")
-        
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
-            let editAction = UIAction(
-                title: "Редактировать", image: editImage) { [weak self] action in
-                    guard let self = self else { return }
-                    self.editTracker(from: self)
-                }
-            let deleteAction = UIAction(
-                title: "Удалить", image: deleteImage, attributes: .destructive) { [weak self] action in
-                    guard let self = self else { return }
-                    self.deleteTracker(from: self)
-                }
-            
-            return UIMenu(children: [editAction, deleteAction])
         }
     }
 }

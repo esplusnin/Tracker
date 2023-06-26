@@ -8,20 +8,23 @@
 import UIKit
 import SnapKit
 
+enum KindOfTrackers {
+    case habit
+    case unregularEvent
+}
+
 final class NewTrackerViewController: UIViewController, NewTrackerViewControllerProtocol {
     
-    var presenter: NewTrackerViewPresenterProtocol?
+    var newTrackerViewModel = NewTrackerViewModel()
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
     var kindOfTracker: KindOfTrackers?
-    var dataProviderService = DataProviderService.instance
         
     private let newTrackerView = NewTrackerView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        newTrackerViewModel.view = self
         newTrackerView.textField.delegate = self
-        presenter = NewTrackerPresenter()
-        presenter?.view = self
         
         setViews()
         setTitle()
@@ -30,6 +33,21 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         setTableViewMainSettings()
         setCollectionViewMainSetting()
         setTargets()
+        bind()
+    }
+    
+    func bind() {
+        newTrackerViewModel.$isReadyToCreateNewTracker.bind { [weak self] value in
+            guard let self = self else { return }
+            value == true ? self.unlockCreateButton() : self.lockCreateButton()
+        }
+        
+        newTrackerViewModel.$isTrackerDidCreate.bind { [weak self] value in
+            guard let self = self else { return }
+            if value == true {
+                dismissNewTrackerVC()
+            }
+        }
     }
     
     func reloadTableView() {
@@ -58,7 +76,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     private func switchToCategoryVC() {
         let viewController = CategoryViewController()
         viewController.newTrackerViewController = self
-        dataProviderService.setupTrackerCategoryDelegate(controller: viewController)
         
         present(viewController,animated: true)
     }
@@ -86,8 +103,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
             }
         } else {
             newTrackerView.warningTextFieldLimitationLabel.removeFromSuperview()
-            unlockCreateButton()
-            
             newTrackerView.tableView.snp.makeConstraints { make in
                 make.top.equalTo(newTrackerView.textField.snp.bottom).inset(-24)
             }
@@ -112,11 +127,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     @objc private func createNewTracker() {
-        presenter?.createNewTracker()
-                
-        dataProviderService.resetNewTrackerInfo()
-        dismissNewTrackerVC()
-        creatingTrackerViewController?.backToTrackerViewController()
+        newTrackerViewModel.createNewTracker()
+        newTrackerViewModel.resetTrackerInfoAfterCreate()
     }
     
     @objc private func dismissNewTrackerVC() {
@@ -136,8 +148,12 @@ extension NewTrackerViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         setTextFieldWarning(textField.text?.count)
-        dataProviderService.trackerName = textField.text == "" ? nil : textField.text
-        presenter?.checkCreateButtonToUnclock()
+        let name = textField.text == "" ? nil : textField.text
+        guard let name = name else { return }
+        
+        if name.count < 38 {
+            newTrackerViewModel.setTrackerName(name: name)
+        }
     }
 }
 
@@ -157,19 +173,19 @@ extension NewTrackerViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "Cell", for: indexPath) as? NewTrackerCell else { return UITableViewCell() }
         
-        cell.categoryLabel.text = presenter?.buttonsTitleForTableView[indexPath.row]
+        cell.categoryLabel.text = newTrackerViewModel.buttonsTitleForTableView[indexPath.row]
         cell.accessoryType = .disclosureIndicator
         
         switch indexPath.row {
         case 0:
-            if let name = dataProviderService.selectedCategoryString {
+             if let name = newTrackerViewModel.getSelectedCategoryName() {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(name)
             } else {
                 cell.setViewsWithoutCategory()
             }
         case 1:
-            if let schedule = dataProviderService.selectedScheduleString {
+            if let schedule = newTrackerViewModel.getSelectedScheduleString() {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(schedule)
             } else {
@@ -203,9 +219,9 @@ extension NewTrackerViewController: UITableViewDelegate {
 
 extension NewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let emojiArray = dataProviderService.emojiArray.count
+        let emojiArray = newTrackerViewModel.emojiArray.count
         
-        return section == 0 ? emojiArray : dataProviderService.colorSectionArray.count
+        return section == 0 ? emojiArray : newTrackerViewModel.colorSectionArray.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -218,7 +234,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
             withReuseIdentifier: "CollectionCell",
             for: indexPath) as? NewTrackerCollectionCell else { return UICollectionViewCell() }
         
-        let emojiArray = dataProviderService.emojiArray
+        let emojiArray = newTrackerViewModel.emojiArray
         
         switch indexPath.section {
         case 0:
@@ -226,7 +242,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
             cell.emojiLabel.text = emojiArray[indexPath.row]
         case 1:
             cell.setSecondSection()
-            cell.colorSectionImageView.backgroundColor = dataProviderService.colorSectionArray[indexPath.row]
+            cell.colorSectionImageView.backgroundColor = newTrackerViewModel.colorSectionArray[indexPath.row]
         default:
             return UICollectionViewCell()
         }
@@ -311,17 +327,15 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         switch indexPath.section {
         case 0:
             cell.backgroundColor = .lightGray
-            dataProviderService.trackerEmoji = cell.emojiLabel.text
+            newTrackerViewModel.setTrackerEmoji(emoji: cell.emojiLabel.text ?? "")
         case 1:
             let color = cell.colorSectionImageView.backgroundColor?.withAlphaComponent(0.3)
             cell.layer.borderWidth = 3
             cell.layer.borderColor = color?.cgColor
-            dataProviderService.trackerColor = cell.colorSectionImageView.backgroundColor
+            newTrackerViewModel.setTrackerColor(color: cell.colorSectionImageView.backgroundColor ?? UIColor())
         default:
             cell.backgroundColor = .lightGray
         }
-        
-        presenter?.checkCreateButtonToUnclock()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -329,8 +343,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         
         cell.backgroundColor = .none
         
-        presenter?.resetTrackerInfoAfterDeselect(section: indexPath.section)
-        presenter?.checkCreateButtonToUnclock()
+        newTrackerViewModel.resetTrackerInfoAfterDeselect(section: indexPath.section)
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {

@@ -12,43 +12,43 @@ import SnapKit
 final class ScheduleViewController: UIViewController {
 
     var newTrackerViewController: NewTrackerViewControllerProtocol?
-    var presenter: SchedulePresenterProtocol?
-    
-    private var scheduleService = ScheduleService()
     
     private let scheduleView = ScheduleView()
-    private let dataProviderService = DataProviderService.instance
+    private let scheduleViewModel = ScheduleViewModel()
+    private var scheduleService = ScheduleService()
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        presenter = SchedulePresenter()
-        
+        super.viewDidLoad()        
         setViews()
         setConstraints()
         settingTableView()
         setTarget()
+        bind()
     }
     
-    @objc private  func setCurrentScheduleForTracker() {
-        let schedule = presenter?.schedule ?? []
-        let string = schedule.count == 7 ? "Каждый день" : scheduleService.getScheduleString(schedule)
-        
-        dataProviderService.selectedScheduleString = string
-        dataProviderService.trackerSchedule = schedule
-        newTrackerViewController?.reloadTableView()
-        presenter?.schedule = []
-                
-        dismiss(animated: true)
+    private func bind() {
+        scheduleViewModel.$isReadyToCloseSchedule.bind { [weak self] value in
+            guard let self = self else { return }
+            
+            if value == true {
+                newTrackerViewController?.reloadTableView()
+                dismiss(animated: true)
+            }
+        }
     }
     
     private func setTarget() {
         scheduleView.completeButton.addTarget(self, action: #selector(setCurrentScheduleForTracker), for: .touchUpInside)
     }
+    
+    @objc private  func setCurrentScheduleForTracker() {
+        scheduleViewModel.setSchedule()
+    }
 }
 
 extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        presenter?.daysArray.count ?? 0
+        scheduleViewModel.daysArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -56,13 +56,13 @@ extension ScheduleViewController: UITableViewDataSource {
             withIdentifier: "ScheduleCell", for: indexPath) as? ScheduleCell else { return UITableViewCell() }
         
         cell.delegate = self
-        cell.label.text = presenter?.daysArray[indexPath.row]
+        cell.viewModel = scheduleViewModel.daysArray[indexPath.row]
         
-        let numberOfDay = scheduleService.addWeekDayToSchedule(dayName: presenter?.daysArray[indexPath.row] ?? "")
+        let numberOfDay = scheduleViewModel.returnNumberOfDay(from: indexPath)
        
-        if dataProviderService.isCurrentDayFromScheduleExist(numberOfDay) {
+        if scheduleViewModel.isCurrentDayExistInSchedule(day: numberOfDay) {
             cell.switcher.isOn = true
-            presenter?.schedule.append(numberOfDay)
+            scheduleViewModel.addDayToSchedule(day: numberOfDay)
         }
                 
         return cell
@@ -84,10 +84,10 @@ extension ScheduleViewController: ScheduleViewControllerDelegate {
         let numberOfDay = scheduleService.addWeekDayToSchedule(dayName: dayName)
         
         if cell.switcher.isOn {
-            presenter?.schedule.append(numberOfDay)
+            scheduleViewModel.addDayToSchedule(day: numberOfDay)
         } else {
-            guard let index = presenter?.schedule.firstIndex(of: numberOfDay) else { return }
-            presenter?.schedule.remove(at: index)
+            guard let index = scheduleViewModel.schedule.firstIndex(of: numberOfDay) else { return }
+            scheduleViewModel.removeAddFromSchedule(index: index)
         }
     }
 }

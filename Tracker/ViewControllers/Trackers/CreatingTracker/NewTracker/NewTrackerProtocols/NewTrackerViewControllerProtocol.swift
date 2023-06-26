@@ -8,9 +8,8 @@
 import UIKit
 
 protocol NewTrackerViewControllerProtocol: AnyObject {
-    var presenter: NewTrackerViewPresenterProtocol? { get set }
-    var dataProviderService: DataProviderService { get set }
     var kindOfTracker: KindOfTrackers? { get }
+    func bind()
     func reloadTableView()
     func unlockCreateButton()
     func lockCreateButton()

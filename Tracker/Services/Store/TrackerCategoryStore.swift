@@ -9,10 +9,8 @@ import UIKit
 import CoreData
 
 final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
-    
-    weak var delegate: TrackersCategoryDelegate?
-    
-    private let dataProviderServie = DataProviderService.instance
+        
+    private let dataProviderService = DataProviderService.instance
     
     private lazy var appDelegate = {
         (UIApplication.shared.delegate as! AppDelegate)
@@ -72,6 +70,12 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
         return category.name ?? ""
     }
     
+    func fetchCategoryNames() -> [String] {
+        guard let categoryName = fetchedResultController.fetchedObjects else { return [] }
+        
+        return categoryName.map { $0.name ?? "" }
+    }
+    
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
         var wantedCategory: TrackerCategoryCoreData?
         
@@ -102,18 +106,8 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
 }
 
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        insertedSet = IndexSet()
-        deletedSet = IndexSet()
-    }
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let insertedSet = insertedSet, let deletedSet = deletedSet else { return }
-        
-        dataProviderServie.inizializeVisibleCategories()
-        delegate?.didUpdate(updates: CollectionStoreUpdates(insertedIndex: insertedSet,
-                                                                  deletedIndex: deletedSet))
-        self.insertedSet = nil
+        dataProviderService.getCategoryNames()
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {

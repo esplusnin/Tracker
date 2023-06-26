@@ -23,12 +23,10 @@ final class TabBarController: UITabBarController {
         tabBar.layer.borderColor = UIColor.systemGray.cgColor
         
         let trackersViewController = TrackersViewController()
-        let trackersViewPresenter = TrackersPresenter()
         
         let trackersViewControllerNavigation = UINavigationController(rootViewController: trackersViewController)
         let statisticViewControllerNavigation = UINavigationController(rootViewController: StatisticViewController())
         
-        trackersViewController.presenter = trackersViewPresenter
         
         trackersViewControllerNavigation.tabBarItem = UITabBarItem(title: "Трекеры",
                                                                    image: Resources.Images.trackersTabBar,

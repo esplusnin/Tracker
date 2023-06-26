@@ -36,7 +36,7 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         } catch {
             print(error.localizedDescription)
         }
-
+        
         return fetchedController
     }()
     
@@ -98,9 +98,9 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
     }
 }
 
-
 extension TrackerRecordStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         dataProviderService.setAllTrackerRecords()
+        dataProviderService.recordDidUpdate()
     }
 }
