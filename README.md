@@ -9,9 +9,10 @@ Tracker is made as a application for tracking your own habits or obligation, whe
 + The application has a calendar, where you can take a particular day to show events with this date
 
 ### :stars: Future plans:
-+ Integrate possibility to update(change) main tracker's information
++ Integrate possibility to update (change) main tracker's information
 + Addition statistic service
 + Addition black theme
++ Covering by tests
 
 ### :telescope: Main technology:
 + MVVM
@@ -31,21 +32,21 @@ Your first meeting starts from launch screen and almost instantly you get on onb
 </div>
 
 And it's all! :blush: 
-Now you can use entire functional of application. Let's start it!
+Now you can use full functional of application. Let's start it!
 
 It is a main screen, which shows all of your trackers:
 <div id="badges">
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/MainScreen.png?raw=true" width="200" height="400"/>
 </div>
 
-From here you can select an especial day to update list of trackers or tap Addition button (plus) to add another one.
+From here you can select an especial day from calendar to update list of trackers or tap Addition button (plus) to add another one.
 After that you'll switch to creating new habit screen:
 
 <div id="badges">
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/SelectionScreen.png?raw=true" width="200" height="400"/>
 </div>
 
-After your selection you'll switch to one of the most interesting screen - Create New Tracker screen, whic has tableView and multiply collectionView. Here you will able to set custom schedule or and select exister or create new category
+After your selection you'll switch to one of the most interesting screen - Create New Tracker screen, which has tableView and multiply collectionView. Here you will be able to set custom schedule and select existed or create new category
 
 <div id="badges">
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/NewTracker.png?raw=true" width="200" height="400"/>
@@ -60,7 +61,7 @@ Notice, that in case of you didn't select all of necessary points, create button
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/UnlockedButton.png?raw=true" width="400" height="100"/>
 </div>
 
-If everything done correctly, you see your new own tracker. Also notice, that you can complete tracker on current day and icrease habit counter
+If everything done correctly, you will see your new own tracker. Also notice, that you can complete tracker on current day and icrease habit counter
 
 <div id="badges">
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/TrackerWasCreated.png?raw=true" width="200" height="400"/>
