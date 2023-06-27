@@ -23,8 +23,9 @@ Tracker is made as a application for tracking your own habits or obligation, whe
 
 ---
 
-Your first meeting starts from launch screen and almost instantly you get on onboarding (only first entry)
+1) Your first meeting starts from launch screen and almost instantly you get on onboarding (only first entry)
 
+*Launch Screen, Onboarding Screen*
 <div id="badges">
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/LaucnScreen.png?raw=true" width="200" height="400"/>
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/Onboarding1.png?raw=true" width="200" height="400"/>
@@ -34,20 +35,24 @@ Your first meeting starts from launch screen and almost instantly you get on onb
 And it's all! :blush: 
 Now you can use full functional of application. Let's start it!
 
-It is a main screen, which shows all of your trackers:
+2) It is a main screen, which shows all of your trackers:
+
+*Main Screen*
 <div id="badges">
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/MainScreen.png?raw=true" width="200" height="400"/>
 </div>
 
-From here you can select an especial day from calendar to update list of trackers or tap Addition button (plus) to add another one.
+3) From here you can select an especial day from calendar to update list of trackers or tap Addition button (plus) to add another one.
 After that you'll switch to creating new habit screen:
 
+*Selection kind of Tracker*
 <div id="badges">
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/SelectionScreen.png?raw=true" width="200" height="400"/>
 </div>
 
-After your selection you'll switch to one of the most interesting screen - Create New Tracker screen, which has tableView and multiply collectionView. Here you will be able to set custom schedule and select existed or create new category
+4) After your selection you'll switch to one of the most interesting screen - Create New Tracker screen, which has tableView and multiply collectionView. Here you will be able to set custom schedule and select existed or create new category
 
+*Create new tracker Screen, Select/Create new Category Screen, Select Schedule Screen*
 <div id="badges">
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/NewTracker.png?raw=true" width="200" height="400"/>
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/NewCategory.png?raw=true" width="200" height="400"/>
@@ -61,8 +66,9 @@ Notice, that in case of you didn't select all of necessary points, create button
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/UnlockedButton.png?raw=true" width="400" height="100"/>
 </div>
 
-If everything done correctly, you will see your new own tracker. Also notice, that you can complete tracker on current day and icrease habit counter
+5) If everything done correctly, you will see your new own tracker. Also notice, that you can complete tracker on current day and icrease habit counter
 
+*Main Screen whith created tracker*
 <div id="badges">
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/TrackerWasCreated.png?raw=true" width="200" height="400"/>
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/AdditionDay.png?raw=true" width="120" height="100"/>
