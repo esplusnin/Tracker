@@ -32,7 +32,8 @@ Your first meeting starts from launch screen and almost instantly you get on onb
 
 And it's all! :blush: 
 Now you can use entire functional of application. Let's start it!
-It is a main screen, which shows all of your trackers
+
+It is a main screen, which shows all of your trackers:
 <div id="badges">
 <img src="https://github.com/esplusnin/esplusnin/blob/main/Tracker/MainScreen.png?raw=true" width="200" height="400"/>
 </div>
