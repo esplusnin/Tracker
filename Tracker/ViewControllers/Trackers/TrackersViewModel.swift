@@ -73,12 +73,12 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     func fillAdditionalInfo(id: UUID) {
         let completeDayString = setCellButtonIfTrackerWasCompletedToday(id: id)
         let countOfDays = countAmountOfCompleteDays(id: id)
-        let countOfDaysString = updateNumberOfCompletedDaysLabel(countOfDays)
+        let daysString = String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: ""), countOfDays)
         let isCompleteToday = completeDayString == "+" ? false : true
         let isTodayFuture = checkCurrentDateIsFuture()
         
         additionTrackerInfo = AdditionTrackerInfo(buttonString: completeDayString,
-                                                  countOfDays: countOfDaysString,
+                                                  countOfDays: daysString,
                                                   isCompleteToday: isCompleteToday,
                                                   isTodayFuture: isTodayFuture)
     }
@@ -92,49 +92,6 @@ final class TrackersViewModel: TrackersViewModelProtocol {
                 string = "✓"
             }
         })
-        
-        return string
-    }
-    
-    private func updateCellDayLabel(at indexPath: IndexPath) -> String {
-        let id = visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
-        let string = updateNumberOfCompletedDaysLabel(countAmountOfCompleteDays(id: id))
-        
-        return string
-    }
-    
-    private func updateNumberOfCompletedDaysLabel(_ number: Int) -> String {
-        var string = "\(number) "
-        var array = [number]
-        
-        switch number {
-        case 0:
-            string += "Дней"
-        case 1:
-            string += "День"
-        case 2:
-            string += "Дня"
-        case 3, 4:
-            string += "Дня"
-        case 5...20:
-            string += "Дней"
-        case 20...:
-            switch array.removeLast() {
-            case 1:
-                string += "День"
-            case 2:
-                string += "Дня"
-            case 3, 4:
-                string += "Дня"
-            case 5...9:
-                string += "Дней"
-            default:
-                string += "Дней"
-            }
-            
-        default:
-            string = ""
-        }
         
         return string
     }
