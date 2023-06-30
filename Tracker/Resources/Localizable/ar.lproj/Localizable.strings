@@ -1,66 +1,66 @@
-// MainTabBar:
-"tabBar.trackers" = "Трекеры";
-"tabBar.statistic" = "Трекеры";
-
 // Onboarding:
-"onboarding.firstScreen.title" = "Отслеживайте только то, что хотите";
-"onboarding.secondScreen.title" = "Даже если это не литры воды и йога";
-"onboarding.continueButton" = "Вот это технологии!";
+"onboarding.firstScreen.title" = "تتبع فقط ما تريد";
+"onboarding.secondScreen.title" = "حتى لو لم يكن لتر من الماء واليوغا";
+"onboarding.continueButton" = "هذه هي التقنيات!";
+
+// MainTabBar:
+"tabBar.trackers" = "بتتبع";
+"tabBar.statistics" = "الإحصاءات";
 
 // TrackerVC:
-"trackerVC.title" = "Трекеры";
-"trackerVC.searchField.placeholder" = "Поиск...";
-"trackerVC.cancelationButton" = "Отменить";
-"trackerVC.emptyState.label" = "Что будем отслеживать?";
-"trackerVC.nothingSearched" = "";
+"trackerVC.title" = "بتتبع";
+"trackerVC.searchField.placeholder" = "بحث...";
+"trackerVC.cancelationButton" = "إلغاء";
+"trackerVC.emptyState.label" = "ماذا سوف تتبع?";
+"trackerVC.nothingSearched" = "لم يتم العثور على شيء";
 
 // CreatingTracker:
-"creatingTracker.title" = "";
-"creatingTracker.habit" = "";
-"creatingTracker.unregularEvent" = "";
+"creatingTracker.title" = "إنشاء تعقب";
+"creatingTracker.habit" = "العادة";
+"creatingTracker.unregularEvent" = "حدث غير منتظم";
 
 // NewTracker:
-"newTracker.habit.title" = "New Habit";
-"newTracker.unregularEvent.title" = "New unregular Event";
-"newTracker.textField.placeholder" = "";
-"newTracker.tableView.category" = "";
-"newTracker.tableView.schedule" = "";
-"newTracker.collectionView.color" = "";
-"newTracker.buttons.cancel" = "";
-"newTracker.buttons.create" = "";
-"newTracker.warning" = "Limit of 38 characters";
-"newTracker.emoji" = "Эмоджи";
+"newTracker.habit.title" = "عادة جديدة";
+"newTracker.unregularEvent.title" = "حدث جديد غير منتظم";
+"newTracker.textField.placeholder" = "أدخل اسم المقتفي";
+"newTracker.tableView.category" = "الفئة";
+"newTracker.tableView.schedule" = "الجدول الزمني";
+"newTracker.collectionView.color" = "اللون";
+"newTracker.buttons.cancel" = "إلغاء";
+"newTracker.buttons.create" = "لإنشاء";
+"newTracker.warning" = "الحد من 38 حرفا";
+"newTracker.emoji" = "الرموز التعبيرية";
 
 // Category:
-"category.title" = "";
-"category.addCategory" = "";
-"category.emptyCategory" = "Habits and events can be\ncombined in meaning";
+"category.title" = "الفئة";
+"category.addCategory" = "إضافة فئة";
+"category.emptyCategory" = "يمكن الجمع بين العادات\n والأحداث في المعنى";
 
 // New Category:
-"newCategory.title" = "";
-"newCategory.textField.placeholder" = "";
-"newCategory.readyButton" = "";
+"newCategory.title" = "فئة جديدة";
+"newCategory.textField.placeholder" = "أدخل اسم الفئة";
+"newCategory.readyButton" = "تم";
 
 // Schedule:
-"schedule.title" = "";
-"schedule.monday" = "";
-"schedule.tuesday" = "";
-"schedule.wednesday" = "";
-"schedule.thursday" = "";
-"schedule.friday" = "";
-"schedule.saturday" = "";
-"schedule.sunday" = "";
-"schedule.everyDay" = "";
-"schedule.ready" = "";
+"schedule.title" = "الجدول الزمني";
+"schedule.monday" = "الاثنين";
+"schedule.tuesday" = "الثلاثاء";
+"schedule.wednesday" = "الأربعاء";
+"schedule.thursday" = "الخميس";
+"schedule.friday" = "الجمعة";
+"schedule.saturday" = "السبت";
+"schedule.sunday" = "الأحد";
+"schedule.everyDay" = "كل يوم";
+"schedule.ready" = "تم";
 
-"schedule.monday.short" = "";
-"schedule.tuesday.short" = "";
-"schedule.wednesday.short" = "";
-"schedule.thursday.short" = "";
-"schedule.friday.short" = "";
-"schedule.saturday.short" = "";
-"schedule.sunday.short" = "";
+"schedule.monday.short" = "الاث";
+"schedule.tuesday.short" = "الث)";
+"schedule.wednesday.short" = "الأر";
+"schedule.thursday.short" = "الخم";
+"schedule.friday.short" = "الجم";
+"schedule.saturday.short" = "السب";
+"schedule.sunday.short" = "الأح";
 
-// Statistic:
-"statistic.title" = "";
-"statistic.nothingToAnalyze" = "";
+// statistics:
+"statistics.title" = "الإحصاءات";
+"statistics.nothingToAnalyze" = "لا يوجد شيء لتحليل حتى الآن";

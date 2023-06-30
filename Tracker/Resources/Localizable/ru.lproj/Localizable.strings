@@ -21,7 +21,7 @@
 
 // NewTracker:
 "newTracker.habit.title" = "Новая привычка";
-"newTracker.unregularEvent.title" = "Новая привычка";
+"newTracker.unregularEvent.title" = "Новое нерегулярное событие";
 "newTracker.textField.placeholder" = "Введите название трекера";
 "newTracker.tableView.category" = "Категория";
 "newTracker.tableView.schedule" = "Расписание";

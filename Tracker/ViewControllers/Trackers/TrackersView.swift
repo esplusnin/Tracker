@@ -46,7 +46,6 @@ final class TrackersView {
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ru-RU")
         datePicker.layer.cornerRadius = 8
         
         return datePicker

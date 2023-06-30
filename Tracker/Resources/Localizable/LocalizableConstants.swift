@@ -24,7 +24,8 @@ enum LocalizableConstants {
         static let cancelationButton = NSLocalizedString("trackerVC.cancelationButton", comment: "")
         static let emptyStateLabel = NSLocalizedString("trackerVC.emptyState.label", comment: "")
         static let nothingSearched = NSLocalizedString("trackerVC.nothingSearched", comment: "")
-        static func countOfCompletedDays(countOfDays: Int) -> String { String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: ""), countOfDays)
+        static func countOfCompletedDays(countOfDays: Int) -> String {
+            String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: ""), countOfDays)
         }
     }
     
