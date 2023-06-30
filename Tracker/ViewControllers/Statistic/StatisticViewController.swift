@@ -28,7 +28,7 @@ final class StatisticViewController: UIViewController {
     
     private func setNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Cтатистика"
+        title = LocalizableConstants.Statistics.title
     }
     
     private func setConstraints() {

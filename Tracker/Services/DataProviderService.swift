@@ -57,7 +57,11 @@ final class DataProviderService {
         }
     }
     
-    private var visibleCategories: [TrackerCategory]?
+    private var visibleCategories: [TrackerCategory]? {
+        didSet {
+            trackerDidCreate()
+        }
+    }
     private var completedTrackers: [TrackerRecord]?
     private var categoryNames: [String]? {
         didSet {

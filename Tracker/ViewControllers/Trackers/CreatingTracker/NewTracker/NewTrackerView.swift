@@ -27,7 +27,7 @@ final class NewTrackerView {
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftViewMode = .always
         textField.backgroundColor = .backgroundDay
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = LocalizableConstants.NewTracker.textFieldPlaceholder
         textField.textColor = .blackDay
         textField.font = .systemFont(ofSize: 17)
         
@@ -58,7 +58,7 @@ final class NewTrackerView {
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.red.cgColor
         button.backgroundColor = .white
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(LocalizableConstants.NewTracker.buttonCancel, for: .normal)
         button.setTitleColor(.red, for: .normal)
         
         return button
@@ -68,7 +68,7 @@ final class NewTrackerView {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
         button.backgroundColor = .gray
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(LocalizableConstants.NewTracker.buttonCreate, for: .normal)
         button.setTitleColor(.white, for: .normal)
         
         return button
@@ -76,7 +76,7 @@ final class NewTrackerView {
     
     lazy var warningTextFieldLimitationLabel: UILabel = {
         let label = UILabel()
-        label.text = "Ограничение 38 символов"
+        label.text = LocalizableConstants.NewTracker.warning
         label.textColor = .red
         label.font = .systemFont(ofSize: 17)
         

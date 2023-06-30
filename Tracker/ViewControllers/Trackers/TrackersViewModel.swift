@@ -73,7 +73,7 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     func fillAdditionalInfo(id: UUID) {
         let completeDayString = setCellButtonIfTrackerWasCompletedToday(id: id)
         let countOfDays = countAmountOfCompleteDays(id: id)
-        let daysString = String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: ""), countOfDays)
+        let daysString = LocalizableConstants.TrackerVC.countOfCompletedDays(countOfDays: countOfDays)
         let isCompleteToday = completeDayString == "+" ? false : true
         let isTodayFuture = checkCurrentDateIsFuture()
         

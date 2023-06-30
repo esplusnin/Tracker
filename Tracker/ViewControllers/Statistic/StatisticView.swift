@@ -17,7 +17,7 @@ final class StatisticView {
     
     lazy var emptyStatisticLabel: UILabel = {
         let label = UILabel()
-        label.text = "Анализировать пока нечего"
+        label.text = LocalizableConstants.Statistics.nothingToAnalyze
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor.blackDay

@@ -1,0 +1,66 @@
+// MainTabBar:
+"tabBar.trackers" = "Трекеры";
+"tabBar.statistic" = "Трекеры";
+
+// Onboarding:
+"onboarding.firstScreen.title" = "Отслеживайте только то, что хотите";
+"onboarding.secondScreen.title" = "Даже если это не литры воды и йога";
+"onboarding.continueButton" = "Вот это технологии!";
+
+// TrackerVC:
+"trackerVC.title" = "Трекеры";
+"trackerVC.searchField.placeholder" = "Поиск...";
+"trackerVC.cancelationButton" = "Отменить";
+"trackerVC.emptyState.label" = "Что будем отслеживать?";
+"trackerVC.nothingSearched" = "";
+
+// CreatingTracker:
+"creatingTracker.title" = "";
+"creatingTracker.habit" = "";
+"creatingTracker.unregularEvent" = "";
+
+// NewTracker:
+"newTracker.habit.title" = "New Habit";
+"newTracker.unregularEvent.title" = "New unregular Event";
+"newTracker.textField.placeholder" = "";
+"newTracker.tableView.category" = "";
+"newTracker.tableView.schedule" = "";
+"newTracker.collectionView.color" = "";
+"newTracker.buttons.cancel" = "";
+"newTracker.buttons.create" = "";
+"newTracker.warning" = "Limit of 38 characters";
+"newTracker.emoji" = "Эмоджи";
+
+// Category:
+"category.title" = "";
+"category.addCategory" = "";
+"category.emptyCategory" = "Habits and events can be\ncombined in meaning";
+
+// New Category:
+"newCategory.title" = "";
+"newCategory.textField.placeholder" = "";
+"newCategory.readyButton" = "";
+
+// Schedule:
+"schedule.title" = "";
+"schedule.monday" = "";
+"schedule.tuesday" = "";
+"schedule.wednesday" = "";
+"schedule.thursday" = "";
+"schedule.friday" = "";
+"schedule.saturday" = "";
+"schedule.sunday" = "";
+"schedule.everyDay" = "";
+"schedule.ready" = "";
+
+"schedule.monday.short" = "";
+"schedule.tuesday.short" = "";
+"schedule.wednesday.short" = "";
+"schedule.thursday.short" = "";
+"schedule.friday.short" = "";
+"schedule.saturday.short" = "";
+"schedule.sunday.short" = "";
+
+// Statistic:
+"statistic.title" = "";
+"statistic.nothingToAnalyze" = "";

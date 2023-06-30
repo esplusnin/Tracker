@@ -89,12 +89,12 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     private func setDumbImageViewAfterSearch() {
         trackersView.emptyTrackersImageView.image = Resources.Images.searchedTrackersIsEmpty
-        trackersView.emptyTrackersLabel.text = "Ничего не найдено"
+        trackersView.emptyTrackersLabel.text = LocalizableConstants.TrackerVC.nothingSearched
     }
     
     private func setDumbWithNoTrackers() {
         trackersView.emptyTrackersImageView.image = Resources.Images.trackersIsEmpty
-        trackersView.emptyTrackersLabel.text = "Что будем отслеживать?"
+        trackersView.emptyTrackersLabel.text = LocalizableConstants.TrackerVC.emptyStateLabel
     }
     
     @objc private func switchToCreatingTrackerVC() {

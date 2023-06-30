@@ -18,7 +18,6 @@ final class TabBarController: UITabBarController {
         let appearance = UITabBarAppearance()
         tabBar.standardAppearance = appearance
         tabBar.backgroundColor = .white
-        
         tabBar.layer.borderWidth = 1
         tabBar.layer.borderColor = UIColor.systemGray.cgColor
         
@@ -28,10 +27,10 @@ final class TabBarController: UITabBarController {
         let statisticViewControllerNavigation = UINavigationController(rootViewController: StatisticViewController())
         
         
-        trackersViewControllerNavigation.tabBarItem = UITabBarItem(title: "Трекеры",
+        trackersViewControllerNavigation.tabBarItem = UITabBarItem(title: LocalizableConstants.TabBar.trackers,
                                                                    image: Resources.Images.trackersTabBar,
                                                                    selectedImage: nil)
-        statisticViewControllerNavigation.tabBarItem = UITabBarItem(title: "Cтатистика",
+        statisticViewControllerNavigation.tabBarItem = UITabBarItem(title: LocalizableConstants.TabBar.statistics,
                                                                     image: Resources.Images.statisticTabBar,
                                                                     selectedImage: nil)
         

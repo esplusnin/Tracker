@@ -17,7 +17,7 @@ final class TrackersView {
     
     lazy var emptyTrackersLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = LocalizableConstants.TrackerVC.emptyStateLabel
         label.textAlignment = .center
         label.textColor = .blackDay
         label.font = .systemFont(ofSize: 12)
@@ -36,7 +36,7 @@ final class TrackersView {
     
     lazy var navigationBarTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Трекеры"
+        label.text = LocalizableConstants.TrackerVC.title
         label.font = .boldSystemFont(ofSize: 34)
         
         return label
@@ -56,7 +56,7 @@ final class TrackersView {
         let textField = UISearchTextField()
         textField.clearButtonMode = .never
         textField.returnKeyType = .go
-        textField.placeholder = "Поиск..."
+        textField.placeholder = LocalizableConstants.TrackerVC.searchFieldPlaceholder
         textField.textColor = .blackDay
         
         return textField
@@ -66,7 +66,7 @@ final class TrackersView {
 
     lazy var cancelationButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(LocalizableConstants.TrackerVC.cancelationButton, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17)
         
         return button

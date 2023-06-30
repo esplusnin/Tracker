@@ -10,7 +10,7 @@ import UIKit
 final class ScheduleView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Расписание"
+        label.text = LocalizableConstants.Schedule.title
         label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = UIColor.blackDay
         
@@ -29,7 +29,7 @@ final class ScheduleView {
     lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(LocalizableConstants.Schedule.ready, for: .normal)
         button.setTitleColor(UIColor.whiteDay, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.backgroundColor = UIColor.blackDay
