@@ -1,14 +1,16 @@
 //
-//  ScheduleObservable.swift
+//  WrappedPropertyObservable.swift
 //  Tracker
 //
-//  Created by Евгений on 20.06.2023.
+//  Created by Евгений on 03.07.2023.
 //
 
 import Foundation
 
+// Only one observable for all screens, as it suits for all viewModels
+
 @propertyWrapper
-final class ScheduleObservable<Value> {
+final class Observable<Value> {
     private var onChange: ((Value) -> Void)? = nil
     
     var wrappedValue: Value {
@@ -17,7 +19,7 @@ final class ScheduleObservable<Value> {
         }
     }
     
-    var projectedValue: ScheduleObservable<Value> {
+    var projectedValue: Observable<Value> {
         return self
     }
     

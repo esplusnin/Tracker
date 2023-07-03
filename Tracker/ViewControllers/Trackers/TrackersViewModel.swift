@@ -16,13 +16,13 @@ struct AdditionTrackerInfo {
 
 final class TrackersViewModel: TrackersViewModelProtocol {
     
-    @TrackerObservable
+    @Observable
     private(set) var visibleTrackers: [TrackerCategory] = []
-    @TrackerObservable
+    @Observable
     private(set) var isRecordUpdate: Bool?
-    @TrackerObservable
+    @Observable
     private(set) var isVisibleCategoryEmpty: Bool?
-    @TrackerObservable
+    @Observable
     private(set) var isVisibleCategoryEmptyAfterSearch: Bool?
     
     private let dataProviderService = DataProviderService.instance

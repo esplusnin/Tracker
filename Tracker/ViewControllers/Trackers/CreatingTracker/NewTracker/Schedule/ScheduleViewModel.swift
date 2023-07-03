@@ -12,7 +12,7 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     private let dataProviderService = DataProviderService.instance
     private let scheduleService = ScheduleService()
     
-    @ScheduleObservable
+    @Observable
     private(set) var isReadyToCloseSchedule = false
     private(set) var schedule: [Int] = []
     private(set) var daysArray = [LocalizableConstants.ScheduleVC.monday, LocalizableConstants.ScheduleVC.tuesday, LocalizableConstants.ScheduleVC.wednesday, LocalizableConstants.ScheduleVC.thursday, LocalizableConstants.ScheduleVC.friday, LocalizableConstants.ScheduleVC.saturday, LocalizableConstants.ScheduleVC.sunday]

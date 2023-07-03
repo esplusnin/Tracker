@@ -11,7 +11,7 @@ final class CategoryViewModel: CategoryViewModelProtocol {
     
     private let dataProviderService = DataProviderService.instance
     
-    @CategoryObservable
+    @Observable
     private(set) var visibleCategories: [String] = []
     var numberOfCategories: Int? {
         visibleCategories.count

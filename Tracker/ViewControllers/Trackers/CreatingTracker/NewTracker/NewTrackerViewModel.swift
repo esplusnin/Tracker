@@ -29,9 +29,9 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
         .colorSelection17, .colorSelection18,
     ]
     
-    @NewTrackerObservable
+    @Observable
     private(set) var isReadyToCreateNewTracker = false
-    @NewTrackerObservable
+    @Observable
     private(set) var isTrackerDidCreate = false
     
     init() {
