@@ -1,9 +1,9 @@
-// Onboarding:
+// OnboardingVC:
 "onboarding.firstScreen.title" = "Track only what you want";
 "onboarding.secondScreen.title" = "Even if it's not liters of water and yoga";
 "onboarding.continueButton" = "These are the technologies!";
 
-// MainTabBar:
+// MainTabBarVC:
 "tabBar.trackers" = "Trackers";
 "tabBar.statistics" = "Statistics";
 
@@ -14,12 +14,19 @@
 "trackerVC.emptyState.label" = "What we will track?";
 "trackerVC.nothingSearched" = "Nothing found";
 
-// CreatingTracker:;
+// FilterVC
+"filter.title" = "Filters";
+"filter.allTrackers" = "All trackers";
+"filter.todaysTrackers" = "Trackers for today";
+"filter.completedTrackers" = "Completed";
+"filter.uncompletedTrackers" = "Uncompleted";
+
+// CreatingTrackerVC:
 "creatingTracker.title" = "Creating a tracker";
 "creatingTracker.habit" = "Habit";
 "creatingTracker.unregularEvent" = "Unregular event";
 
-// NewTracker:;
+// NewTrackerVC:
 "newTracker.habit.title" = "New habit";
 "newTracker.unregularEvent.title" = "New unregular event";
 "newTracker.textField.placeholder" = "Enter the name of the tracker";
@@ -31,17 +38,17 @@
 "newTracker.warning" = "Limit of 38 characters";
 "newTracker.emoji" = "Emoji";
 
-// Category:
+// CategoryVC:
 "category.title" = "Category";
 "category.addCategory" = "Add category";
 "category.emptyCategory" = "Habits and events can be\ncombined in meaning";
 
-// New Category:
+// New CategoryVC:
 "newCategory.title" = "New category";
 "newCategory.textField.placeholder" = "Enter the category name";
 "newCategory.readyButton" = "Complete";
 
-// Schedule:
+// ScheduleVC:
 "schedule.title" = "Schedule";
 "schedule.monday" = "Monday";
 "schedule.tuesday" = "Tuesday";
@@ -61,7 +68,7 @@
 "schedule.saturday.short" = "Sut";
 "schedule.sunday.short" = "Sun";
 
-// Statistics:
+// StatisticsVC:
 "statistics.title" = "Statistics";
 "statistics.nothingToAnalyze" = "There is nothing to analyze yet";
 

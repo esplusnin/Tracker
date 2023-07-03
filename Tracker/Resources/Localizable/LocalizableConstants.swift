@@ -8,12 +8,12 @@
 import UIKit
 
 enum LocalizableConstants {
-    enum Onboarding {
+    enum OnboardingVC {
         static let firstScreenTitle = NSLocalizedString("onboarding.firstScreen.title", comment: "")
         static let secondScreenTitle = NSLocalizedString("onboarding.secondScreen.title", comment: "")
         static let continueButton = NSLocalizedString("onboarding.continueButton", comment: "")
     }
-    enum TabBar {
+    enum TabBarVC {
         static let trackers = NSLocalizedString("tabBar.trackers", comment: "")
         static let statistics = NSLocalizedString("tabBar.statistics", comment: "")
     }
@@ -30,13 +30,21 @@ enum LocalizableConstants {
         }
     }
     
-    enum CreatingTracker {
+    enum FilterVC {
+        static let title = NSLocalizedString("filter.title", comment: "")
+        static let allTrackers = NSLocalizedString("filter.allTrackers", comment: "")
+        static let todaysTrackers = NSLocalizedString("filter.todaysTrackers", comment: "")
+        static let completedTrackers = NSLocalizedString("filter.completedTrackers", comment: "")
+        static let uncompletedTrackers = NSLocalizedString("filter.uncompletedTrackers", comment: "")
+    }
+    
+    enum CreatingTrackerVC {
         static let title = NSLocalizedString("creatingTracker.title", comment: "")
         static let habit = NSLocalizedString("creatingTracker.habit", comment: "")
         static let unregularEvent = NSLocalizedString("creatingTracker.unregularEvent", comment: "")
     }
     
-    enum NewTracker {
+    enum NewTrackerVC {
         static let habitTitle = NSLocalizedString("newTracker.habit.title", comment: "")
         static let unregularTitle = NSLocalizedString("newTracker.habit.title", comment: "")
         static let textFieldPlaceholder = NSLocalizedString("newTracker.textField.placeholder", comment: "")
@@ -49,19 +57,19 @@ enum LocalizableConstants {
         static let emoji = NSLocalizedString("newTracker.emoji", comment: "")
     }
     
-    enum Category {
+    enum CategoryVC {
         static let title = NSLocalizedString("category.title", comment: "")
         static let addCategory = NSLocalizedString("category.addCategory", comment: "")
         static let emptyCategory = NSLocalizedString("category.emptyCategory", comment: "")
     }
     
-    enum NewCategory {
+    enum NewCategoryVC {
         static let title = NSLocalizedString("newCategory.title", comment: "")
         static let textFieldPlaceholder = NSLocalizedString("newCategory.textField.placeholder", comment: "")
         static let readyButton = NSLocalizedString("newCategory.readyButton", comment: "")
     }
     
-    enum Schedule {
+    enum ScheduleVC {
         static let title = NSLocalizedString("schedule.title", comment: "")
         static let monday = NSLocalizedString("schedule.monday", comment: "")
         static let tuesday = NSLocalizedString("schedule.tuesday", comment: "")
@@ -82,12 +90,12 @@ enum LocalizableConstants {
         static let sundayShort = NSLocalizedString("schedule.sunday.short", comment: "")
     }
     
-    enum Statistics {
+    enum StatisticsVC {
         static let title = NSLocalizedString("statistics.title", comment: "")
         static let nothingToAnalyze = NSLocalizedString("statistics.nothingToAnalyze", comment: "")
     }
     
-    enum Alerts {
+    enum AlertsVC {
         static let removeCategoryTitle = NSLocalizedString("alert.removeCategory.title", comment: "")
         static let removeCategoryMessage = NSLocalizedString("alert.removeCategory.message", comment: "")
         static let removeTrackerTitle = NSLocalizedString("alert.removeTracker.title", comment: "")
@@ -95,7 +103,7 @@ enum LocalizableConstants {
         static let cancel = NSLocalizedString("alert.cancel", comment: "")
     }
     
-    enum ContextMenu {
+    enum ContextMenuVC {
         static let remove = NSLocalizedString("contextMenu.remove", comment: "")
         static let edit = NSLocalizedString("contextMenu.edit", comment: "")
         static let fix = NSLocalizedString("contextMenu.fix", comment: "")

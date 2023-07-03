@@ -15,7 +15,7 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     @ScheduleObservable
     private(set) var isReadyToCloseSchedule = false
     private(set) var schedule: [Int] = []
-    private(set) var daysArray = [LocalizableConstants.Schedule.monday, LocalizableConstants.Schedule.tuesday, LocalizableConstants.Schedule.wednesday, LocalizableConstants.Schedule.thursday, LocalizableConstants.Schedule.friday, LocalizableConstants.Schedule.saturday, LocalizableConstants.Schedule.sunday]
+    private(set) var daysArray = [LocalizableConstants.ScheduleVC.monday, LocalizableConstants.ScheduleVC.tuesday, LocalizableConstants.ScheduleVC.wednesday, LocalizableConstants.ScheduleVC.thursday, LocalizableConstants.ScheduleVC.friday, LocalizableConstants.ScheduleVC.saturday, LocalizableConstants.ScheduleVC.sunday]
     
     init() {
         dataProviderService.bindScheduleViewModel(controller: self)
@@ -30,7 +30,7 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     }
     
     func setSchedule() {
-        let string = schedule.count == 7 ? LocalizableConstants.Schedule.everyDay : scheduleService.getScheduleString(schedule)
+        let string = schedule.count == 7 ? LocalizableConstants.ScheduleVC.everyDay : scheduleService.getScheduleString(schedule)
         
         dataProviderService.selectedScheduleString = string
         dataProviderService.trackerSchedule = schedule

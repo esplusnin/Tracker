@@ -1,9 +1,9 @@
-// Onboarding:
+// OnboardingVC:
 "onboarding.firstScreen.title" = "تتبع فقط ما تريد";
 "onboarding.secondScreen.title" = "حتى لو لم يكن لتر من الماء واليوغا";
 "onboarding.continueButton" = "هذه هي التقنيات!";
 
-// MainTabBar:
+// MainTabBarVC:
 "tabBar.trackers" = "بتتبع";
 "tabBar.statistics" = "الإحصاءات";
 
@@ -14,12 +14,19 @@
 "trackerVC.emptyState.label" = "ماذا سوف تتبع?";
 "trackerVC.nothingSearched" = "لم يتم العثور على شيء";
 
-// CreatingTracker:
+// FilterVC
+"filter.title" = "الفلاتر";
+"filter.allTrackers" = "جميع أجهزة التتبع";
+"filter.todaysTrackers" = "بتتبع لهذا اليوم";
+"filter.completedTrackers" = "اكتمل";
+"filter.uncompletedTrackers" = "لم تكتمل";
+
+// CreatingTrackerVC:
 "creatingTracker.title" = "إنشاء تعقب";
 "creatingTracker.habit" = "العادة";
 "creatingTracker.unregularEvent" = "حدث غير منتظم";
 
-// NewTracker:
+// NewTrackerVC:
 "newTracker.habit.title" = "عادة جديدة";
 "newTracker.unregularEvent.title" = "حدث جديد غير منتظم";
 "newTracker.textField.placeholder" = "أدخل اسم المقتفي";
@@ -31,17 +38,17 @@
 "newTracker.warning" = "الحد من 38 حرفا";
 "newTracker.emoji" = "الرموز التعبيرية";
 
-// Category:
+// CategoryVC:
 "category.title" = "الفئة";
 "category.addCategory" = "إضافة فئة";
 "category.emptyCategory" = "يمكن الجمع بين العادات\n والأحداث في المعنى";
 
-// New Category:
+// New CategoryVC:
 "newCategory.title" = "فئة جديدة";
 "newCategory.textField.placeholder" = "أدخل اسم الفئة";
 "newCategory.readyButton" = "تم";
 
-// Schedule:
+// ScheduleVC:
 "schedule.title" = "الجدول الزمني";
 "schedule.monday" = "الاثنين";
 "schedule.tuesday" = "الثلاثاء";
@@ -61,7 +68,7 @@
 "schedule.saturday.short" = "السب";
 "schedule.sunday.short" = "الأح";
 
-// Statistics:
+// StatisticsVC:
 "statistics.title" = "الإحصاءات";
 "statistics.nothingToAnalyze" = "لا يوجد شيء لتحليل حتى الآن";
 

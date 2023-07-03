@@ -70,7 +70,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     private func setTitle() {
-        newTrackerView.titleLabel.text = kindOfTracker == .habit ? LocalizableConstants.NewTracker.habitTitle : LocalizableConstants.NewTracker.unregularTitle
+        newTrackerView.titleLabel.text = kindOfTracker == .habit ? LocalizableConstants.NewTrackerVC.habitTitle : LocalizableConstants.NewTrackerVC.unregularTitle
     }
     
     private func switchToCategoryVC() {
@@ -268,9 +268,9 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         
         switch indexPath.section {
         case 0:
-            view.headerLabel.text = LocalizableConstants.NewTracker.emoji
+            view.headerLabel.text = LocalizableConstants.NewTrackerVC.emoji
         case 1:
-            view.headerLabel.text = LocalizableConstants.NewTracker.collectionViewColor
+            view.headerLabel.text = LocalizableConstants.NewTrackerVC.collectionViewColor
         default:
             view.headerLabel.text = ""
         }

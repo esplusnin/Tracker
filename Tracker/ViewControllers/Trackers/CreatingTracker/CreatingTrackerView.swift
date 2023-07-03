@@ -10,7 +10,7 @@ import UIKit
 final class CreatingTrackerView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = LocalizableConstants.CreatingTracker.title
+        label.text = LocalizableConstants.CreatingTrackerVC.title
         label.font = .systemFont(ofSize: 16)
         label.textColor = .blackDay
         
@@ -21,7 +21,7 @@ final class CreatingTrackerView {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
         button.backgroundColor = .blackDay
-        button.setTitle(LocalizableConstants.CreatingTracker.habit, for: .normal)
+        button.setTitle(LocalizableConstants.CreatingTrackerVC.habit, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.setTitleColor(UIColor.whiteDay, for: .normal)
         
@@ -32,7 +32,7 @@ final class CreatingTrackerView {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
         button.backgroundColor = .blackDay
-        button.setTitle(LocalizableConstants.CreatingTracker.unregularEvent, for: .normal)
+        button.setTitle(LocalizableConstants.CreatingTrackerVC.unregularEvent, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.setTitleColor(.whiteDay, for: .normal)
         

@@ -34,7 +34,14 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         trackerViewModel.$visibleTrackers.bind { [weak self] _ in
             guard let self = self else { return }
             self.reloadCollectionView()
-            self.trackersView.trackersCollection.alpha = self.trackerViewModel.visibleTrackers.count == 0 ? 0 : 1
+            
+            if self.trackerViewModel.visibleTrackers.count == 0 {
+                self.trackersView.filterButton.removeFromSuperview()
+                self.trackersView.trackersCollection.alpha = 0
+            } else {
+                self.trackersView.trackersCollection.alpha = 1
+                self.setFilterButton()
+            }
         }
         
         trackerViewModel.$isRecordUpdate.bind { [weak self] _ in
@@ -77,6 +84,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     private func setTargets() {
         trackersView.addTrackerButton.addTarget(
             self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
+        trackersView.filterButton.addTarget(self, action: #selector(switchToFilterVC), for: .touchUpInside)
         trackersView.navigationBarDatePicker.addTarget(
             self, action: #selector(setDateFromDatePicker), for: .primaryActionTriggered)
         trackersView.searchTextField.addTarget(
@@ -95,6 +103,23 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     private func setDumbWithNoTrackers() {
         trackersView.emptyTrackersImageView.image = Resources.Images.trackersIsEmpty
         trackersView.emptyTrackersLabel.text = LocalizableConstants.TrackerVC.emptyStateLabel
+    }
+    
+    private func setFilterButton() {
+        view.addSubview(trackersView.filterButton)
+        
+        trackersView.filterButton.snp.makeConstraints { make in
+            make.height.equalTo(50)
+            make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(130)
+            make.bottom.equalTo(view.layoutMarginsGuide.snp.bottom).inset(30)
+        }
+    }
+    
+    @objc private func switchToFilterVC() {
+        let viewController = FilterViewController()
+        
+        present(viewController, animated: true)
     }
     
     @objc private func switchToCreatingTrackerVC() {

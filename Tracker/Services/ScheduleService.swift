@@ -23,19 +23,19 @@ final class ScheduleService {
     
     func addWeekDayToSchedule(dayName: String) -> Int {
         switch dayName {
-        case LocalizableConstants.Schedule.sunday:
+        case LocalizableConstants.ScheduleVC.sunday:
             return 1
-        case LocalizableConstants.Schedule.monday:
+        case LocalizableConstants.ScheduleVC.monday:
             return 2
-        case LocalizableConstants.Schedule.tuesday:
+        case LocalizableConstants.ScheduleVC.tuesday:
             return 3
-        case LocalizableConstants.Schedule.wednesday:
+        case LocalizableConstants.ScheduleVC.wednesday:
             return 4
-        case LocalizableConstants.Schedule.thursday:
+        case LocalizableConstants.ScheduleVC.thursday:
             return 5
-        case LocalizableConstants.Schedule.friday:
+        case LocalizableConstants.ScheduleVC.friday:
             return 6
-        case LocalizableConstants.Schedule.saturday:
+        case LocalizableConstants.ScheduleVC.saturday:
             return 7
         default:
             return 0
@@ -45,19 +45,19 @@ final class ScheduleService {
     private func getShortNameWeekDayFromNumber(_ number: Int) -> String {
         switch number {
         case 1:
-            return LocalizableConstants.Schedule.sundayShort
+            return LocalizableConstants.ScheduleVC.sundayShort
         case 2:
-            return LocalizableConstants.Schedule.mondayShort
+            return LocalizableConstants.ScheduleVC.mondayShort
         case 3:
-            return LocalizableConstants.Schedule.tuesdayShort
+            return LocalizableConstants.ScheduleVC.tuesdayShort
         case 4:
-            return LocalizableConstants.Schedule.wednesdayShort
+            return LocalizableConstants.ScheduleVC.wednesdayShort
         case 5:
-            return LocalizableConstants.Schedule.thursdayShort
+            return LocalizableConstants.ScheduleVC.thursdayShort
         case 6:
-            return LocalizableConstants.Schedule.fridayShort
+            return LocalizableConstants.ScheduleVC.fridayShort
         case 7:
-            return LocalizableConstants.Schedule.saturdayShort
+            return LocalizableConstants.ScheduleVC.saturdayShort
         default:
             return ""
         }

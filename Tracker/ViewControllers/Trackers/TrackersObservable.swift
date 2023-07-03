@@ -25,7 +25,7 @@ final class TrackerObservable<Value> {
         self.wrappedValue = wrappedValue
     }
     
-    func bind(action: @escaping (Value)-> Void) {
+    func bind(action: @escaping (Value) -> Void) {
         self.onChange = action
     }
 }

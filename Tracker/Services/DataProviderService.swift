@@ -57,6 +57,12 @@ final class DataProviderService {
         }
     }
     
+    var currentFilter: String? {
+        didSet {
+            
+        }
+    }
+    
     private var visibleCategories: [TrackerCategory]? {
         didSet {
             trackerDidCreate()

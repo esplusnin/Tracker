@@ -70,4 +70,15 @@ final class TrackersView {
         
         return button
     }()
+    
+    lazy var filterButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.layer.cornerRadius = 20
+        button.backgroundColor = .blue
+        button.setTitle(LocalizableConstants.FilterVC.title, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 17)
+        button.setTitleColor(.white, for: .normal)
+        
+        return button
+    }()
 }

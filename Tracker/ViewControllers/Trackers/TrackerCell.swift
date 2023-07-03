@@ -124,7 +124,7 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     private func fixTracker(from cell: TrackerCell) {
-        // TODO: 
+        // TODO:
     }
     
     private func editTracker(from cell: TrackerCell) {
@@ -161,19 +161,19 @@ extension TrackerCell: UIContextMenuInteractionDelegate {
         let deleteImage = UIImage(systemName: "trash")
         
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            let fixAction = UIAction(title: LocalizableConstants.ContextMenu.fix,
+            let fixAction = UIAction(title: LocalizableConstants.ContextMenuVC.fix,
                                      image: fixImage) { [weak self] _ in
                 guard let self = self else { return }
                 editTracker(from: self)
             }
             
-            let editAction = UIAction(title: LocalizableConstants.ContextMenu.edit,
+            let editAction = UIAction(title: LocalizableConstants.ContextMenuVC.edit,
                                       image: editImage) { [weak self] action in
                 guard let self = self else { return }
                 self.editTracker(from: self)
             }
             
-            let deleteAction = UIAction(title: LocalizableConstants.ContextMenu.remove,
+            let deleteAction = UIAction(title: LocalizableConstants.ContextMenuVC.remove,
                                         image: deleteImage, attributes: .destructive) { [weak self] action in
                 guard let self = self else { return }
                 self.deleteTracker(from: self)

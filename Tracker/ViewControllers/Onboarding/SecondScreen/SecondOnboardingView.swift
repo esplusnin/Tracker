@@ -20,7 +20,7 @@ final class SecondOnboardingView {
         label.font = .boldSystemFont(ofSize: 32)
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.text = LocalizableConstants.Onboarding.secondScreenTitle
+        label.text = LocalizableConstants.OnboardingVC.secondScreenTitle
         
         return label
     }()
@@ -39,7 +39,7 @@ final class SecondOnboardingView {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.setTitle(LocalizableConstants.Onboarding.continueButton, for: .normal)
+        button.setTitle(LocalizableConstants.OnboardingVC.continueButton, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.titleLabel?.textColor = .whiteDay

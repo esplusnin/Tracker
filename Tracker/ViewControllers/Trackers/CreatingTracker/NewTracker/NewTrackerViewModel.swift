@@ -13,7 +13,7 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
     
     private let dataProviderService = DataProviderService.instance
     
-    let buttonsTitleForTableView = [LocalizableConstants.NewTracker.tableViewCategory, LocalizableConstants.NewTracker.tableViewSchedule]
+    let buttonsTitleForTableView = [LocalizableConstants.NewTrackerVC.tableViewCategory, LocalizableConstants.NewTrackerVC.tableViewSchedule]
     
     var emojiArray = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",

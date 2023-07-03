@@ -1,9 +1,9 @@
-// Onboarding:
+// OnboardingVC:
 "onboarding.firstScreen.title" = "Отслеживайте только то, что хотите";
 "onboarding.secondScreen.title" = "Даже если это не литры воды и йога";
 "onboarding.continueButton" = "Вот это технологии!";
 
-// MainTabBar:
+// MainTabBarVC:
 "tabBar.trackers" = "Трекеры";
 "tabBar.statistics" = "Статистика";
 
@@ -14,12 +14,19 @@
 "trackerVC.emptyState.label" = "Что будем отслеживать?";
 "trackerVC.nothingSearched" = "Ничего не найдено";
 
-// CreatingTracker:
+// FilterVC
+"filter.title" = "Фильтры";
+"filter.allTrackers" = "Все трекеры";
+"filter.todaysTrackers" = "Трекеры на сегодня";
+"filter.completedTrackers" = "Завершенные";
+"filter.uncompletedTrackers" = "Не завершенные";
+
+// CreatingTrackerVC:
 "creatingTracker.title" = "Создание трекера";
 "creatingTracker.habit" = "Привычка";
 "creatingTracker.unregularEvent" = "Нерегулярное событие";
 
-// NewTracker:
+// NewTrackerVC:
 "newTracker.habit.title" = "Новая привычка";
 "newTracker.unregularEvent.title" = "Новое нерегулярное событие";
 "newTracker.textField.placeholder" = "Введите название трекера";
@@ -31,17 +38,17 @@
 "newTracker.warning" = "Ограничение 38 символов";
 "newTracker.emoji" = "Эмоджи";
 
-// Category:
+// CategoryVC:
 "category.title" = "Категория";
 "category.addCategory" = "Добавить категорию";
 "category.emptyCategory" = "Привычки и события можно\nобъединить по смыслу";
 
-// New Category:
+// New CategoryVC:
 "newCategory.title" = "Новая категория";
 "newCategory.textField.placeholder" = "Введите название категории";
 "newCategory.readyButton" = "Готово";
 
-// Schedule:
+// ScheduleVC:
 "schedule.title" = "Расписание";
 "schedule.monday" = "Понедельник";
 "schedule.tuesday" = "Вторник";
@@ -61,7 +68,7 @@
 "schedule.saturday.short" = "Сб";
 "schedule.sunday.short" = "Вс";
 
-// Statistics:
+// StatisticsVC:
 "statistics.title" = "Статистика";
 "statistics.nothingToAnalyze" = "Анализировать пока нечего";
 
