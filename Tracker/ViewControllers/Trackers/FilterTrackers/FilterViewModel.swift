@@ -22,7 +22,7 @@ final class FilterViewModel {
         dataProvider.currentFilter ?? ""
     }
     
-    func setCurrentFilter(selected: String) {
+    func setCurrentFilter(selected: String) {        
         dataProvider.currentFilter = selected
     }
 }

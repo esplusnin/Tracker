@@ -199,6 +199,7 @@
 			children = (
 				7EB1D6982A405D2300106032 /* FirstScreen */,
 				7EB1D6992A405D4000106032 /* SecondScreen */,
+				7EB1D68E2A405CAB00106032 /* OnboardingPageViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -413,7 +414,6 @@
 			isa = PBXGroup;
 			children = (
 				7EB1D68D2A405C9300106032 /* Onboarding */,
-				7EB1D68E2A405CAB00106032 /* OnboardingPageViewController.swift */,
 				7ED3D3FE2A1A193C004C371B /* Trackers */,
 				7ED3D3FF2A1A197A004C371B /* Statistic */,
 				7ED3D3F82A1A0C0C004C371B /* TabBarController.swift */,

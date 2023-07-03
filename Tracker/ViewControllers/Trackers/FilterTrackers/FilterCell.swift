@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 final class FilterCell: UITableViewCell {
-    lazy var cellLabel: UILabel = {
+    var cellLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17)
         label.textColor = .blackDay

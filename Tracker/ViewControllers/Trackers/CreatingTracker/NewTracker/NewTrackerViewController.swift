@@ -37,6 +37,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     func bind() {
+        
+        
         newTrackerViewModel.$isReadyToCreateNewTracker.bind { [weak self] value in
             guard let self = self else { return }
             value == true ? self.unlockCreateButton() : self.lockCreateButton()

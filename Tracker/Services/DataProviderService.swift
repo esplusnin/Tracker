@@ -59,7 +59,7 @@ final class DataProviderService {
     
     var currentFilter: String? {
         didSet {
-            
+            currentFilterDidUpdate()
         }
     }
     
@@ -142,6 +142,23 @@ final class DataProviderService {
     
     func recordDidUpdate() {
         trackersViewModel?.recordDidUpdate()
+    }
+    
+    func currentFilterDidUpdate() {
+        switch currentFilter {
+        case "\(LocalizableConstants.FilterVC.allTrackers)":
+            trackersViewModel?.showNewTrackersAfterChangeDate()
+        case "\(LocalizableConstants.FilterVC.todaysTrackers)":
+            trackersViewModel?.todaysFilterDidEnable()
+        case "\(LocalizableConstants.FilterVC.completedTrackers)":
+            trackersViewModel?.showNewTrackersAfterChangeDate()
+            trackersViewModel?.updateVisibleTrackers(isCompleted: true)
+        case "\(LocalizableConstants.FilterVC.uncompletedTrackers)":
+            trackersViewModel?.showNewTrackersAfterChangeDate()
+            trackersViewModel?.updateVisibleTrackers(isCompleted: false)
+        default:
+            return
+        }
     }
     
     //MARK: TrackerStore Block:

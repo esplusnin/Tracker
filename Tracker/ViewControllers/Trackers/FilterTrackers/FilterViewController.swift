@@ -66,6 +66,8 @@ extension FilterViewController: UITableViewDataSource {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 400, bottom: 0, right: 0)
         }
         
+        cell.accessoryType = cell.cellLabel.text == viewModel.getCurrentFilter() ? .checkmark : .none
+        
         return cell
     }
         
@@ -77,10 +79,11 @@ extension FilterViewController: UITableViewDataSource {
 
 extension FilterViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "FilterCell", for: indexPath) as? FilterCell else { return }
-        cell.accessoryType = cell.accessoryType == UITableViewCell.AccessoryType.none ? .checkmark : .none
+        guard let cell = tableView.cellForRow(at: indexPath) as? FilterCell else { return }
         
-        dismiss(animated: true  )
+        cell.accessoryType = cell.accessoryType == UITableViewCell.AccessoryType.none ? .checkmark : .none
+        viewModel.setCurrentFilter(selected: cell.cellLabel.text ?? "")
+        
+        dismiss(animated: true)
     }
 }

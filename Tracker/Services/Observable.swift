@@ -8,7 +8,6 @@
 import Foundation
 
 // Only one observable for all screens, as it suits for all viewModels
-
 @propertyWrapper
 final class Observable<Value> {
     private var onChange: ((Value) -> Void)? = nil
