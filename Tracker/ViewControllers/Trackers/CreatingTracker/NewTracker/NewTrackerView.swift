@@ -22,13 +22,12 @@ final class NewTrackerView {
     lazy var textField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 16
-        if let currentLanguageCode = NSLocale.current.languageCode {
-            if currentLanguageCode == "ar" {
+        
+        if NSLocale.current.languageCode == "ar" {
                 textField.textAlignment = .right
-            }
         } else {
             textField.textAlignment = .left
-            }
+        }
         
         textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .go

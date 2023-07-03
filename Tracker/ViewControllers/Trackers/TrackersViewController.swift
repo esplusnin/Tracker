@@ -300,12 +300,16 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
     }
     
     func deleteTracker(from cell: TrackerCell) {
-        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-        
-        let visibleCategories = trackerViewModel.visibleTrackers
-        let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
-        
-        trackerViewModel.deleteTracker(id: tracker.id)
+        AlertService().showAlert(event: .removeTracker,
+                                 controller: self) { [weak self] in
+            guard let self = self,
+                  let indexPath = self.trackersView.trackersCollection.indexPath(for: cell) else { return }
+                        
+            let visibleCategories = self.trackerViewModel.visibleTrackers
+            let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
+            
+            self.trackerViewModel.deleteTracker(id: tracker.id)
+        }
     }
 }
 

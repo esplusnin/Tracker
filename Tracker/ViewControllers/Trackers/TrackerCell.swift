@@ -123,6 +123,10 @@ final class TrackerCell: UICollectionViewCell {
         completeTrackerDayButton.addTarget(self, action: #selector(completeTrackerToday), for: .touchUpInside)
     }
     
+    private func fixTracker(from cell: TrackerCell) {
+        // TODO: 
+    }
+    
     private func editTracker(from cell: TrackerCell) {
         delegate?.editTracker(from: cell)
     }
@@ -150,23 +154,32 @@ extension TrackerCell: UIContextMenuInteractionDelegate {
         cellView.addInteraction(interaction)
     }
     
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        let fixImage = UIImage(systemName: "pencil")
         let editImage = UIImage(systemName: "square.and.pencil")
         let deleteImage = UIImage(systemName: "trash")
         
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
-            let editAction = UIAction(
-                title: "Редактировать", image: editImage) { [weak self] action in
-                    guard let self = self else { return }
-                    self.editTracker(from: self)
-                }
-            let deleteAction = UIAction(
-                title: "Удалить", image: deleteImage, attributes: .destructive) { [weak self] action in
-                    guard let self = self else { return }
-                    self.deleteTracker(from: self)
-                }
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let fixAction = UIAction(title: LocalizableConstants.ContextMenu.fix,
+                                     image: fixImage) { [weak self] _ in
+                guard let self = self else { return }
+                editTracker(from: self)
+            }
             
-            return UIMenu(children: [editAction, deleteAction])
+            let editAction = UIAction(title: LocalizableConstants.ContextMenu.edit,
+                                      image: editImage) { [weak self] action in
+                guard let self = self else { return }
+                self.editTracker(from: self)
+            }
+            
+            let deleteAction = UIAction(title: LocalizableConstants.ContextMenu.remove,
+                                        image: deleteImage, attributes: .destructive) { [weak self] action in
+                guard let self = self else { return }
+                self.deleteTracker(from: self)
+            }
+            
+            return UIMenu(children: [fixAction, editAction, deleteAction])
         }
     }
 }

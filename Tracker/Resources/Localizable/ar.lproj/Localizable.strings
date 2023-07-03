@@ -61,6 +61,18 @@
 "schedule.saturday.short" = "السب";
 "schedule.sunday.short" = "الأح";
 
-// statistics:
+// Statistics:
 "statistics.title" = "الإحصاءات";
 "statistics.nothingToAnalyze" = "لا يوجد شيء لتحليل حتى الآن";
+
+// Alerts:
+"alert.removeCategory.title" = "هل هذه الفئة بالتأكيد ليست هناك حاجة?";
+"alert.removeCategory.message" = "سيؤدي حذف فئة إلى فقدان جميع أجهزة التتبع الخاصة بها";
+"alert.removeTracker.title" = "هل أنت متأكد أنك تريد حذف تعقب?";
+"alert.remove" = "إزالة";
+"alert.cancel" = "إلغاء";
+
+// Context menu:
+"contextMenu.remove" = "إزالة";
+"contextMenu.edit" = "تحرير";
+"contextMenu.fix" = "لإصلاح";

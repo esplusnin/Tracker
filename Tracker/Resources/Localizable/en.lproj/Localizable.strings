@@ -5,7 +5,7 @@
 
 // MainTabBar:
 "tabBar.trackers" = "Trackers";
-"tabBar.statistics" = "statistics";
+"tabBar.statistics" = "Statistics";
 
 // TrackerVC:
 "trackerVC.title" = "Trackers";
@@ -64,3 +64,15 @@
 // Statistics:
 "statistics.title" = "Statistics";
 "statistics.nothingToAnalyze" = "There is nothing to analyze yet";
+
+// Alerts:
+"alert.removeCategory.title" = "Is this category definitely not needed?";
+"alert.removeCategory.message" = "Deleting a category will result in the loss of all its trackers";
+"alert.removeTracker.title" = "Are you sure you want to delete the tracker?";
+"alert.remove" = "Remove";
+"alert.cancel" = "Cancel";
+
+// Context menu:
+"contextMenu.remove" = "Remove";
+"contextMenu.edit" = "Edit";
+"contextMenu.fix" = "Fix";

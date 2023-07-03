@@ -61,6 +61,19 @@
 "schedule.saturday.short" = "Сб";
 "schedule.sunday.short" = "Вс";
 
-// statistics:
+// Statistics:
 "statistics.title" = "Статистика";
 "statistics.nothingToAnalyze" = "Анализировать пока нечего";
+
+// Alerts:
+"alert.removeCategory.title" = "Эта категория точно не нужна?";
+"alert.removeCategory.message" = "Удаление категории приведет к потере всех её трекеров";
+"alert.removeTracker.title" = "Уверены, что хотите удалить трекер?";
+"alert.remove" = "Удалить";
+"alert.cancel" = "Отменить";
+
+// Context menu:
+"contextMenu.remove" = "Удалить";
+"contextMenu.edit" = "Редактировать";
+"contextMenu.fix" = "Закрепить";
+
