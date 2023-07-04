@@ -14,7 +14,7 @@ Tracker is made as a application for tracking your own habits or obligation, whe
 + Addition black theme
 + Covering by tests
 
-### :telescope: Main technology:
+### :telescope: Main technologies:
 + MVVM
 + UIKit
 + AutoLayout programmaticly
