@@ -28,7 +28,7 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     private(set) var isNeedToChangeDate: Bool?
     
     private let dataProviderService = DataProviderService.instance
-    
+    private var pinnedTrackers: [Tracker] = []
     var additionTrackerInfo: AdditionTrackerInfo?
     var currentDate: Date?
     
@@ -44,10 +44,27 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     }
     
     func setVisibleTrackersFromProvider() {
-        visibleTrackers = dataProviderService.getVisiblieCategories()
+        if isPinnedTrackersExist() {
+            getVisibleTrackersWithPinned()
+        } else {
+            visibleTrackers = dataProviderService.getVisiblieCategories()
+        }
         
         if visibleTrackers.count == 0 {
             isVisibleCategoryEmpty = true
+        }
+    }
+    
+    func getVisibleTrackersWithPinned() {
+        var trackerCategories = dataProviderService.getVisiblieCategories()
+        
+        if let index = trackerCategories.firstIndex(where: { $0.name == LocalizableConstants.TrackerVC.pinned }) {
+            let pinnedTrackers = trackerCategories[index]
+            trackerCategories.remove(at: index)
+            trackerCategories.insert(pinnedTrackers, at: 0)
+            visibleTrackers = trackerCategories
+        } else {
+            return
         }
     }
     
@@ -105,6 +122,21 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         }
         
         visibleTrackers = newArray
+    }
+    
+    func pinTracker(from indexPath: IndexPath) {
+        let pinnedName = LocalizableConstants.TrackerVC.pinned
+        if visibleTrackers[0].name != pinnedName {
+            dataProviderService.addCategoryToStore(name: pinnedName)
+            dataProviderService.pinTracker(from: indexPath)
+        } else {
+            dataProviderService.pinTracker(from: indexPath)
+        }
+    }
+    
+    func unpinTracker(from indexPath: IndexPath) {
+        dataProviderService.unpinTracker(from: indexPath)
+        print("unpinTracker trackerViewModel")
     }
     
     func recordDidUpdate() {
@@ -171,6 +203,10 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         let date = Date()
         
         return date > currentDate
+    }
+    
+    private func isPinnedTrackersExist() -> Bool {
+        dataProviderService.getVisiblieCategories().contains(where: { $0.name == LocalizableConstants.TrackerVC.pinned })
     }
     
     private func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory] {

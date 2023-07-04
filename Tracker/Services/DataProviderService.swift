@@ -11,7 +11,7 @@ final class DataProviderService {
     
     static let instance = DataProviderService()
     
-    //CoreData Stores:
+    // CoreData Stores:
     var trackerStore: TrackerStoreProtocol?
     var trackerCategoryStore: TrackerCategoryStoreProtocol?
     var trackerRecordStore: TrackerRecordStore?
@@ -186,6 +186,15 @@ final class DataProviderService {
     
     func updateTrackerStoreController() {
         trackerStore?.updateController()
+    }
+    
+    func pinTracker(from indexPath: IndexPath) {
+        trackerStore?.pinTracker(from: indexPath)
+    }
+    
+    func unpinTracker(from indexPath: IndexPath) {
+        trackerStore?.unpinTracker(from: indexPath)
+        print("unpinTracker provider")
     }
     
     //MARK: TrackerCategoryStore Block:

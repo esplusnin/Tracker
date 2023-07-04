@@ -13,6 +13,7 @@
 "trackerVC.cancelationButton" = "إلغاء";
 "trackerVC.emptyState.label" = "ماذا سوف تتبع?";
 "trackerVC.nothingSearched" = "لم يتم العثور على شيء";
+"trackerVC.pinned" = "ثابت";
 
 // FilterVC
 "filter.title" = "الفلاتر";
@@ -87,3 +88,4 @@
 "contextMenu.remove" = "إزالة";
 "contextMenu.edit" = "تحرير";
 "contextMenu.fix" = "لإصلاح";
+"contextMenu.unfix" = "أونبين";

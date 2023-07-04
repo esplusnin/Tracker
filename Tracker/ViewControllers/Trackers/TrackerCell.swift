@@ -36,6 +36,19 @@ final class TrackerCell: UICollectionViewCell {
         }
     }
     
+    var isTrackerPinned: Bool? {
+        didSet {
+            guard let isTrackerPinned = isTrackerPinned else { return }
+            
+            switch isTrackerPinned {
+            case true:
+                pinCommandString = LocalizableConstants.ContextMenuVC.unfix
+            case false:
+                pinCommandString = LocalizableConstants.ContextMenuVC.fix
+            }
+        }
+    }
+    
     lazy var cellView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = true
@@ -87,6 +100,15 @@ final class TrackerCell: UICollectionViewCell {
         return button
     }()
     
+    lazy var pinSingImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "pin.fill")
+        imageView.tintColor = .white
+        
+        return imageView
+    }()
+    
+    lazy var pinCommandString = String()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -96,10 +118,13 @@ final class TrackerCell: UICollectionViewCell {
         
         addContextMenuInteraction()
         
-        contentView.layer.shadowColor = UIColor.gray.cgColor
-        contentView.layer.shadowOpacity = 0.4
-        contentView.layer.shadowOffset = CGSize(width: 10, height: 10)
-        contentView.layer.shadowRadius = 4
+        UIView.animate(withDuration: 1, animations: { [weak self] in
+            guard let self = self else { return }
+            self.contentView.layer.shadowColor = UIColor.gray.cgColor
+            self.contentView.layer.shadowOpacity = 0.4
+            self.contentView.layer.shadowOffset = CGSize(width: 10, height: 10)
+            self.contentView.layer.shadowRadius = 4
+        })
     }
     
     required init?(coder: NSCoder) {
@@ -123,8 +148,13 @@ final class TrackerCell: UICollectionViewCell {
         completeTrackerDayButton.addTarget(self, action: #selector(completeTrackerToday), for: .touchUpInside)
     }
     
-    private func fixTracker(from cell: TrackerCell) {
-        // TODO:
+    private func pinTracker(from cell: TrackerCell) {
+        delegate?.pinTracker(from: cell)
+    }
+    
+    private func unpinTracker(from cell: TrackerCell) {
+        print("unpinTracker CELL")
+        delegate?.unpinTracker(from: cell)
     }
     
     private func editTracker(from cell: TrackerCell) {
@@ -156,15 +186,17 @@ extension TrackerCell: UIContextMenuInteractionDelegate {
     
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        let fixImage = UIImage(systemName: "pencil")
+        guard let isTrackerPinned = isTrackerPinned else { return UIContextMenuConfiguration() }
+        
+        let pinImage = isTrackerPinned ? UIImage(systemName: "pin.slash") : UIImage(systemName: "pin.fill")
         let editImage = UIImage(systemName: "square.and.pencil")
         let removeImage = UIImage(systemName: "trash")
         
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            let fixAction = UIAction(title: LocalizableConstants.ContextMenuVC.fix,
-                                     image: fixImage) { [weak self] _ in
-                guard let self = self else { return }
-                editTracker(from: self)
+            let pinAction = UIAction(title: self.pinCommandString,
+                                     image: pinImage) { [weak self] _ in
+                guard let self = self, let isTrackerPinned = self.isTrackerPinned  else { return }
+                isTrackerPinned ? self.unpinTracker(from: self) : self.pinTracker(from: self)
             }
             
             let editAction = UIAction(title: LocalizableConstants.ContextMenuVC.edit,
@@ -179,11 +211,10 @@ extension TrackerCell: UIContextMenuInteractionDelegate {
                 self.deleteTracker(from: self)
             }
             
-            return UIMenu(children: [fixAction, editAction, deleteAction])
+            return UIMenu(children: [pinAction, editAction, deleteAction])
         }
     }
 }
-
 
 // MARK: Setting Views:
 extension TrackerCell {
@@ -192,6 +223,7 @@ extension TrackerCell {
         cellView.addSubview(emojiImageView)
         cellView.addSubview(emojiLabel)
         cellView.addSubview(trackerLabel)
+        cellView.addSubview(pinSingImageView)
         contentView.addSubview(numberOfDaysLabel)
         contentView.addSubview(completeTrackerDayButton)
     }
@@ -229,6 +261,12 @@ extension TrackerCell {
             make.top.equalTo(cellView.snp.bottom).inset(-8)
             make.trailing.equalToSuperview().inset(12)
             make.centerY.equalTo(numberOfDaysLabel.snp.centerY)
+        }
+        
+        pinSingImageView.snp.makeConstraints { make in
+            make.height.width.equalTo(16)
+            make.centerY.equalTo(emojiImageView.snp.centerY)
+            make.trailing.equalToSuperview().inset(12)
         }
     }
 }

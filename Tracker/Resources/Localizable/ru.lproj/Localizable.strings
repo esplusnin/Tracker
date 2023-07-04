@@ -13,6 +13,7 @@
 "trackerVC.cancelationButton" = "Отменить";
 "trackerVC.emptyState.label" = "Что будем отслеживать?";
 "trackerVC.nothingSearched" = "Ничего не найдено";
+"trackerVC.pinned" = "Закрепленные";
 
 // FilterVC
 "filter.title" = "Фильтры";
@@ -87,4 +88,5 @@
 "contextMenu.remove" = "Удалить";
 "contextMenu.edit" = "Редактировать";
 "contextMenu.fix" = "Закрепить";
+"contextMenu.unfix" = "Открепить";
 

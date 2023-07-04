@@ -89,20 +89,6 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         trackersViewModel.currentDate = date
     }
     
-    private func setTargets() {
-        trackersView.addTrackerButton.addTarget(
-            self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
-        trackersView.filterButton.addTarget(self, action: #selector(switchToFilterVC), for: .touchUpInside)
-        trackersView.navigationBarDatePicker.addTarget(
-            self, action: #selector(setDateFromDatePicker), for: .primaryActionTriggered)
-        trackersView.searchTextField.addTarget(
-            self, action: #selector(updateVisibleTrackersAfterSearch), for: [.editingChanged, .editingDidEnd])
-        trackersView.searchTextField.addTarget(
-            self, action: #selector(addCanceletionButton), for: .editingDidBegin)
-        trackersView.cancelationButton.addTarget(
-            self, action: #selector(setSearchFieldWithoutCancelationButton), for: .touchUpInside)
-    }
-    
     private func setDumbImageViewAfterSearch() {
         trackersView.emptyTrackersImageView.image = Resources.Images.searchedTrackersIsEmpty
         trackersView.emptyTrackersLabel.text = LocalizableConstants.TrackerVC.nothingSearched
@@ -122,6 +108,20 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             make.leading.trailing.equalToSuperview().inset(130)
             make.bottom.equalTo(view.layoutMarginsGuide.snp.bottom).inset(30)
         }
+    }
+    
+    private func setTargets() {
+        trackersView.addTrackerButton.addTarget(
+            self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
+        trackersView.filterButton.addTarget(self, action: #selector(switchToFilterVC), for: .touchUpInside)
+        trackersView.navigationBarDatePicker.addTarget(
+            self, action: #selector(setDateFromDatePicker), for: .primaryActionTriggered)
+        trackersView.searchTextField.addTarget(
+            self, action: #selector(updateVisibleTrackersAfterSearch), for: [.editingChanged, .editingDidEnd])
+        trackersView.searchTextField.addTarget(
+            self, action: #selector(addCanceletionButton), for: .editingDidBegin)
+        trackersView.cancelationButton.addTarget(
+            self, action: #selector(setSearchFieldWithoutCancelationButton), for: .touchUpInside)
     }
     
     @objc private func switchToFilterVC() {
@@ -212,6 +212,7 @@ extension TrackersViewController: UITextFieldDelegate {
     }
 }
 
+// MARK: UICollectionViewDelegateFlowLayout
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
@@ -256,7 +257,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-
+// MARK: UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         trackersViewModel.visibleTrackers.count
@@ -275,6 +276,7 @@ extension TrackersViewController: UICollectionViewDataSource {
         
         let visibleCategories = trackersViewModel.visibleTrackers
         let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
+        let sectionName = visibleCategories[indexPath.section].name
         
         trackersViewModel.fillAdditionalInfo(id: tracker.id)
         let additionalInfo = trackersViewModel.additionTrackerInfo
@@ -282,6 +284,9 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell.trackerModel = tracker
         cell.additionalTrackerInfo = additionalInfo
         cell.delegate = self
+        
+        cell.isTrackerPinned = sectionName == LocalizableConstants.TrackerVC.pinned ? true : false
+        cell.pinSingImageView.isHidden = sectionName == LocalizableConstants.TrackerVC.pinned ? false : true 
         
         return cell
     }
@@ -310,6 +315,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: TrackersCollectionViewCellDelegate
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func addCurrentTrackerToCompletedThisDate(_ cell: TrackerCell, isAddDay: Bool) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell),
@@ -321,7 +327,17 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
                                                                         date: date), isAddDay: isAddDay)
         trackersViewModel.fillAdditionalInfo(id: tracker.id)
         cell.additionalTrackerInfo = trackersViewModel.additionTrackerInfo
-        
+    }
+    
+    func pinTracker(from cell: TrackerCell) {
+        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
+        trackersViewModel.pinTracker(from: indexPath)
+    }
+    
+    func unpinTracker(from cell: TrackerCell) {
+        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
+        trackersViewModel.unpinTracker(from: indexPath)
+        print("unpinTracker tracker")
     }
     
     func editTracker(from cell: TrackerCell) {

@@ -23,7 +23,13 @@ final class CategoryViewModel: CategoryViewModelProtocol {
     }
     
     func updateVisibleCategories() {
-        visibleCategories = dataProviderService.updateCategoryViewModel()
+        var categories = dataProviderService.updateCategoryViewModel()
+
+        if let index = visibleCategories.firstIndex(where: { $0 == LocalizableConstants.TrackerVC.pinned }) {
+            categories.remove(at: index)
+        }
+        
+        visibleCategories = categories
     }
     
     func setSelectedCategory(name: String) {

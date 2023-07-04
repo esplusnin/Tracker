@@ -13,6 +13,7 @@
 "trackerVC.cancelationButton" = "Cancel";
 "trackerVC.emptyState.label" = "What we will track?";
 "trackerVC.nothingSearched" = "Nothing found";
+"trackerVC.pinned" = "Pinned";
 
 // FilterVC
 "filter.title" = "Filters";
@@ -86,4 +87,5 @@
 // Context menu:
 "contextMenu.remove" = "Remove";
 "contextMenu.edit" = "Edit";
-"contextMenu.fix" = "Fix";
+"contextMenu.fix" = "Pin";
+"contextMenu.unfix" = "Unpin";

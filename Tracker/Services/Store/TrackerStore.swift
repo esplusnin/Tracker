@@ -100,6 +100,26 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         // Заготовка
     }
     
+    func pinTracker(from indexPath: IndexPath) {
+        let pinnedName = LocalizableConstants.TrackerVC.pinned
+        let tracker = fetchedResultController.object(at: indexPath)
+        let category = dataProviderService.fetchSpecificCategory(name: pinnedName)
+        
+        tracker.previousCategory = tracker.category
+        tracker.category = category
+        
+        appDelegate.saveContext()
+    }
+    
+    func unpinTracker(from indexPath: IndexPath) {
+        print("unpinTracker")
+        let tracker = fetchedResultController.object(at: indexPath)
+        print(tracker.previousCategory?.name)
+        tracker.category = tracker.previousCategory
+        
+        appDelegate.saveContext()
+    }
+    
     func updateController() {
         do {
             try fetchedResultController.performFetch()

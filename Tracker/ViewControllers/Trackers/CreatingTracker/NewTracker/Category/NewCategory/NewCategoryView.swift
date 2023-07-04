@@ -19,6 +19,13 @@ final class NewCategoryView {
     
     lazy var textField: UITextField = {
         let textField = UITextField()
+        
+        if NSLocale.current.languageCode == "ar" {
+                textField.textAlignment = .right
+        } else {
+            textField.textAlignment = .left
+        }
+        
         textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .go
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))

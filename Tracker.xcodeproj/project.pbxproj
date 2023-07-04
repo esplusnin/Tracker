@@ -375,6 +375,7 @@
 				7ECDD9442A1CB41F00771EE4 /* Tracker.swift */,
 				7ECDD9472A1CB44900771EE4 /* TrackerCategory.swift */,
 				7ECDD9492A1CB45000771EE4 /* TrackerRecord.swift */,
+				7E584B5E2A530A86004C1341 /* Observable.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -463,7 +464,6 @@
 				7EC8175C2A2724CF00527BBB /* DataProviderService.swift */,
 				7EDABC562A20DD5200F39D8E /* DateService.swift */,
 				7EB1D69A2A40689100106032 /* FirstEntryRevisionService.swift */,
-				7E584B5E2A530A86004C1341 /* Observable.swift */,
 				7EDABC582A20F0F700F39D8E /* ScheduleService.swift */,
 				7E916FC22A2B9C6700FA18F3 /* UIColorMarshallingService.swift */,
 			);
