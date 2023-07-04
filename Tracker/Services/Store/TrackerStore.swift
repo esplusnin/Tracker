@@ -11,7 +11,7 @@ import CoreData
 final class TrackerStore: NSObject, TrackerStoreProtocol {
        
     private let colorMarshalling = UIColorMarshallingService()
-    private let dataProvider = DataProviderService.instance
+    private let dataProviderService = DataProviderService.instance
   
     private lazy var appDelegate = {
         (UIApplication.shared.delegate as! AppDelegate)
@@ -65,7 +65,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
 
     // CRUD Tracker:
     func addTracker(model: Tracker) {
-        let category = dataProvider.fetchSpecificCategory(name: dataProvider.selectedCategoryString ?? "")
+        let category = dataProviderService.fetchSpecificCategory(name: dataProviderService.selectedCategoryString ?? "")
         let tracker = TrackerCoreData(context: context)
         let color = colorMarshalling.hexStringFromColor(color: model.color)
         
@@ -110,6 +110,6 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
 
 extension TrackerStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        dataProvider.inizializeVisibleCategories()
+        dataProviderService.inizializeVisibleCategories()
     }
 }

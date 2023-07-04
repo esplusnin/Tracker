@@ -9,7 +9,7 @@ import Foundation
 
 final class FilterViewModel {
     
-    private let dataProvider = DataProviderService.instance
+    private let dataProviderService = DataProviderService.instance
     
     private(set) var availableFilters: [String] = [
         LocalizableConstants.FilterVC.allTrackers,
@@ -19,10 +19,10 @@ final class FilterViewModel {
     ]
     
     func getCurrentFilter() -> String {
-        dataProvider.currentFilter ?? ""
+        dataProviderService.currentFilter ?? ""
     }
     
     func setCurrentFilter(selected: String) {        
-        dataProvider.currentFilter = selected
+        dataProviderService.currentFilter = selected
     }
 }

@@ -69,6 +69,11 @@ enum LocalizableConstants {
         static let readyButton = NSLocalizedString("newCategory.readyButton", comment: "")
     }
     
+    enum EditingCategory {
+        static let title = NSLocalizedString("editingCategory.title", comment: "")
+        static let completeButton = NSLocalizedString("editingCategory.completeButton", comment: "")
+    }
+    
     enum ScheduleVC {
         static let title = NSLocalizedString("schedule.title", comment: "")
         static let monday = NSLocalizedString("schedule.monday", comment: "")

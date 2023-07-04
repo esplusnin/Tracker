@@ -48,6 +48,10 @@
 "newCategory.textField.placeholder" = "Введите название категории";
 "newCategory.readyButton" = "Готово";
 
+// Editing CategoryVC:
+"editingCategory.title" = "Редактирование категории";
+"editingCategory.completeButton" = "Готово";
+
 // ScheduleVC:
 "schedule.title" = "Расписание";
 "schedule.monday" = "Понедельник";

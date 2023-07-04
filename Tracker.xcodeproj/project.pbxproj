@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		7E102F942A53D8C600A1BDB7 /* UIButton + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E102F932A53D8C600A1BDB7 /* UIButton + Extension.swift */; };
+		7E102F962A53DF1F00A1BDB7 /* EditingCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E102F952A53DF1F00A1BDB7 /* EditingCategoryViewController.swift */; };
+		7E102F992A53DFB400A1BDB7 /* EditingCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E102F982A53DFB400A1BDB7 /* EditingCategoryView.swift */; };
+		7E102F9B2A53E16900A1BDB7 /* EditingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E102F9A2A53E16900A1BDB7 /* EditingViewModel.swift */; };
+		7E102F9D2A53E63D00A1BDB7 /* CategoryCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E102F9C2A53E63D00A1BDB7 /* CategoryCellDelegate.swift */; };
 		7E14905B2A3092EA002B58F2 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E14905A2A3092EA002B58F2 /* TrackerRecordStore.swift */; };
 		7E14905D2A309537002B58F2 /* TrackerRecordStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E14905C2A309537002B58F2 /* TrackerRecordStoreProtocol.swift */; };
 		7E14C1CA2A446BE90000587D /* TrackersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E14C1C92A446BE90000587D /* TrackersViewModel.swift */; };
@@ -85,6 +89,10 @@
 
 /* Begin PBXFileReference section */
 		7E102F932A53D8C600A1BDB7 /* UIButton + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Extension.swift"; sourceTree = "<group>"; };
+		7E102F952A53DF1F00A1BDB7 /* EditingCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingCategoryViewController.swift; sourceTree = "<group>"; };
+		7E102F982A53DFB400A1BDB7 /* EditingCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingCategoryView.swift; sourceTree = "<group>"; };
+		7E102F9A2A53E16900A1BDB7 /* EditingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingViewModel.swift; sourceTree = "<group>"; };
+		7E102F9C2A53E63D00A1BDB7 /* CategoryCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCellDelegate.swift; sourceTree = "<group>"; };
 		7E14905A2A3092EA002B58F2 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
 		7E14905C2A309537002B58F2 /* TrackerRecordStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStoreProtocol.swift; sourceTree = "<group>"; };
 		7E14C1C92A446BE90000587D /* TrackersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewModel.swift; sourceTree = "<group>"; };
@@ -177,6 +185,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E102F972A53DF9500A1BDB7 /* EditingCategory */ = {
+			isa = PBXGroup;
+			children = (
+				7E102F982A53DFB400A1BDB7 /* EditingCategoryView.swift */,
+				7E102F9A2A53E16900A1BDB7 /* EditingViewModel.swift */,
+				7E102F952A53DF1F00A1BDB7 /* EditingCategoryViewController.swift */,
+			);
+			path = EditingCategory;
+			sourceTree = "<group>";
+		};
 		7E584B552A52E835004C1341 /* FilterTrackers */ = {
 			isa = PBXGroup;
 			children = (
@@ -277,6 +295,7 @@
 			children = (
 				7E1E541D2A1F900A006FD792 /* CategoryViewControllerProtocol.swift */,
 				7EB1D6C52A409CF000106032 /* CategoryViewModelProtocol.swift */,
+				7E102F9C2A53E63D00A1BDB7 /* CategoryCellDelegate.swift */,
 			);
 			path = CategoryProtocols;
 			sourceTree = "<group>";
@@ -327,11 +346,12 @@
 		7ECDD93E2A1BC5F400771EE4 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				7EDABC532A20930D00F39D8E /* NewCategory */,
 				7EC817562A25D89D00527BBB /* CategoryProtocols */,
+				7EDABC532A20930D00F39D8E /* NewCategory */,
+				7E102F972A53DF9500A1BDB7 /* EditingCategory */,
 				7ECDD9512A1DEFDA00771EE4 /* CategoryView.swift */,
-				7ECDD93A2A1BC56400771EE4 /* CategoryViewController.swift */,
 				7EB1D6C12A4095E400106032 /* CategoryViewModel.swift */,
+				7ECDD93A2A1BC56400771EE4 /* CategoryViewController.swift */,
 				7E1E541B2A1F79B5006FD792 /* CategoryCell.swift */,
 			);
 			path = Category;
@@ -585,11 +605,14 @@
 				7E14C1CE2A446E400000587D /* TrackersViewModelProtocol.swift in Sources */,
 				7E14C1CA2A446BE90000587D /* TrackersViewModel.swift in Sources */,
 				7E1E54202A1FB3C3006FD792 /* NewTrackerViewControllerProtocol.swift in Sources */,
+				7E102F992A53DFB400A1BDB7 /* EditingCategoryView.swift in Sources */,
 				7ECDD9572A1DF65900771EE4 /* NewCategoryView.swift in Sources */,
+				7E102F9B2A53E16900A1BDB7 /* EditingViewModel.swift in Sources */,
 				7ECDD9482A1CB44900771EE4 /* TrackerCategory.swift in Sources */,
 				7E14905D2A309537002B58F2 /* TrackerRecordStoreProtocol.swift in Sources */,
 				7E584B5B2A52FD24004C1341 /* FilterCell.swift in Sources */,
 				7ECDD92F2A1BB13300771EE4 /* NewTrackerViewController.swift in Sources */,
+				7E102F9D2A53E63D00A1BDB7 /* CategoryCellDelegate.swift in Sources */,
 				7EDABC552A209F8100F39D8E /* CreatingTrackerViewControllerProtocol.swift in Sources */,
 				7EF620A22A1629B900B66A4B /* TrackersViewController.swift in Sources */,
 				7EB1D6C62A409CF000106032 /* CategoryViewModelProtocol.swift in Sources */,
@@ -613,6 +636,7 @@
 				7E584B592A52FC24004C1341 /* FilterViewModel.swift in Sources */,
 				7ECDDA272A2F577600B8167A /* TrackerStoreProtocol.swift in Sources */,
 				7ECDD94A2A1CB45000771EE4 /* TrackerRecord.swift in Sources */,
+				7E102F962A53DF1F00A1BDB7 /* EditingCategoryViewController.swift in Sources */,
 				7EB1D6952A405D1700106032 /* FirstOnboardingView.swift in Sources */,
 				7EF6209E2A1629B900B66A4B /* AppDelegate.swift in Sources */,
 				7EC577C62A2E5934000837E8 /* TrackerStore.swift in Sources */,

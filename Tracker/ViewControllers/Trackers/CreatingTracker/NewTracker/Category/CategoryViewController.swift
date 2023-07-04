@@ -48,6 +48,11 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         categoryView.tableView.alpha = categoryViewModel.numberOfCategories == 0 ? 0 : 1
     }
     
+    private func switchToEditingVC(_ name: String) {
+        let viewController = EditingCategoryViewController(categoryName: name)
+        present(viewController, animated: true)
+    }
+    
     @objc private func switchToNewCategoryVC() {
         let viewController = NewCategoryViewController()
         viewController.categoryViewController = self
@@ -84,6 +89,7 @@ extension CategoryViewController: UITableViewDataSource {
             withIdentifier: "CategoryCell",
             for: indexPath) as? CategoryCell else { return UITableViewCell() }
         
+        cell.delegate = self
         cell.viewModel = categoryViewModel.visibleCategories[indexPath.row]
         cell.accessoryType = cell.titleLabel.text == categoryViewModel.getSelectedCategory() ? .checkmark : .none
         if indexPath.row + 1 == categoryViewModel.numberOfCategories {
@@ -101,6 +107,17 @@ extension CategoryViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         75
+    }
+}
+
+extension CategoryViewController: CategoryCellDelegate {
+    func editCategory(_ cell: CategoryCell) {
+        guard let categoryName = cell.titleLabel.text else { return }
+        switchToEditingVC(categoryName)
+    }
+    
+    func removeCategory(_ cell: CategoryCell) {
+        
     }
 }
 

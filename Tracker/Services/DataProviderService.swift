@@ -137,7 +137,6 @@ final class DataProviderService {
     
     func trackerDidCreate() {
         trackersViewModel?.setVisibleTrackersFromProvider()
-        newTrackerViewModel?.trackerDidCreate()
     }
     
     func recordDidUpdate() {
@@ -208,6 +207,14 @@ final class DataProviderService {
     
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
         trackerCategoryStore?.fetchSpecificCategory(name: name)
+    }
+    
+    func editCategory(oldName: String, newName: String) {
+        trackerCategoryStore?.editCategory(oldName: oldName, newName: newName)
+    }
+    
+    func removeCategory(_ name: String) {
+        trackerCategoryStore?.removeCategory(name)
     }
     
     //MARK: TrackerRecord Block:

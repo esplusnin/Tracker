@@ -48,6 +48,10 @@
 "newCategory.textField.placeholder" = "أدخل اسم الفئة";
 "newCategory.readyButton" = "تم";
 
+// Editing CategoryVC:
+"editingCategory.title" = "تحرير فئة";
+"editingCategory.completeButton" = "تم";
+
 // ScheduleVC:
 "schedule.title" = "الجدول الزمني";
 "schedule.monday" = "الاثنين";

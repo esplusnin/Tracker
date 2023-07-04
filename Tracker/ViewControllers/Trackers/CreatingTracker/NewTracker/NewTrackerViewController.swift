@@ -45,13 +45,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
                 self.newTrackerView.createButton.controlState(isLock: true)
             }
         }
-        
-        newTrackerViewModel.$isTrackerDidCreate.bind { [weak self] value in
-            guard let self = self else { return }
-            if value == true {
-                dismissNewTrackerVC()
-            }
-        }
     }
     
     func reloadTableView() {
@@ -86,7 +79,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         if countOfTextFieldLetter >= 38 {
             view.addSubview(newTrackerView.warningTextFieldLimitationLabel)
             newTrackerView.createButton.controlState(isLock: true)
-
+            
             newTrackerView.warningTextFieldLimitationLabel.snp.makeConstraints { make in
                 make.top.equalTo(newTrackerView.textField.snp.bottom).inset(-8)
                 make.centerX.equalToSuperview()
@@ -123,6 +116,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     @objc private func createNewTracker() {
         newTrackerViewModel.createNewTracker()
         newTrackerViewModel.resetTrackerInfoAfterCreate()
+        dismissNewTrackerVC()
     }
     
     @objc private func dismissNewTrackerVC() {

@@ -158,7 +158,7 @@ extension TrackerCell: UIContextMenuInteractionDelegate {
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         let fixImage = UIImage(systemName: "pencil")
         let editImage = UIImage(systemName: "square.and.pencil")
-        let deleteImage = UIImage(systemName: "trash")
+        let removeImage = UIImage(systemName: "trash")
         
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             let fixAction = UIAction(title: LocalizableConstants.ContextMenuVC.fix,
@@ -174,7 +174,7 @@ extension TrackerCell: UIContextMenuInteractionDelegate {
             }
             
             let deleteAction = UIAction(title: LocalizableConstants.ContextMenuVC.remove,
-                                        image: deleteImage, attributes: .destructive) { [weak self] action in
+                                        image: removeImage, attributes: .destructive) { [weak self] action in
                 guard let self = self else { return }
                 self.deleteTracker(from: self)
             }

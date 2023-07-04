@@ -13,7 +13,6 @@ protocol NewTrackerViewModelProtocol: AnyObject {
     var colorSectionArray: [UIColor] { get }
     var buttonsTitleForTableView: [String] { get }
     func createNewTracker()
-    func trackerDidCreate()
     func setTrackerName(name: String)
     func clearTrackerName()
     func resetTrackerInfoAfterDeselect(section: Int)

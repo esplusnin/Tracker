@@ -48,6 +48,10 @@
 "newCategory.textField.placeholder" = "Enter the category name";
 "newCategory.readyButton" = "Complete";
 
+// Editing CategoryVC:
+"editingCategory.title" = "Editing category";
+"editingCategory.completeButton" = "Complete";
+
 // ScheduleVC:
 "schedule.title" = "Schedule";
 "schedule.monday" = "Monday";

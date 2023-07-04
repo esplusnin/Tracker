@@ -31,8 +31,6 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
     
     @Observable
     private(set) var isReadyToCreateNewTracker = false
-    @Observable
-    private(set) var isTrackerDidCreate = false
     
     init() {
         dataProviderService.bindNewTrackerViewModel(controller: self)
@@ -94,10 +92,6 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
     }
     
     // MARK: Rule wrapped property:
-    func trackerDidCreate() {
-        isTrackerDidCreate = true
-    }
-    
     func changeStatusToCreateTracker() {
         isReadyToCreateNewTracker = true
     }
