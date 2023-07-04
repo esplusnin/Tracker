@@ -12,6 +12,8 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
        
     private let colorMarshalling = UIColorMarshallingService()
     private let dataProviderService = DataProviderService.instance
+    
+    private var trackerCategoryObservation: NSKeyValueObservation?
   
     private lazy var appDelegate = {
         (UIApplication.shared.delegate as! AppDelegate)
@@ -96,6 +98,16 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
     
     func editTracker(id: UUID) {
         // Заготовка
+    }
+    
+    func updateController() {
+        do {
+            try fetchedResultController.performFetch()
+        } catch {
+            print("error", error.localizedDescription)
+        }
+        
+        dataProviderService.inizializeVisibleCategories()
     }
     
     func deleteTracker(id: UUID) {

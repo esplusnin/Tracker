@@ -93,6 +93,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     func editCategory(oldName: String, newName: String) {
         guard let object = fetchedResultController.fetchedObjects?.first(where: { $0.name == oldName }) else { return }
         object.name = newName
+        
         appDelegate.saveContext()
     }
     
@@ -120,7 +121,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         dataProviderService.getCategoryNames()
-        dataProviderService.inizializeVisibleCategories()
+        dataProviderService.updateTrackerStoreController()
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {

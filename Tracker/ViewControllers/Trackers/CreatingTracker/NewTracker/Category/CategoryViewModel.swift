@@ -33,4 +33,8 @@ final class CategoryViewModel: CategoryViewModelProtocol {
     func getSelectedCategory() -> String {
         dataProviderService.selectedCategoryString ?? ""
     }
+    
+    func removeCategory(_ name: String) {
+        dataProviderService.removeCategory(name)
+    }
 }

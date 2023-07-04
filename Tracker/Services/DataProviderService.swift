@@ -184,6 +184,10 @@ final class DataProviderService {
                        schedule: tracker?.schedule ?? [])
     }
     
+    func updateTrackerStoreController() {
+        trackerStore?.updateController()
+    }
+    
     //MARK: TrackerCategoryStore Block:
     func getNumberOfCategories() -> Int {
         trackerCategoryStore?.getNumberOfCategories() ?? 0
@@ -217,7 +221,7 @@ final class DataProviderService {
         trackerCategoryStore?.removeCategory(name)
     }
     
-    //MARK: TrackerRecord Block:
+    //MARK: TrackerRecordStore Block:
     func setAllTrackerRecords() {
         completedTrackers = trackerRecordStore?.getTrackerRecords()
     }

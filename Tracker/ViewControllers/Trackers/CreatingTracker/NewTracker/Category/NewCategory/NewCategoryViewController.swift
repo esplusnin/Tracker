@@ -17,6 +17,7 @@ final class NewCategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        newCategory.textField.becomeFirstResponder()
         newCategory.textField.delegate = self
         
         setViews()

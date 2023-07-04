@@ -12,5 +12,6 @@ protocol TrackerStoreProtocol: AnyObject {
     func addTracker(model: Tracker)
     func getTracker(categoryName: String, searchedindex: Int) -> Tracker
     func editTracker(id: UUID)
+    func updateController()
     func deleteTracker(id: UUID)
 }

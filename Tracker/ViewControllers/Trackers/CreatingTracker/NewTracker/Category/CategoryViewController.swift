@@ -117,7 +117,10 @@ extension CategoryViewController: CategoryCellDelegate {
     }
     
     func removeCategory(_ cell: CategoryCell) {
-        
+        AlertService().showAlert(event: .removeCategory, controller: self) { [weak self] in
+            guard let self = self, let categoryName = cell.titleLabel.text else { return }
+            self.categoryViewModel.removeCategory(categoryName)
+        }
     }
 }
 

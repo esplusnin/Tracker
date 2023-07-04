@@ -32,7 +32,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         trackersViewModel.$visibleTrackers.bind { [weak self] _ in
             guard let self = self else { return }
             self.reloadCollectionView()
-            
+
             if self.trackersViewModel.visibleTrackers.count == 0 {
                 self.trackersView.filterButton.removeFromSuperview()
                 self.trackersView.trackersCollection.alpha = 0
