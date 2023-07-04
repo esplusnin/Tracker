@@ -11,6 +11,4 @@ protocol NewTrackerViewControllerProtocol: AnyObject {
     var kindOfTracker: KindOfTrackers? { get }
     func bind()
     func reloadTableView()
-    func unlockCreateButton()
-    func lockCreateButton()
 }

@@ -13,7 +13,9 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     private let scheduleService = ScheduleService()
     
     @Observable
-    private(set) var isReadyToCloseSchedule = false
+    private(set) var isReadyToCloseScheduleVC = false
+    @Observable
+    private(set) var isReadyToUnlockCreateButton = false
     private(set) var schedule: [Int] = []
     private(set) var daysArray = [LocalizableConstants.ScheduleVC.monday, LocalizableConstants.ScheduleVC.tuesday, LocalizableConstants.ScheduleVC.wednesday, LocalizableConstants.ScheduleVC.thursday, LocalizableConstants.ScheduleVC.friday, LocalizableConstants.ScheduleVC.saturday, LocalizableConstants.ScheduleVC.sunday]
     
@@ -23,10 +25,12 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     
     func addDayToSchedule(day: Int) {
         schedule.append(day)
+        isScheduleEmpty()
     }
     
     func removeAddFromSchedule(index: Int) {
         schedule.remove(at: index)
+        isScheduleEmpty()
     }
     
     func setSchedule() {
@@ -39,7 +43,7 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     }
     
     func changeStatusToCloseSchedule() {
-        isReadyToCloseSchedule = true
+        isReadyToCloseScheduleVC = true
     }
     
     func returnNumberOfDay(from index: IndexPath) -> Int {
@@ -48,5 +52,9 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     
     func isCurrentDayExistInSchedule(day: Int) -> Bool {
         dataProviderService.isCurrentDayFromScheduleExist(day) ? true : false
+    }
+    
+    private func isScheduleEmpty() {
+        isReadyToUnlockCreateButton = schedule.count == 0 ? false : true
     }
 }

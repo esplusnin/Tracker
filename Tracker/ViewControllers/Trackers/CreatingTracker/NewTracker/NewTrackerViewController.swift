@@ -18,7 +18,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     var newTrackerViewModel = NewTrackerViewModel()
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
     var kindOfTracker: KindOfTrackers?
-        
+    
     private let newTrackerView = NewTrackerView()
     
     override func viewDidLoad() {
@@ -37,11 +37,13 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     func bind() {
-        
-        
         newTrackerViewModel.$isReadyToCreateNewTracker.bind { [weak self] value in
             guard let self = self else { return }
-            value == true ? self.unlockCreateButton() : self.lockCreateButton()
+            if value == true {
+                self.newTrackerView.createButton.controlState(isLock: false)
+            } else {
+                self.newTrackerView.createButton.controlState(isLock: true)
+            }
         }
         
         newTrackerViewModel.$isTrackerDidCreate.bind { [weak self] value in
@@ -54,16 +56,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     func reloadTableView() {
         newTrackerView.tableView.reloadData()
-    }
-    
-    func unlockCreateButton() {
-        newTrackerView.createButton.isEnabled = true
-        newTrackerView.createButton.backgroundColor = .blackDay
-    }
-    
-    func lockCreateButton() {
-        newTrackerView.createButton.isEnabled = false
-        newTrackerView.createButton.backgroundColor = .gray
     }
     
     private func setTargets() {
@@ -93,8 +85,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         guard let countOfTextFieldLetter = countOfTextFieldLetter else { return }
         if countOfTextFieldLetter >= 38 {
             view.addSubview(newTrackerView.warningTextFieldLimitationLabel)
-            lockCreateButton()
-            
+            newTrackerView.createButton.controlState(isLock: true)
+
             newTrackerView.warningTextFieldLimitationLabel.snp.makeConstraints { make in
                 make.top.equalTo(newTrackerView.textField.snp.bottom).inset(-8)
                 make.centerX.equalToSuperview()

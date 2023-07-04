@@ -23,16 +23,27 @@ final class ScheduleViewController: UIViewController {
         setConstraints()
         settingTableView()
         setTarget()
+        scheduleView.completeButton.controlState(isLock: true)
         bind()
     }
     
     private func bind() {
-        scheduleViewModel.$isReadyToCloseSchedule.bind { [weak self] value in
+        scheduleViewModel.$isReadyToCloseScheduleVC.bind { [weak self] value in
             guard let self = self else { return }
             
             if value == true {
                 newTrackerViewController?.reloadTableView()
                 dismiss(animated: true)
+            }
+        }
+        
+        scheduleViewModel.$isReadyToUnlockCreateButton.bind { [weak self] value in
+            guard let self = self else { return }
+            
+            if value == true {
+                scheduleView.completeButton.controlState(isLock: false)
+            } else {
+                scheduleView.completeButton.controlState(isLock: true)
             }
         }
     }

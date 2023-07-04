@@ -32,7 +32,6 @@ final class ScheduleView {
         button.setTitle(LocalizableConstants.ScheduleVC.ready, for: .normal)
         button.setTitleColor(UIColor.whiteDay, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        button.backgroundColor = UIColor.blackDay
         
         return button
     }()

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E102F942A53D8C600A1BDB7 /* UIButton + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E102F932A53D8C600A1BDB7 /* UIButton + Extension.swift */; };
 		7E14905B2A3092EA002B58F2 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E14905A2A3092EA002B58F2 /* TrackerRecordStore.swift */; };
 		7E14905D2A309537002B58F2 /* TrackerRecordStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E14905C2A309537002B58F2 /* TrackerRecordStoreProtocol.swift */; };
 		7E14C1CA2A446BE90000587D /* TrackersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E14C1C92A446BE90000587D /* TrackersViewModel.swift */; };
@@ -83,6 +84,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7E102F932A53D8C600A1BDB7 /* UIButton + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Extension.swift"; sourceTree = "<group>"; };
 		7E14905A2A3092EA002B58F2 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
 		7E14905C2A309537002B58F2 /* TrackerRecordStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStoreProtocol.swift; sourceTree = "<group>"; };
 		7E14C1C92A446BE90000587D /* TrackersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewModel.swift; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 		7ED3D3F62A1A064A004C371B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				7E102F932A53D8C600A1BDB7 /* UIButton + Extension.swift */,
 				7ED3D3F42A1A0643004C371B /* UIColor + Extension.swift */,
 				7ED3D4092A1A20BB004C371B /* Colors.swift */,
 			);
@@ -605,6 +608,7 @@
 				7ED3D3FD2A1A1035004C371B /* Resources.swift in Sources */,
 				7EB1D6C22A4095E400106032 /* CategoryViewModel.swift in Sources */,
 				7ED3D3F52A1A0643004C371B /* UIColor + Extension.swift in Sources */,
+				7E102F942A53D8C600A1BDB7 /* UIButton + Extension.swift in Sources */,
 				7ED3D3FB2A1A0E21004C371B /* StatisticViewController.swift in Sources */,
 				7E584B592A52FC24004C1341 /* FilterViewModel.swift in Sources */,
 				7ECDDA272A2F577600B8167A /* TrackerStoreProtocol.swift in Sources */,

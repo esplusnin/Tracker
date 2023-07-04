@@ -144,6 +144,7 @@ final class DataProviderService {
         trackersViewModel?.recordDidUpdate()
     }
     
+    // Return string of current localize value from selected filter 
     func currentFilterDidUpdate() {
         switch currentFilter {
         case "\(LocalizableConstants.FilterVC.allTrackers)":

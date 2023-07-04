@@ -22,6 +22,8 @@ final class NewCategoryViewController: UIViewController {
         setViews()
         setConstraints()
         setTarget()
+        
+        controlStateCompleteButton(newCategory.textField)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -30,6 +32,14 @@ final class NewCategoryViewController: UIViewController {
     
     private func setTarget() {
         newCategory.completeButton.addTarget(self, action: #selector(createNewCategory), for: .touchUpInside)
+    }
+    
+    private func controlStateCompleteButton(_ textField: UITextField) {
+        if textField.text?.count != 0 {
+            newCategory.completeButton.controlState(isLock: false)
+        } else {
+            newCategory.completeButton.controlState(isLock: true)
+        }
     }
     
     @objc private func createNewCategory() {
@@ -50,7 +60,7 @@ extension NewCategoryViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        newCategory.completeButton.backgroundColor = textField.text?.count != 0 ? .blackDay : .gray
+        controlStateCompleteButton(textField)
     }
 }
 
