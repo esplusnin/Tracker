@@ -96,13 +96,27 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
                        schedule: tracker?.schedule ?? [])
     }
     
-    func editTracker(id: UUID) {
-        // Заготовка
+    func editTracker(newModel: Tracker) {
+        guard let tracker = fetchedResultController.fetchedObjects?.first( where: { $0.id == newModel.id }),
+              let selectedCategory = dataProviderService.selectedCategoryString else { return }
+        
+        let category = dataProviderService.fetchSpecificCategory(name: selectedCategory)
+        
+        tracker.id = newModel.id
+        tracker.name = newModel.name
+        tracker.emoji = newModel.emoji
+        tracker.color = colorMarshalling.hexStringFromColor(color: newModel.color)
+        tracker.schedule = newModel.schedule
+        tracker.category = category
+
+        appDelegate.saveContext()
     }
     
-    func pinTracker(from indexPath: IndexPath) {
+    func pinTracker(_ trackerID: UUID) {
+        guard let tracker = fetchedResultController.fetchedObjects?.first(
+            where: { $0.id == trackerID }) else { return }
+        
         let pinnedName = LocalizableConstants.TrackerVC.pinned
-        let tracker = fetchedResultController.object(at: indexPath)
         let category = dataProviderService.fetchSpecificCategory(name: pinnedName)
         
         tracker.previousCategory = tracker.category
@@ -111,10 +125,10 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         appDelegate.saveContext()
     }
     
-    func unpinTracker(from indexPath: IndexPath) {
-        print("unpinTracker")
-        let tracker = fetchedResultController.object(at: indexPath)
-        print(tracker.previousCategory?.name)
+    func unpinTracker(_ trackerID: UUID) {
+        guard let tracker = fetchedResultController.fetchedObjects?.first(
+            where: { $0.id == trackerID }) else { return }
+        
         tracker.category = tracker.previousCategory
         
         appDelegate.saveContext()
@@ -143,5 +157,6 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
 extension TrackerStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         dataProviderService.inizializeVisibleCategories()
+        print("controllerDidChangeContent")
     }
 }

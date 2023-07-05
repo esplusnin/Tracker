@@ -26,7 +26,7 @@ final class TrackerCell: UICollectionViewCell {
         didSet {
             guard let additionalTrackerInfo = additionalTrackerInfo else { return }
             completeTrackerDayButton.setTitle(additionalTrackerInfo.buttonString, for: .normal)
-            numberOfDaysLabel.text = additionalTrackerInfo.countOfDays
+            numberOfDaysLabel.text = additionalTrackerInfo.countOfDaysString
             if additionalTrackerInfo.isTodayFuture {
                 unlockCompleteButton()
                 completeTrackerDayButton.alpha = additionalTrackerInfo.isCompleteToday ? 0.5 : 1
@@ -118,17 +118,23 @@ final class TrackerCell: UICollectionViewCell {
         
         addContextMenuInteraction()
         
-        UIView.animate(withDuration: 1, animations: { [weak self] in
-            guard let self = self else { return }
-            self.contentView.layer.shadowColor = UIColor.gray.cgColor
-            self.contentView.layer.shadowOpacity = 0.4
-            self.contentView.layer.shadowOffset = CGSize(width: 10, height: 10)
-            self.contentView.layer.shadowRadius = 4
-        })
+        doAnimate()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.contentView.layer.shadowOpacity = 0
+        self.contentView.layer.shadowOffset = CGSize.zero
+        self.contentView.layer.shadowRadius = 0
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        doAnimate()
     }
     
     func lockCompleteButton() {
@@ -144,6 +150,16 @@ final class TrackerCell: UICollectionViewCell {
         completeTrackerDayButton.isEnabled = true
     }
     
+    private func doAnimate() {
+        UIView.animate(withDuration: 1, delay: 0.5, animations: { [weak self] in
+            guard let self = self else { return }
+            self.contentView.layer.shadowColor = UIColor.gray.cgColor
+            self.contentView.layer.shadowOpacity = 0.5
+            self.contentView.layer.shadowOffset = CGSize(width: 10, height: 10)
+            self.contentView.layer.shadowRadius = 4
+        })
+    }
+    
     private func setTarget() {
         completeTrackerDayButton.addTarget(self, action: #selector(completeTrackerToday), for: .touchUpInside)
     }
@@ -153,7 +169,6 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     private func unpinTracker(from cell: TrackerCell) {
-        print("unpinTracker CELL")
         delegate?.unpinTracker(from: cell)
     }
     

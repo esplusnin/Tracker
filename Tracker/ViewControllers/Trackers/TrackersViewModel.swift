@@ -9,9 +9,11 @@ import Foundation
 
 struct AdditionTrackerInfo {
     var buttonString: String
-    var countOfDays: String
+    var countOfDays: Int
+    var countOfDaysString: String
     var isCompleteToday: Bool
     var isTodayFuture: Bool
+    var categoryName: String?
 }
 
 final class TrackersViewModel: TrackersViewModelProtocol {
@@ -124,19 +126,18 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         visibleTrackers = newArray
     }
     
-    func pinTracker(from indexPath: IndexPath) {
+    func pinTracker(_ trackerID: UUID) {
         let pinnedName = LocalizableConstants.TrackerVC.pinned
         if visibleTrackers[0].name != pinnedName {
             dataProviderService.addCategoryToStore(name: pinnedName)
-            dataProviderService.pinTracker(from: indexPath)
+            dataProviderService.pinTracker(trackerID)
         } else {
-            dataProviderService.pinTracker(from: indexPath)
+            dataProviderService.pinTracker(trackerID)
         }
     }
     
-    func unpinTracker(from indexPath: IndexPath) {
-        dataProviderService.unpinTracker(from: indexPath)
-        print("unpinTracker trackerViewModel")
+    func unpinTracker(_ trackerID: UUID) {
+        dataProviderService.unpinTracker(trackerID)
     }
     
     func recordDidUpdate() {
@@ -147,8 +148,8 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         isNeedToChangeDate = true
     }
     
-    func editTracker(id: UUID) {
-        dataProviderService.editTrackerFromStore(id: id)
+    func editTracker(trackerID: UUID) {
+        dataProviderService.editTrackerFromStore(trackerID)
     }
     
     func deleteTracker(id: UUID) {
@@ -158,12 +159,13 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     func fillAdditionalInfo(id: UUID) {
         let completeDayString = setCellButtonIfTrackerWasCompletedToday(id: id)
         let countOfDays = countAmountOfCompleteDays(id: id)
-        let daysString = LocalizableConstants.TrackerVC.countOfCompletedDays(countOfDays: countOfDays)
+        let countOfDaysString = LocalizableConstants.TrackerVC.countOfCompletedDays(countOfDays: countOfDays)
         let isCompleteToday = completeDayString == "+" ? false : true
         let isTodayFuture = checkCurrentDateIsFuture()
         
         additionTrackerInfo = AdditionTrackerInfo(buttonString: completeDayString,
-                                                  countOfDays: daysString,
+                                                  countOfDays: countOfDays,
+                                                  countOfDaysString: countOfDaysString,
                                                   isCompleteToday: isCompleteToday,
                                                   isTodayFuture: isTodayFuture)
     }

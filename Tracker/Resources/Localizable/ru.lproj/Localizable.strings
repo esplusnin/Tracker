@@ -90,3 +90,6 @@
 "contextMenu.fix" = "Закрепить";
 "contextMenu.unfix" = "Открепить";
 
+// Editing Tracker:
+"editingTracker.title" = "Редактирование привычки";
+"editingTracker.saveChanges" = "Сохранить";

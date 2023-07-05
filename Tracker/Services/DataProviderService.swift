@@ -100,17 +100,18 @@ final class DataProviderService {
         trackerEmoji != nil && selectedCategoryString != nil ? true : false
     }
     
-    // Getting and Setting operating arrays:
+    
+    // MARK: Getting and Setting operating arrays:
     func getVisiblieCategories() -> [TrackerCategory] {
         return visibleCategories ?? []
     }
     
-    func setVisibleCategory(_ category: [TrackerCategory]) {
-        visibleCategories = category
-    }
-    
     func getTrackerRecords() -> [TrackerRecord] {
         completedTrackers ?? []
+    }
+    
+    func setVisibleCategory(_ category: [TrackerCategory]) {
+        visibleCategories = category
     }
     
     func setTrackerRecords(_ records: [TrackerRecord]) {
@@ -166,8 +167,16 @@ final class DataProviderService {
         trackerStore?.addTracker(model: model)
     }
     
-    func editTrackerFromStore(id: UUID) {
-        trackerStore?.editTracker(id: id)
+    func editTrackerFromStore(_ trackerID: UUID) {
+        guard let name = trackerName, let color = trackerColor, let emoji = trackerEmoji,
+              let schedule = trackerSchedule else { return }
+        
+        trackerStore?.editTracker(newModel: Tracker(id: trackerID,
+                                                               name: name,
+                                                               color: color,
+                                                               emoji: emoji,
+                                                               schedule: schedule))
+        resetNewTrackerInfo()
     }
     
     func deleteTrackerFromStore(id: UUID) {
@@ -188,13 +197,12 @@ final class DataProviderService {
         trackerStore?.updateController()
     }
     
-    func pinTracker(from indexPath: IndexPath) {
-        trackerStore?.pinTracker(from: indexPath)
+    func pinTracker(_ trackerID: UUID) {
+        trackerStore?.pinTracker(trackerID)
     }
     
-    func unpinTracker(from indexPath: IndexPath) {
-        trackerStore?.unpinTracker(from: indexPath)
-        print("unpinTracker provider")
+    func unpinTracker(_ trackerID: UUID) {
+        trackerStore?.unpinTracker(trackerID)
     }
     
     //MARK: TrackerCategoryStore Block:
@@ -241,6 +249,10 @@ final class DataProviderService {
         } else {
             trackerRecordStore?.deleteRecord(tracker: model)
         }
+    }
+    
+    func setNewValueRecords(trackerID: UUID, newRecordValues: Int) {
+        trackerRecordStore?.editRecord(trackerID, newRecordValues: newRecordValues)
     }
     
     //MARK: Setting Controller protocols:

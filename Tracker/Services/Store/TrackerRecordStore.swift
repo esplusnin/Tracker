@@ -65,6 +65,37 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         return newRecordsArray
     }
     
+    func editRecord(_ trackerID: UUID, newRecordValues: Int) {
+        guard let fetchedResult = fetchedResultController.fetchedObjects else { return }
+        let oldRecords = fetchedResult.filter({ $0.id == trackerID })
+        let newRecordValue = DateService().getRandomDate(times: newRecordValues)
+        
+        var counter = 0
+        
+        if oldRecords.count < newRecordValues {
+            let times = newRecordValues - oldRecords.count
+            for _ in 1...times {
+                let record = TrackerRecordCoreData(context: context)
+                record.id = trackerID
+                record.date = newRecordValue[counter]
+                
+                counter += 1
+            }
+        } else if oldRecords.count > newRecordValues {
+            let times = oldRecords.count - newRecordValues
+            for _ in 1...times {
+                let record = oldRecords[counter]
+                context.delete(record)
+                
+                counter += 1
+            }
+        } else {
+            return
+        }
+        
+        appDelegate.saveContext()
+    }
+    
     func deleteRecord(tracker: TrackerRecord) {
         guard let objects = fetchedResultController.fetchedObjects else { return }
         var recordToDelete: TrackerRecordCoreData?

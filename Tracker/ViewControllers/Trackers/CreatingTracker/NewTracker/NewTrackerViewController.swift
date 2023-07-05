@@ -21,6 +21,14 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     private let newTrackerView = NewTrackerView()
     
+    // For Editing VC:
+    private var trackerID: UUID?
+    private var countOfDays = 0 {
+        didSet {
+            newTrackerView.countOfCompleteDaysLabel.text = LocalizableConstants.TrackerVC.countOfCompletedDays(countOfDays: countOfDays)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         newTrackerViewModel.view = self
@@ -54,6 +62,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     private func setTargets() {
         newTrackerView.cancelButton.addTarget(self, action: #selector(dismissNewTrackerVC), for: .touchUpInside)
         newTrackerView.createButton.addTarget(self, action: #selector(createNewTracker), for: .touchUpInside)
+        newTrackerView.leftStepperButton.addTarget(self, action: #selector(decreaseCountOfDays), for: .touchUpInside)
+        newTrackerView.rightStepperButton.addTarget(self, action: #selector(increaseCountOfDays), for: .touchUpInside)
     }
     
     private func setTitle() {
@@ -119,12 +129,29 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         dismissNewTrackerVC()
     }
     
+    @objc private func editTracker() {
+        guard let trackerID = trackerID else { return }
+        
+        newTrackerViewModel.editTracker(trackerID)
+        newTrackerViewModel.changeRecord(trackerID: trackerID, newRecordValues: countOfDays)
+        dismiss(animated: true)
+    }
+    
+    @objc private func increaseCountOfDays() {
+        countOfDays += 1
+    }
+    
+    @objc private func decreaseCountOfDays() {
+        countOfDays -= 1
+    }
+    
     @objc private func dismissNewTrackerVC() {
         dismiss(animated: true)
         creatingTrackerViewController?.backToTrackerViewController()
     }
 }
 
+// MARK: UITextFieldDelegate
 extension NewTrackerViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.becomeFirstResponder()
@@ -145,6 +172,7 @@ extension NewTrackerViewController: UITextFieldDelegate {
     }
 }
 
+// MARK: UITableViewDataSource
 extension NewTrackerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch kindOfTracker {
@@ -163,7 +191,7 @@ extension NewTrackerViewController: UITableViewDataSource {
         
         cell.categoryLabel.text = newTrackerViewModel.buttonsTitleForTableView[indexPath.row]
         cell.accessoryType = .disclosureIndicator
-        
+      
         switch indexPath.row {
         case 0:
              if let name = newTrackerViewModel.getSelectedCategoryName() {
@@ -190,6 +218,7 @@ extension NewTrackerViewController: UITableViewDataSource {
     }
 }
 
+// MARK: UITableViewDelegate
 extension NewTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
@@ -205,6 +234,7 @@ extension NewTrackerViewController: UITableViewDelegate {
     }
 }
 
+// MARK: UICollectionViewDataSource
 extension NewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let emojiArray = newTrackerViewModel.emojiArray.count
@@ -267,6 +297,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: UICollectionViewDelegateFlowLayout
 extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
@@ -363,6 +394,81 @@ extension NewTrackerViewController {
         
         newTrackerView.collectionView.dataSource = self
         newTrackerView.collectionView.delegate = self
+    }
+}
+
+// MARK: Set EditingVC:
+extension NewTrackerViewController {
+    func setupEditingVC(trackerInfo: Tracker, additionalTrackerInfo: AdditionTrackerInfo) {
+        setupEditingTrackerMenu(trackerInfo: trackerInfo, additionalTrackerInfo: additionalTrackerInfo)
+        setupCurrentTrackerInfo(trackerInfo: trackerInfo, additionatlInfo: additionalTrackerInfo)
+        setupTargets()
+    }
+    private func setupEditingTrackerMenu(trackerInfo: Tracker, additionalTrackerInfo: AdditionTrackerInfo) {
+        newTrackerViewModel.presetTrackerInfo(trackerInfo: trackerInfo, additionalTrackerInfo: additionalTrackerInfo)
+        
+        view.addSubview(newTrackerView.countOfCompleteDaysLabel)
+        view.addSubview(newTrackerView.leftStepperButton)
+        view.addSubview(newTrackerView.rightStepperButton)
+        
+        newTrackerView.countOfCompleteDaysLabel.snp.makeConstraints { make in
+            make.top.equalTo(newTrackerView.titleLabel).inset(35)
+            make.top.equalTo(newTrackerView.titleLabel).inset(35)
+            make.centerX.equalToSuperview()
+        }
+        
+        newTrackerView.leftStepperButton.snp.makeConstraints { make in
+            make.height.width.equalTo(30)
+            make.centerY.equalTo(newTrackerView.countOfCompleteDaysLabel.snp.centerY)
+            make.trailing.equalTo(newTrackerView.countOfCompleteDaysLabel.snp.leading).inset(-20)
+        }
+        
+        newTrackerView.rightStepperButton.snp.makeConstraints { make in
+            make.height.width.equalTo(30)
+            make.centerY.equalTo(newTrackerView.countOfCompleteDaysLabel.snp.centerY)
+            make.leading.equalTo(newTrackerView.countOfCompleteDaysLabel.snp.trailing).inset(-20)
+        }
+        
+        newTrackerView.textField.snp.removeConstraints()
+        newTrackerView.textField.snp.makeConstraints { make in
+            make.height.equalTo(75)
+            make.top.equalTo(newTrackerView.countOfCompleteDaysLabel.snp.bottom).inset(-30)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        setupCurrentTrackerInfo(trackerInfo: trackerInfo, additionatlInfo: additionalTrackerInfo)
+    }
+    
+    private func setupCurrentTrackerInfo(trackerInfo: Tracker, additionatlInfo: AdditionTrackerInfo) {
+//        let indexes = findIndexesOfEmojiAndColors(emoji: trackerInfo.emoji, color: trackerInfo.color)
+        
+        newTrackerViewModel.setTrackerName(name: trackerInfo.name)
+        newTrackerViewModel.setTrackerEmoji(emoji: trackerInfo.emoji)
+        newTrackerViewModel.setTrackerColor(color: trackerInfo.color)
+        
+        newTrackerView.titleLabel.text = LocalizableConstants.EditingHabit.title
+        newTrackerView.createButton.setTitle(LocalizableConstants.EditingHabit.saveButton, for: .normal)
+        newTrackerView.textField.text = trackerInfo.name
+        newTrackerView.countOfCompleteDaysLabel.text = LocalizableConstants.TrackerVC.countOfCompletedDays(countOfDays: additionatlInfo.countOfDays)
+        
+        countOfDays = additionatlInfo.countOfDays
+        trackerID = trackerInfo.id
+    }
+    
+    private func findIndexesOfEmojiAndColors(emoji: String, color: UIColor) -> (Int, Int) {
+        let colorService = UIColorMarshallingService()
+        let trackerColorHex = colorService.hexStringFromColor(color: color)
+        
+        guard let emojiIndex = newTrackerViewModel.emojiArray.firstIndex(where: { $0 == emoji }),
+              let colorIndex = newTrackerViewModel.colorSectionArray.firstIndex(
+                where: { colorService.hexStringFromColor(color: $0) == trackerColorHex }) else { return (0, 0) }
+        
+        return (emojiIndex, colorIndex)
+    }
+    
+    private func setupTargets() {
+        newTrackerView.createButton.removeTarget(self, action: #selector(createNewTracker), for: .touchUpInside)
+        newTrackerView.createButton.addTarget(self, action: #selector(editTracker), for: .touchUpInside)
     }
 }
 

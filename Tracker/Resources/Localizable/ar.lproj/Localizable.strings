@@ -89,3 +89,7 @@
 "contextMenu.edit" = "تحرير";
 "contextMenu.fix" = "لإصلاح";
 "contextMenu.unfix" = "أونبين";
+
+// Editing Tracker:
+"editingTracker.title" = "عادات التحرير";
+"editingTracker.saveChanges" = "حفظ";

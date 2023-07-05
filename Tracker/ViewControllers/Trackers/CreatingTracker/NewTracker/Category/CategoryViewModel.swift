@@ -24,8 +24,7 @@ final class CategoryViewModel: CategoryViewModelProtocol {
     
     func updateVisibleCategories() {
         var categories = dataProviderService.updateCategoryViewModel()
-
-        if let index = visibleCategories.firstIndex(where: { $0 == LocalizableConstants.TrackerVC.pinned }) {
+        if let index = categories.firstIndex(where: { $0 == LocalizableConstants.TrackerVC.pinned }) {
             categories.remove(at: index)
         }
         

@@ -110,4 +110,27 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
             isReadyToCreateNewTracker = false
         }
     }
+    
+    // MARK: Editing tracker info:
+    func presetTrackerInfo(trackerInfo: Tracker, additionalTrackerInfo: AdditionTrackerInfo) {
+        dataProviderService.trackerName = trackerInfo.name
+        dataProviderService.trackerEmoji = trackerInfo.emoji
+        dataProviderService.trackerColor = trackerInfo.color
+        dataProviderService.trackerSchedule = trackerInfo.schedule
+        dataProviderService.selectedCategoryString = additionalTrackerInfo.categoryName
+        
+        guard let schedule = dataProviderService.trackerSchedule else { return }
+        
+        let string = schedule.count == 7 ? LocalizableConstants.ScheduleVC.everyDay : ScheduleService().getScheduleString(schedule)
+        
+        dataProviderService.selectedScheduleString = string
+    }
+    
+    func editTracker(_ trackerID: UUID) {
+        dataProviderService.editTrackerFromStore(trackerID)
+    }
+    
+    func changeRecord(trackerID: UUID, newRecordValues: Int) {
+        dataProviderService.setNewValueRecords(trackerID: trackerID, newRecordValues: newRecordValues)
+    }
 }

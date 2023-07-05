@@ -89,3 +89,7 @@
 "contextMenu.edit" = "Edit";
 "contextMenu.fix" = "Pin";
 "contextMenu.unfix" = "Unpin";
+
+// Editing Tracker:
+"editingTracker.title" = "Editing habit";
+"editingTracker.saveChanges" = "Save changes";

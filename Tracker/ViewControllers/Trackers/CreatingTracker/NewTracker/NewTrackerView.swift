@@ -24,7 +24,7 @@ final class NewTrackerView {
         textField.layer.cornerRadius = 16
         
         if NSLocale.current.languageCode == "ar" {
-                textField.textAlignment = .right
+            textField.textAlignment = .right
         } else {
             textField.textAlignment = .left
         }
@@ -88,5 +88,34 @@ final class NewTrackerView {
         label.font = .systemFont(ofSize: 17)
         
         return label
+    }()
+    
+    lazy var countOfCompleteDaysLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 32)
+        
+        return label
+    }()
+    
+    lazy var leftStepperButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.layer.cornerRadius = 6
+        button.backgroundColor = .blackDay
+        button.setTitle("-", for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 20)
+        button.setTitleColor(.blackNight, for: .normal)
+        
+        return button
+    }()
+    
+    lazy var rightStepperButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.layer.cornerRadius = 6
+        button.backgroundColor = .blackDay
+        button.setTitle("+", for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 20)
+        button.setTitleColor(.blackNight, for: .normal)
+        
+        return button
     }()
 }

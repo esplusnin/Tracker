@@ -331,22 +331,30 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
     
     func pinTracker(from cell: TrackerCell) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-        trackersViewModel.pinTracker(from: indexPath)
+        let trackerID = trackersViewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
+
+        trackersViewModel.pinTracker(trackerID)
     }
     
     func unpinTracker(from cell: TrackerCell) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-        trackersViewModel.unpinTracker(from: indexPath)
-        print("unpinTracker tracker")
+        let trackerID = trackersViewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
+
+        trackersViewModel.unpinTracker(trackerID)
     }
     
     func editTracker(from cell: TrackerCell) {
-        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
+        guard let trackerModel = cell.trackerModel,
+              var additionalTrackerInfo = cell.additionalTrackerInfo,
+              let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
         
-        let visibleCategories = trackersViewModel.visibleTrackers
-        let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
+        let viewController = NewTrackerViewController()
         
-        trackersViewModel.editTracker(id: tracker.id)
+        additionalTrackerInfo.categoryName = trackersViewModel.visibleTrackers[indexPath.section].name
+        viewController.kindOfTracker = .habit
+        viewController.setupEditingVC(trackerInfo: trackerModel, additionalTrackerInfo: additionalTrackerInfo)
+        
+        present(viewController, animated: true)
     }
     
     func deleteTracker(from cell: TrackerCell) {
@@ -354,7 +362,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
                                  controller: self) { [weak self] in
             guard let self = self,
                   let indexPath = self.trackersView.trackersCollection.indexPath(for: cell) else { return }
-                        
+            
             let visibleCategories = self.trackersViewModel.visibleTrackers
             let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
             

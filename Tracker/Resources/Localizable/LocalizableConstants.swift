@@ -115,4 +115,9 @@ enum LocalizableConstants {
         static let fix = NSLocalizedString("contextMenu.fix", comment: "")
         static let unfix = NSLocalizedString("contextMenu.unfix", comment: "")
     }
+    
+    enum EditingHabit {
+        static let title = NSLocalizedString("editingTracker.title", comment: "")
+        static let saveButton = NSLocalizedString("editingTracker.saveChanges", comment: "")
+    }
 }
