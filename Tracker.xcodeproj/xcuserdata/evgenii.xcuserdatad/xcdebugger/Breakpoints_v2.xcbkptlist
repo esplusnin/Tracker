@@ -3,4 +3,22 @@
    uuid = "0AD9FE34-41F3-4BE8-9760-C07B1236D917"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "00F6A25E-28FA-4C36-B19A-F11B188695E7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TrackerTests/TrackerTests.swift"
+            startingColumnNumber = "35"
+            endingColumnNumber = "35"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
+            landmarkName = "testTrackerViewControllerRecursiveBlack()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
