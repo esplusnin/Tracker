@@ -21,6 +21,7 @@ final class DataProviderService {
     var scheduleViewModel: ScheduleViewModelProtocol?
     var newTrackerViewModel: NewTrackerViewModelProtocol?
     var trackersViewModel: TrackersViewModelProtocol?
+    var statisticsViewModel: StatisticsViewModelProtocol?
     
     private init() {}
     
@@ -142,6 +143,7 @@ final class DataProviderService {
     
     func recordDidUpdate() {
         trackersViewModel?.recordDidUpdate()
+        statisticsViewModel?.setCountOfTotalCompletedTrackers()
     }
     
     // Return string of current localize value from selected filter 
@@ -255,6 +257,11 @@ final class DataProviderService {
         trackerRecordStore?.editRecord(trackerID, newRecordValues: newRecordValues)
     }
     
+    // MARK: Statistics block:
+    func getTotalCompletedTrackers() -> Int {
+        trackerRecordStore?.getTotalCompletedTrackers() ?? 0
+    }
+    
     //MARK: Setting Controller protocols:
     func bindCategoryViewModel(controller: CategoryViewModelProtocol) {
         categoryViewModel = controller
@@ -270,5 +277,9 @@ final class DataProviderService {
     
     func bindTrackersViewModel(controller: TrackersViewModelProtocol) {
         trackersViewModel = controller
+    }
+    
+    func bindStatisticsViewModel(controller: StatisticsViewModelProtocol) {
+        statisticsViewModel = controller
     }
 }

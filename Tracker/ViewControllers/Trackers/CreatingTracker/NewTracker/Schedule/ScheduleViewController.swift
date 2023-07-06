@@ -14,7 +14,7 @@ final class ScheduleViewController: UIViewController {
     var newTrackerViewController: NewTrackerViewControllerProtocol?
     
     private let scheduleView = ScheduleView()
-    private let scheduleViewModel = ScheduleViewModel()
+    private let viewModel = ScheduleViewModel()
     private var scheduleService = ScheduleService()
     
     override func viewDidLoad() {
@@ -28,7 +28,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     private func bind() {
-        scheduleViewModel.$isReadyToCloseScheduleVC.bind { [weak self] value in
+        viewModel.$isReadyToCloseScheduleVC.bind { [weak self] value in
             guard let self = self else { return }
             
             if value == true {
@@ -37,7 +37,7 @@ final class ScheduleViewController: UIViewController {
             }
         }
         
-        scheduleViewModel.$isReadyToUnlockCreateButton.bind { [weak self] value in
+        viewModel.$isReadyToUnlockCreateButton.bind { [weak self] value in
             guard let self = self else { return }
             
             if value == true {
@@ -53,13 +53,13 @@ final class ScheduleViewController: UIViewController {
     }
     
     @objc private  func setCurrentScheduleForTracker() {
-        scheduleViewModel.setSchedule()
+        viewModel.setSchedule()
     }
 }
 
 extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        scheduleViewModel.daysArray.count
+        viewModel.daysArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -67,13 +67,13 @@ extension ScheduleViewController: UITableViewDataSource {
             withIdentifier: "ScheduleCell", for: indexPath) as? ScheduleCell else { return UITableViewCell() }
         
         cell.delegate = self
-        cell.viewModel = scheduleViewModel.daysArray[indexPath.row]
+        cell.viewModel = viewModel.daysArray[indexPath.row]
         
-        let numberOfDay = scheduleViewModel.returnNumberOfDay(from: indexPath)
+        let numberOfDay = viewModel.returnNumberOfDay(from: indexPath)
        
-        if scheduleViewModel.isCurrentDayExistInSchedule(day: numberOfDay) {
+        if viewModel.isCurrentDayExistInSchedule(day: numberOfDay) {
             cell.switcher.isOn = true
-            scheduleViewModel.addDayToSchedule(day: numberOfDay)
+            viewModel.addDayToSchedule(day: numberOfDay)
         }
                 
         return cell
@@ -95,10 +95,10 @@ extension ScheduleViewController: ScheduleViewControllerDelegate {
         let numberOfDay = scheduleService.addWeekDayToSchedule(dayName: dayName)
         
         if cell.switcher.isOn {
-            scheduleViewModel.addDayToSchedule(day: numberOfDay)
+            viewModel.addDayToSchedule(day: numberOfDay)
         } else {
-            guard let index = scheduleViewModel.schedule.firstIndex(of: numberOfDay) else { return }
-            scheduleViewModel.removeAddFromSchedule(index: index)
+            guard let index = viewModel.schedule.firstIndex(of: numberOfDay) else { return }
+            viewModel.removeAddFromSchedule(index: index)
         }
     }
 }

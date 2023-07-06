@@ -10,7 +10,7 @@ import SnapKit
 
 class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
-    var trackersViewModel = TrackersViewModel()
+    private let viewModel = TrackersViewModel()
     private let trackersView = TrackersView()
     private var indexToUpdate: IndexPath?
     
@@ -20,20 +20,20 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         bind()
         setDate()
         
-        trackersViewModel.showNewTrackersAfterChangeDate()
+        viewModel.showNewTrackersAfterChangeDate()
         
         setViews()
         setMainCollectionSettings()
         
-        trackersViewModel.setVisibleTrackersFromProvider()
+        viewModel.setVisibleTrackersFromProvider()
     }
     
     func bind() {
-        trackersViewModel.$visibleTrackers.bind { [weak self] _ in
+        viewModel.$visibleTrackers.bind { [weak self] _ in
             guard let self = self else { return }
             self.reloadCollectionView()
 
-            if self.trackersViewModel.visibleTrackers.count == 0 {
+            if self.viewModel.visibleTrackers.count == 0 {
                 self.trackersView.filterButton.removeFromSuperview()
                 self.trackersView.trackersCollection.alpha = 0
             } else {
@@ -42,7 +42,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             }
         }
         
-        trackersViewModel.$isRecordUpdate.bind { [weak self] _ in
+        viewModel.$isRecordUpdate.bind { [weak self] _ in
             guard let self = self,
                   let indexToUpdate = indexToUpdate,
                   let cell = trackersView.trackersCollection.dequeueReusableCell(withReuseIdentifier: "Cell",
@@ -50,23 +50,23 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             cell.numberOfDaysLabel.reloadInputViews()
         }
         
-        trackersViewModel.$isVisibleCategoryEmptyAfterSearch.bind { [weak self] _ in
+        viewModel.$isVisibleCategoryEmptyAfterSearch.bind { [weak self] _ in
             guard let self = self else { return }
             self.setDumbImageViewAfterSearch()
         }
         
-        trackersViewModel.$isVisibleCategoryEmpty.bind { [weak self] _ in
+        viewModel.$isVisibleCategoryEmpty.bind { [weak self] _ in
             guard let self = self else { return }
             self.setDumbWithNoTrackers()
         }
         
-        trackersViewModel.$isNeedToChangeDate.bind { [weak self] value in
+        viewModel.$isNeedToChangeDate.bind { [weak self] value in
             guard let self = self else { return }
             
             if value == true {
                 trackersView.navigationBarDatePicker.date = Date()
                 setDate()
-                trackersViewModel.showNewTrackersAfterChangeDate()
+                viewModel.showNewTrackersAfterChangeDate()
             }
         }
     }
@@ -86,7 +86,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     private func setDate() {
         let date = DateService().convertDateWithoutTimes(date: trackersView.navigationBarDatePicker.date)
-        trackersViewModel.currentDate = date
+        viewModel.currentDate = date
     }
     
     private func setDumbImageViewAfterSearch() {
@@ -142,7 +142,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     @objc private func updateVisibleTrackersAfterSearch() {
         guard let searchFieldText = trackersView.searchTextField.text else { return }
         
-        trackersViewModel.updateVisibleTrackersAfterSearch(filledName: searchFieldText)
+        viewModel.updateVisibleTrackersAfterSearch(filledName: searchFieldText)
     }
     
     @objc private func addCanceletionButton() {
@@ -168,7 +168,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     @objc private func setSearchFieldWithoutCancelationButton() {
         resetTextField()
-        let visibleCategories = trackersViewModel.visibleTrackers
+        let visibleCategories = viewModel.visibleTrackers
         trackersView.cancelationButton.removeFromSuperview()
         
         trackersView.searchTextField.snp.makeConstraints { make in
@@ -181,13 +181,13 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             setDumbWithNoTrackers()
         }
         
-        trackersViewModel.showNewTrackersAfterChangeDate()
+        viewModel.showNewTrackersAfterChangeDate()
     }
     
     @objc private func setDateFromDatePicker() {
         setDate()
         resetTextField()
-        trackersViewModel.showNewTrackersAfterChangeDate()
+        viewModel.showNewTrackersAfterChangeDate()
         reloadCollectionView()
         
         self.dismiss(animated: true)
@@ -205,7 +205,7 @@ extension TrackersViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if range.length == 1 && string.isEmpty || !textField.hasText {
-            trackersViewModel.showNewTrackersAfterChangeDate()
+            viewModel.showNewTrackersAfterChangeDate()
         }
         
         return true
@@ -260,12 +260,12 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 // MARK: UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        trackersViewModel.visibleTrackers.count
+        viewModel.visibleTrackers.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        trackersViewModel.visibleTrackers[section].trackerDictionary.count
+        viewModel.visibleTrackers[section].trackerDictionary.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -274,12 +274,12 @@ extension TrackersViewController: UICollectionViewDataSource {
             withReuseIdentifier: "Cell",
             for: indexPath) as? TrackerCell else { return UICollectionViewCell() }
         
-        let visibleCategories = trackersViewModel.visibleTrackers
+        let visibleCategories = viewModel.visibleTrackers
         let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
         let sectionName = visibleCategories[indexPath.section].name
         
-        trackersViewModel.fillAdditionalInfo(id: tracker.id)
-        let additionalInfo = trackersViewModel.additionTrackerInfo
+        viewModel.fillAdditionalInfo(id: tracker.id)
+        let additionalInfo = viewModel.additionTrackerInfo
         
         cell.trackerModel = tracker
         cell.additionalTrackerInfo = additionalInfo
@@ -294,7 +294,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
-        let visibleCategories = trackersViewModel.visibleTrackers
+        let visibleCategories = viewModel.visibleTrackers
         
         var id: String
         switch kind {
@@ -319,28 +319,28 @@ extension TrackersViewController: UICollectionViewDataSource {
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
     func addCurrentTrackerToCompletedThisDate(_ cell: TrackerCell, isAddDay: Bool) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell),
-              let date = trackersViewModel.currentDate else { return }
+              let date = viewModel.currentDate else { return }
         
-        let tracker = trackersViewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row]
+        let tracker = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row]
         indexToUpdate = indexPath
-        trackersViewModel.changeStatusTrackerRecord(model: TrackerRecord(id: tracker.id,
+        viewModel.changeStatusTrackerRecord(model: TrackerRecord(id: tracker.id,
                                                                         date: date), isAddDay: isAddDay)
-        trackersViewModel.fillAdditionalInfo(id: tracker.id)
-        cell.additionalTrackerInfo = trackersViewModel.additionTrackerInfo
+        viewModel.fillAdditionalInfo(id: tracker.id)
+        cell.additionalTrackerInfo = viewModel.additionTrackerInfo
     }
     
     func pinTracker(from cell: TrackerCell) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-        let trackerID = trackersViewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
+        let trackerID = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
 
-        trackersViewModel.pinTracker(trackerID)
+        viewModel.pinTracker(trackerID)
     }
     
     func unpinTracker(from cell: TrackerCell) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-        let trackerID = trackersViewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
+        let trackerID = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
 
-        trackersViewModel.unpinTracker(trackerID)
+        viewModel.unpinTracker(trackerID)
     }
     
     func editTracker(from cell: TrackerCell) {
@@ -350,7 +350,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         
         let viewController = NewTrackerViewController()
         
-        additionalTrackerInfo.categoryName = trackersViewModel.visibleTrackers[indexPath.section].name
+        additionalTrackerInfo.categoryName = viewModel.visibleTrackers[indexPath.section].name
         viewController.kindOfTracker = .habit
         viewController.setupEditingVC(trackerInfo: trackerModel, additionalTrackerInfo: additionalTrackerInfo)
         
@@ -363,10 +363,10 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             guard let self = self,
                   let indexPath = self.trackersView.trackersCollection.indexPath(for: cell) else { return }
             
-            let visibleCategories = self.trackersViewModel.visibleTrackers
+            let visibleCategories = self.viewModel.visibleTrackers
             let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
             
-            self.trackersViewModel.deleteTracker(id: tracker.id)
+            self.viewModel.deleteTracker(id: tracker.id)
         }
     }
 }

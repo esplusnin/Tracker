@@ -11,7 +11,7 @@ import SnapKit
 final class EditingCategoryViewController: UIViewController {
     
     private let editingCategoryView = EditingCategoryView()
-    private let editingViewModel = EditingViewModel()
+    private let viewModel = EditingViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +27,7 @@ final class EditingCategoryViewController: UIViewController {
     init(categoryName: String) {
         super.init(nibName: nil, bundle: nil)
         self.setTextFieldPlaceholder(categoryName)
-        self.editingViewModel.setOldCategoryName(categoryName)
+        self.viewModel.setOldCategoryName(categoryName)
     }
     
     required init?(coder: NSCoder) {
@@ -45,7 +45,7 @@ final class EditingCategoryViewController: UIViewController {
     @objc private func editCategory() {
         guard let categoryName = editingCategoryView.textField.text else { return }
         
-        editingViewModel.editCategory(newCategoryName: categoryName)
+        viewModel.editCategory(newCategoryName: categoryName)
         dismiss(animated: true)
     }
 }

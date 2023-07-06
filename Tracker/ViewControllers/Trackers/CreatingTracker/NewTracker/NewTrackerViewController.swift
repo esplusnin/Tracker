@@ -15,12 +15,12 @@ enum KindOfTrackers {
 
 final class NewTrackerViewController: UIViewController, NewTrackerViewControllerProtocol {
     
-    var newTrackerViewModel = NewTrackerViewModel()
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
     var kindOfTracker: KindOfTrackers?
     
     private let newTrackerView = NewTrackerView()
-    
+    private let viewModel = NewTrackerViewModel()
+
     // For Editing VC:
     private var trackerID: UUID?
     private var countOfDays = 0 {
@@ -31,7 +31,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        newTrackerViewModel.view = self
+        viewModel.view = self
         newTrackerView.textField.delegate = self
         
         setViews()
@@ -45,7 +45,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     func bind() {
-        newTrackerViewModel.$isReadyToCreateNewTracker.bind { [weak self] value in
+        viewModel.$isReadyToCreateNewTracker.bind { [weak self] value in
             guard let self = self else { return }
             if value == true {
                 self.newTrackerView.createButton.controlState(isLock: false)
@@ -124,16 +124,16 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     @objc private func createNewTracker() {
-        newTrackerViewModel.createNewTracker()
-        newTrackerViewModel.resetTrackerInfoAfterCreate()
+        viewModel.createNewTracker()
+        viewModel.resetTrackerInfoAfterCreate()
         dismissNewTrackerVC()
     }
     
     @objc private func editTracker() {
         guard let trackerID = trackerID else { return }
         
-        newTrackerViewModel.editTracker(trackerID)
-        newTrackerViewModel.changeRecord(trackerID: trackerID, newRecordValues: countOfDays)
+        viewModel.editTracker(trackerID)
+        viewModel.changeRecord(trackerID: trackerID, newRecordValues: countOfDays)
         dismiss(animated: true)
     }
     
@@ -142,7 +142,9 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     @objc private func decreaseCountOfDays() {
-        countOfDays -= 1
+        if countOfDays > 0 {
+            countOfDays -= 1
+        }
     }
     
     @objc private func dismissNewTrackerVC() {
@@ -167,7 +169,7 @@ extension NewTrackerViewController: UITextFieldDelegate {
         guard let name = name else { return }
         
         if name.count < 38 {
-            newTrackerViewModel.setTrackerName(name: name)
+            viewModel.setTrackerName(name: name)
         }
     }
 }
@@ -189,19 +191,19 @@ extension NewTrackerViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "Cell", for: indexPath) as? NewTrackerCell else { return UITableViewCell() }
         
-        cell.categoryLabel.text = newTrackerViewModel.buttonsTitleForTableView[indexPath.row]
+        cell.categoryLabel.text = viewModel.buttonsTitleForTableView[indexPath.row]
         cell.accessoryType = .disclosureIndicator
       
         switch indexPath.row {
         case 0:
-             if let name = newTrackerViewModel.getSelectedCategoryName() {
+             if let name = viewModel.getSelectedCategoryName() {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(name)
             } else {
                 cell.setViewsWithoutCategory()
             }
         case 1:
-            if let schedule = newTrackerViewModel.getSelectedScheduleString() {
+            if let schedule = viewModel.getSelectedScheduleString() {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(schedule)
             } else {
@@ -237,9 +239,9 @@ extension NewTrackerViewController: UITableViewDelegate {
 // MARK: UICollectionViewDataSource
 extension NewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let emojiArray = newTrackerViewModel.emojiArray.count
+        let emojiArray = viewModel.emojiArray.count
         
-        return section == 0 ? emojiArray : newTrackerViewModel.colorSectionArray.count
+        return section == 0 ? emojiArray : viewModel.colorSectionArray.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -252,7 +254,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
             withReuseIdentifier: "CollectionCell",
             for: indexPath) as? NewTrackerCollectionCell else { return UICollectionViewCell() }
         
-        let emojiArray = newTrackerViewModel.emojiArray
+        let emojiArray = viewModel.emojiArray
         
         switch indexPath.section {
         case 0:
@@ -260,7 +262,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
             cell.emojiLabel.text = emojiArray[indexPath.row]
         case 1:
             cell.setSecondSection()
-            cell.colorSectionImageView.backgroundColor = newTrackerViewModel.colorSectionArray[indexPath.row]
+            cell.colorSectionImageView.backgroundColor = viewModel.colorSectionArray[indexPath.row]
         default:
             return UICollectionViewCell()
         }
@@ -346,12 +348,12 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         switch indexPath.section {
         case 0:
             cell.backgroundColor = .lightGray
-            newTrackerViewModel.setTrackerEmoji(emoji: cell.emojiLabel.text ?? "")
+            viewModel.setTrackerEmoji(emoji: cell.emojiLabel.text ?? "")
         case 1:
             let color = cell.colorSectionImageView.backgroundColor?.withAlphaComponent(0.3)
             cell.layer.borderWidth = 3
             cell.layer.borderColor = color?.cgColor
-            newTrackerViewModel.setTrackerColor(color: cell.colorSectionImageView.backgroundColor ?? UIColor())
+            viewModel.setTrackerColor(color: cell.colorSectionImageView.backgroundColor ?? UIColor())
         default:
             cell.backgroundColor = .lightGray
         }
@@ -362,7 +364,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         
         cell.backgroundColor = .none
         
-        newTrackerViewModel.resetTrackerInfoAfterDeselect(section: indexPath.section)
+        viewModel.resetTrackerInfoAfterDeselect(section: indexPath.section)
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
@@ -405,7 +407,7 @@ extension NewTrackerViewController {
         setupTargets()
     }
     private func setupEditingTrackerMenu(trackerInfo: Tracker, additionalTrackerInfo: AdditionTrackerInfo) {
-        newTrackerViewModel.presetTrackerInfo(trackerInfo: trackerInfo, additionalTrackerInfo: additionalTrackerInfo)
+        viewModel.presetTrackerInfo(trackerInfo: trackerInfo, additionalTrackerInfo: additionalTrackerInfo)
         
         view.addSubview(newTrackerView.countOfCompleteDaysLabel)
         view.addSubview(newTrackerView.leftStepperButton)
@@ -442,9 +444,9 @@ extension NewTrackerViewController {
     private func setupCurrentTrackerInfo(trackerInfo: Tracker, additionatlInfo: AdditionTrackerInfo) {
 //        let indexes = findIndexesOfEmojiAndColors(emoji: trackerInfo.emoji, color: trackerInfo.color)
         
-        newTrackerViewModel.setTrackerName(name: trackerInfo.name)
-        newTrackerViewModel.setTrackerEmoji(emoji: trackerInfo.emoji)
-        newTrackerViewModel.setTrackerColor(color: trackerInfo.color)
+        viewModel.setTrackerName(name: trackerInfo.name)
+        viewModel.setTrackerEmoji(emoji: trackerInfo.emoji)
+        viewModel.setTrackerColor(color: trackerInfo.color)
         
         newTrackerView.titleLabel.text = LocalizableConstants.EditingHabit.title
         newTrackerView.createButton.setTitle(LocalizableConstants.EditingHabit.saveButton, for: .normal)
@@ -459,8 +461,8 @@ extension NewTrackerViewController {
         let colorService = UIColorMarshallingService()
         let trackerColorHex = colorService.hexStringFromColor(color: color)
         
-        guard let emojiIndex = newTrackerViewModel.emojiArray.firstIndex(where: { $0 == emoji }),
-              let colorIndex = newTrackerViewModel.colorSectionArray.firstIndex(
+        guard let emojiIndex = viewModel.emojiArray.firstIndex(where: { $0 == emoji }),
+              let colorIndex = viewModel.colorSectionArray.firstIndex(
                 where: { colorService.hexStringFromColor(color: $0) == trackerColorHex }) else { return (0, 0) }
         
         return (emojiIndex, colorIndex)

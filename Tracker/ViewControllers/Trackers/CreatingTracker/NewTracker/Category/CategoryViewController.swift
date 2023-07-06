@@ -10,8 +10,8 @@ import UIKit
 final class CategoryViewController: UIViewController, CategoryViewControllerProtocol {
     
     var newTrackerViewController: NewTrackerViewControllerProtocol?
-    var categoryViewModel = CategoryViewModel()
     
+    private let viewModel = CategoryViewModel()
     private let categoryView = CategoryView()
         
     override func viewDidLoad() {
@@ -30,7 +30,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     }
     
     private func bindViewModel() {
-        categoryViewModel.$visibleCategories.bind { [weak self] _ in
+        viewModel.$visibleCategories.bind { [weak self] _ in
             guard let self = self else { return }
 
             self.checkToSetupDumb()
@@ -45,7 +45,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     }
     
     private func checkToSetupDumb() {
-        categoryView.tableView.alpha = categoryViewModel.numberOfCategories == 0 ? 0 : 1
+        categoryView.tableView.alpha = viewModel.numberOfCategories == 0 ? 0 : 1
     }
     
     private func switchToEditingVC(_ name: String) {
@@ -67,7 +67,7 @@ extension CategoryViewController: UITableViewDelegate {
         cell.accessoryType = cell.accessoryType == UITableViewCell.AccessoryType.none ? .checkmark : .none
         cell.selectionStyle = .none
         
-        categoryViewModel.setSelectedCategory(name: cell.titleLabel.text ?? "")
+        viewModel.setSelectedCategory(name: cell.titleLabel.text ?? "")
         newTrackerViewController?.reloadTableView()
         
         self.dismiss(animated: true)
@@ -81,7 +81,7 @@ extension CategoryViewController: UITableViewDelegate {
 
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        categoryViewModel.numberOfCategories ?? 0
+        viewModel.numberOfCategories ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -90,9 +90,9 @@ extension CategoryViewController: UITableViewDataSource {
             for: indexPath) as? CategoryCell else { return UITableViewCell() }
         
         cell.delegate = self
-        cell.viewModel = categoryViewModel.visibleCategories[indexPath.row]
-        cell.accessoryType = cell.titleLabel.text == categoryViewModel.getSelectedCategory() ? .checkmark : .none
-        if indexPath.row + 1 == categoryViewModel.numberOfCategories {
+        cell.viewModel = viewModel.visibleCategories[indexPath.row]
+        cell.accessoryType = cell.titleLabel.text == viewModel.getSelectedCategory() ? .checkmark : .none
+        if indexPath.row + 1 == viewModel.numberOfCategories {
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 16
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -119,7 +119,7 @@ extension CategoryViewController: CategoryCellDelegate {
     func removeCategory(_ cell: CategoryCell) {
         AlertService().showAlert(event: .removeCategory, controller: self) { [weak self] in
             guard let self = self, let categoryName = cell.titleLabel.text else { return }
-            self.categoryViewModel.removeCategory(categoryName)
+            self.viewModel.removeCategory(categoryName)
         }
     }
 }

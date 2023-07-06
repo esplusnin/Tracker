@@ -127,6 +127,15 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         
         return answer
     }
+    
+    // Statistics block:
+    func getTotalCompletedTrackers() -> Int {
+        fetchedResultController.fetchedObjects?.count ?? 0
+    }
+    
+    func getTotalSequintance() -> Int {
+        0
+    }
 }
 
 extension TrackerRecordStore: NSFetchedResultsControllerDelegate {

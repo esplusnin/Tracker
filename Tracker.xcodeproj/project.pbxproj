@@ -80,6 +80,8 @@
 		7EDAE2852A41D1B200A75A69 /* ScheduleViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDAE2842A41D1B200A75A69 /* ScheduleViewModelProtocol.swift */; };
 		7EDAE2892A41DE5E00A75A69 /* NewTrackerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDAE2882A41DE5E00A75A69 /* NewTrackerViewModel.swift */; };
 		7EDAE28B2A41E5B300A75A69 /* NewTrackerViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EDAE28A2A41E5B300A75A69 /* NewTrackerViewModelProtocol.swift */; };
+		7EE5987B2A558ECC00998A3F /* StatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE5987A2A558ECC00998A3F /* StatisticsViewModel.swift */; };
+		7EE598812A56A63D00998A3F /* StatisticsViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE598802A56A63D00998A3F /* StatisticsViewModelProtocol.swift */; };
 		7EF6209E2A1629B900B66A4B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF6209D2A1629B900B66A4B /* AppDelegate.swift */; };
 		7EF620A02A1629B900B66A4B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF6209F2A1629B900B66A4B /* SceneDelegate.swift */; };
 		7EF620A22A1629B900B66A4B /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF620A12A1629B900B66A4B /* TrackersViewController.swift */; };
@@ -164,6 +166,8 @@
 		7EDAE2842A41D1B200A75A69 /* ScheduleViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewModelProtocol.swift; sourceTree = "<group>"; };
 		7EDAE2882A41DE5E00A75A69 /* NewTrackerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewModel.swift; sourceTree = "<group>"; };
 		7EDAE28A2A41E5B300A75A69 /* NewTrackerViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewModelProtocol.swift; sourceTree = "<group>"; };
+		7EE5987A2A558ECC00998A3F /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
+		7EE598802A56A63D00998A3F /* StatisticsViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModelProtocol.swift; sourceTree = "<group>"; };
 		7EF6209A2A1629B800B66A4B /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF6209D2A1629B900B66A4B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7EF6209F2A1629B900B66A4B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -428,7 +432,9 @@
 		7ED3D3FF2A1A197A004C371B /* Statistic */ = {
 			isa = PBXGroup;
 			children = (
+				7EE598822A56A64200998A3F /* Protocols */,
 				7ECDD91C2A1B396200771EE4 /* StatisticView.swift */,
+				7EE5987A2A558ECC00998A3F /* StatisticsViewModel.swift */,
 				7ED3D3FA2A1A0E21004C371B /* StatisticViewController.swift */,
 			);
 			path = Statistic;
@@ -477,6 +483,14 @@
 				7ECDD9532A1DF60A00771EE4 /* NewCategoryViewController.swift */,
 			);
 			path = NewCategory;
+			sourceTree = "<group>";
+		};
+		7EE598822A56A64200998A3F /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				7EE598802A56A63D00998A3F /* StatisticsViewModelProtocol.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		7EF620912A1629B800B66A4B = {
@@ -598,6 +612,7 @@
 				7ECDDA2A2A2F635300B8167A /* TrackerCategoryStoreProtocol.swift in Sources */,
 				7ECDD93D2A1BC5BD00771EE4 /* ScheduleViewController.swift in Sources */,
 				7ECDD9522A1DEFDA00771EE4 /* CategoryView.swift in Sources */,
+				7EE598812A56A63D00998A3F /* StatisticsViewModelProtocol.swift in Sources */,
 				7ECDD94C2A1CB6E100771EE4 /* ScheduleView.swift in Sources */,
 				7E1E541E2A1F900A006FD792 /* CategoryViewControllerProtocol.swift in Sources */,
 				7EB1D68F2A405CAB00106032 /* OnboardingPageViewController.swift in Sources */,
@@ -635,6 +650,7 @@
 				7ED3D3FB2A1A0E21004C371B /* StatisticViewController.swift in Sources */,
 				7E584B592A52FC24004C1341 /* FilterViewModel.swift in Sources */,
 				7ECDDA272A2F577600B8167A /* TrackerStoreProtocol.swift in Sources */,
+				7EE5987B2A558ECC00998A3F /* StatisticsViewModel.swift in Sources */,
 				7ECDD94A2A1CB45000771EE4 /* TrackerRecord.swift in Sources */,
 				7E102F962A53DF1F00A1BDB7 /* EditingCategoryViewController.swift in Sources */,
 				7EB1D6952A405D1700106032 /* FirstOnboardingView.swift in Sources */,
