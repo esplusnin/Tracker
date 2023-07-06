@@ -99,6 +99,7 @@ enum LocalizableConstants {
     enum StatisticsVC {
         static let title = NSLocalizedString("statistics.title", comment: "")
         static let nothingToAnalyze = NSLocalizedString("statistics.nothingToAnalyze", comment: "")
+        static let totalCompletedTracker = NSLocalizedString("statistics.totalCompletedTracker", comment: "")
     }
     
     enum AlertsVC {

@@ -143,7 +143,7 @@ final class DataProviderService {
     
     func recordDidUpdate() {
         trackersViewModel?.recordDidUpdate()
-        statisticsViewModel?.setCountOfTotalCompletedTrackers()
+        statisticsViewModel?.checkIsStatisticsExist()
     }
     
     // Return string of current localize value from selected filter 
@@ -183,6 +183,7 @@ final class DataProviderService {
     
     func deleteTrackerFromStore(id: UUID) {
         trackerStore?.deleteTracker(id: id)
+        trackerRecordStore?.editRecord(id, newRecordValues: 0)
     }
     
     func getTrackersFromStore(categoryName: String, index: Int) -> Tracker {

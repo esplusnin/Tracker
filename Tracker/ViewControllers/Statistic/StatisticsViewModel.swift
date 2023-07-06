@@ -27,11 +27,13 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
     func checkIsStatisticsExist() {
         if dataProviderService.getTotalCompletedTrackers() != 0 {
             isStatisticsExist = true
+        } else {
+            isStatisticsExist = false
         }
 
     }
     
-    func setCountOfTotalCompletedTrackers() {
+    private func setCountOfTotalCompletedTrackers() {
         totalCountOfCompletedTrackers = dataProviderService.getTotalCompletedTrackers()
     }
 }

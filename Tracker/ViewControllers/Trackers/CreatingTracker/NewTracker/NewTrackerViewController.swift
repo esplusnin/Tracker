@@ -18,7 +18,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
     var kindOfTracker: KindOfTrackers?
     
-    private let newTrackerView = NewTrackerView()
+    private(set) var newTrackerView = NewTrackerView()
     private let viewModel = NewTrackerViewModel()
 
     // For Editing VC:

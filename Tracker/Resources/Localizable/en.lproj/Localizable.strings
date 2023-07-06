@@ -76,6 +76,7 @@
 // StatisticsVC:
 "statistics.title" = "Statistics";
 "statistics.nothingToAnalyze" = "There is nothing to analyze yet";
+"statistics.totalCompletedTracker" = "Trackers completed";
 
 // Alerts:
 "alert.removeCategory.title" = "Is this category definitely not needed?";

@@ -76,6 +76,7 @@
 // StatisticsVC:
 "statistics.title" = "الإحصاءات";
 "statistics.nothingToAnalyze" = "لا يوجد شيء لتحليل حتى الآن";
+"statistics.totalCompletedTracker" = "بتتبع الانتهاء";
 
 // Alerts:
 "alert.removeCategory.title" = "هل هذه الفئة بالتأكيد ليست هناك حاجة?";

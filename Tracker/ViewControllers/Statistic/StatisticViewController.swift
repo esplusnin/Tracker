@@ -10,7 +10,7 @@ import SnapKit
 
 final class StatisticViewController: UIViewController {
     
-    private let statisticView = StatisticView()
+    private(set) var statisticView = StatisticView()
     private let viewModel = StatisticsViewModel()
     
     override func viewDidLoad() {
@@ -46,6 +46,9 @@ final class StatisticViewController: UIViewController {
         if value == true {
             setStatisticsViews()
             setStatisticsViewsConstraints()
+        } else {
+            setDumbs()
+            setDumbsConstraints()
         }
     }
 }
@@ -53,6 +56,8 @@ final class StatisticViewController: UIViewController {
 // MARK: Set views:
 extension StatisticViewController {
     private func setDumbs() {
+        statisticView.totalCompletedTrackerView.removeFromSuperview()
+        
         view.addSubview(statisticView.emptyStatisticImageView)
         view.addSubview(statisticView.emptyStatisticLabel)
     }

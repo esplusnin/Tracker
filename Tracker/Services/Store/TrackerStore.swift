@@ -157,5 +157,6 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
 extension TrackerStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         dataProviderService.inizializeVisibleCategories()
+        dataProviderService.recordDidUpdate()
     }
 }

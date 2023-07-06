@@ -39,7 +39,7 @@ final class StatisticView {
     lazy var countOfCompletedTrackersLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 34)
-        label.textAlignment = .left
+        label.textAlignment = NSLocale.current.languageCode == "ar" ? .right : .left
         
         return label
     }()
@@ -47,7 +47,7 @@ final class StatisticView {
     lazy var completedTrackersLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12)
-        label.text = "Трекеров завершено"
+        label.text = LocalizableConstants.StatisticsVC.totalCompletedTracker
         
         return label
     }()

@@ -11,8 +11,8 @@ import SnapKit
 class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     private let viewModel = TrackersViewModel()
-    private let trackersView = TrackersView()
     private var indexToUpdate: IndexPath?
+    private(set) var trackersView = TrackersView()
     
     override func viewDidLoad() {
         super.viewDidLoad()

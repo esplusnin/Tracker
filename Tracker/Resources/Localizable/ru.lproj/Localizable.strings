@@ -76,6 +76,7 @@
 // StatisticsVC:
 "statistics.title" = "Статистика";
 "statistics.nothingToAnalyze" = "Анализировать пока нечего";
+"statistics.totalCompletedTracker" = "Трекеров завершено";
 
 // Alerts:
 "alert.removeCategory.title" = "Эта категория точно не нужна?";

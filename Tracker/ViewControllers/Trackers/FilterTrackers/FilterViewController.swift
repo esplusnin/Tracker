@@ -10,16 +10,16 @@ import SnapKit
 
 final class FilterViewController: UIViewController {
     
-    private let filterViews = FilterView()
+    private(set) var filterView = FilterView()
     private let viewModel = FilterViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        filterViews.tableView.register(FilterCell.self, forCellReuseIdentifier: "FilterCell")
-        filterViews.tableView.dataSource = self
-        filterViews.tableView.delegate = self
+        filterView.tableView.register(FilterCell.self, forCellReuseIdentifier: "FilterCell")
+        filterView.tableView.dataSource = self
+        filterView.tableView.delegate = self
         
         setViews()
         setConstraints()
@@ -29,22 +29,22 @@ final class FilterViewController: UIViewController {
 // Set Views:
 extension FilterViewController {
     private func setViews() {
-        view.addSubview(filterViews.titleLabel)
-        view.addSubview(filterViews.tableView)
+        view.addSubview(filterView.titleLabel)
+        view.addSubview(filterView.tableView)
     }
 }
 
 // Set Consraints:
 extension FilterViewController {
     private func setConstraints() {
-        filterViews.titleLabel.snp.makeConstraints { make in
+        filterView.titleLabel.snp.makeConstraints { make in
             make.height.equalTo(22)
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().inset(27)
         }
         
-        filterViews.tableView.snp.makeConstraints { make in
-            make.top.equalTo(filterViews.titleLabel.snp.bottom).inset(-24)
+        filterView.tableView.snp.makeConstraints { make in
+            make.top.equalTo(filterView.titleLabel.snp.bottom).inset(-24)
             make.leading.trailing.equalToSuperview().inset(16)
             make.height.equalTo(300)
         }

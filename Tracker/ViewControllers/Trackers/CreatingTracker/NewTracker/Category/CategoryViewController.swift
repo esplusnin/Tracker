@@ -12,7 +12,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     var newTrackerViewController: NewTrackerViewControllerProtocol?
     
     private let viewModel = CategoryViewModel()
-    private let categoryView = CategoryView()
+    private(set) var categoryView = CategoryView()
         
     override func viewDidLoad() {
         super.viewDidLoad()

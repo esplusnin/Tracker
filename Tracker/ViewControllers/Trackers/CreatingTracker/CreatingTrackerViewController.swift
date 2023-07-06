@@ -12,7 +12,7 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
     
     var trackerViewController: TrackersViewControllerProtocol?
     
-    private let creatingTrackerView = CreatingTrackerView()
+    private(set) var creatingTrackerView = CreatingTrackerView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
