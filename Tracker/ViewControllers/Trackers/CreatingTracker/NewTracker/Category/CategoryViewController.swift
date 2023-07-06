@@ -127,7 +127,7 @@ extension CategoryViewController: CategoryCellDelegate {
 // MARK: Setting views:
 extension CategoryViewController {
     private func setViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .whiteDay
         
         view.addSubview(categoryView.titleLabel)
         view.addSubview(categoryView.emptyCategoryImageView)

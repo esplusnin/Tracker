@@ -18,6 +18,7 @@ final class SecondOnboardingView {
     lazy var introduceLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 32)
+        label.textColor = .black
         label.numberOfLines = 0
         label.textAlignment = .center
         label.text = LocalizableConstants.OnboardingVC.secondScreenTitle
@@ -29,8 +30,8 @@ final class SecondOnboardingView {
         let pageControl = UIPageControl()
         pageControl.numberOfPages = 2
         pageControl.currentPage = 1
-        pageControl.currentPageIndicatorTintColor = .blackDay
-        pageControl.pageIndicatorTintColor = .blackDay.withAlphaComponent(0.3)
+        pageControl.currentPageIndicatorTintColor = .black
+        pageControl.pageIndicatorTintColor = .black.withAlphaComponent(0.3)
         
         return pageControl
     }()
@@ -42,8 +43,8 @@ final class SecondOnboardingView {
         button.setTitle(LocalizableConstants.OnboardingVC.continueButton, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
-        button.titleLabel?.textColor = .whiteDay
-        button.backgroundColor = .blackDay
+        button.titleLabel?.textColor = .white
+        button.backgroundColor = .black
         
         return button
     }()

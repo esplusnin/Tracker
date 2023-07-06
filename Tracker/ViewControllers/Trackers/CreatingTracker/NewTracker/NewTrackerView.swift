@@ -58,7 +58,7 @@ final class NewTrackerView {
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.red.cgColor
-        button.backgroundColor = .white
+        button.backgroundColor = .whiteDay
         button.setTitle(LocalizableConstants.NewTrackerVC.buttonCancel, for: .normal)
         button.setTitleColor(.red, for: .normal)
         
@@ -70,7 +70,7 @@ final class NewTrackerView {
         button.layer.cornerRadius = 16
         button.backgroundColor = .gray
         button.setTitle(LocalizableConstants.NewTrackerVC.buttonCreate, for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.whiteDay, for: .normal)
         
         return button
     }()
@@ -97,7 +97,7 @@ final class NewTrackerView {
         button.backgroundColor = .blackDay
         button.setTitle("-", for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 20)
-        button.setTitleColor(.blackNight, for: .normal)
+        button.setTitleColor(.whiteDay, for: .normal)
         
         return button
     }()
@@ -108,7 +108,7 @@ final class NewTrackerView {
         button.backgroundColor = .blackDay
         button.setTitle("+", for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 20)
-        button.setTitleColor(.blackNight, for: .normal)
+        button.setTitleColor(.whiteDay, for: .normal)
         
         return button
     }()

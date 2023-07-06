@@ -477,7 +477,7 @@ extension NewTrackerViewController {
 // MARK: Setting views:
 extension NewTrackerViewController {
     private func setViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .whiteDay
         
         view.addSubview(newTrackerView.scrollView)
         

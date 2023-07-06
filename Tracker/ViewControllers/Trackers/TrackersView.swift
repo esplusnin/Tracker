@@ -61,8 +61,13 @@ final class TrackersView {
         return textField
     }()
     
-    lazy var trackersCollection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-
+    lazy var trackersCollection: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.backgroundColor = .whiteDay
+        
+        return collectionView
+    }()
+    
     lazy var cancelationButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(LocalizableConstants.TrackerVC.cancelationButton, for: .normal)

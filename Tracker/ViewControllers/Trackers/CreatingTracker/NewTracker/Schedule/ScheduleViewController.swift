@@ -116,7 +116,7 @@ extension ScheduleViewController {
 // MARK: Setting views:
 extension ScheduleViewController {
     private func setViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .whiteDay
         
         view.addSubview(scheduleView.titleLabel)
         view.addSubview(scheduleView.scheduleTableView)

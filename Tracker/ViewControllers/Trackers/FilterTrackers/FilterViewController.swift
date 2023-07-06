@@ -15,7 +15,7 @@ final class FilterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .whiteDay
         
         filterView.tableView.register(FilterCell.self, forCellReuseIdentifier: "FilterCell")
         filterView.tableView.dataSource = self

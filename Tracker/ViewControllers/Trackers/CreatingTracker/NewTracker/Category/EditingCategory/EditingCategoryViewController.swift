@@ -67,7 +67,7 @@ extension EditingCategoryViewController: UITextFieldDelegate {
 // Set Views:
 extension EditingCategoryViewController {
     private func setViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .whiteDay
 
         view.addSubview(editingCategoryView.titleLabel)
         view.addSubview(editingCategoryView.textField)

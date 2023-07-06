@@ -52,7 +52,7 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
 // MARK: Setting Views
 extension CreatingTrackerViewController {
     private func setViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .whiteDay
         view.addSubview(creatingTrackerView.titleLabel)
         view.addSubview(creatingTrackerView.habitCreateButton)
         view.addSubview(creatingTrackerView.unregularEventCreateButton)

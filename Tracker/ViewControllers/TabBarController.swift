@@ -12,14 +12,18 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBar()
+       
+        let separator = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 0.5))
+        separator.backgroundColor = .blackNight
+            tabBar.shadowImage = UIImage()
+            tabBar.addSubview(separator)
     }
     
     private func setupTabBar() {
         let appearance = UITabBarAppearance()
         tabBar.standardAppearance = appearance
-        tabBar.backgroundColor = .white
-        tabBar.layer.borderWidth = 1
-        tabBar.layer.borderColor = UIColor.systemGray.cgColor
+        tabBar.backgroundColor = .whiteDay
+
         
         let trackersViewController = TrackersViewController()
         

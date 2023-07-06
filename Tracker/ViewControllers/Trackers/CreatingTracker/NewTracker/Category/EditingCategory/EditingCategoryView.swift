@@ -42,7 +42,7 @@ final class EditingCategoryView {
         button.setTitle(LocalizableConstants.EditingCategory.completeButton, for: .normal)
         button.setTitleColor(.whiteDay, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
-        button.backgroundColor = .gray
+        button.backgroundColor = .backgroundDay
         
         return button
     }()

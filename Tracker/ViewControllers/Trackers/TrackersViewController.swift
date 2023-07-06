@@ -387,7 +387,7 @@ extension TrackersViewController {
 // MARK: Setting Views
 extension TrackersViewController {
     private func setViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .whiteDay
         
         view.addSubview(trackersView.emptyTrackersImageView)
         view.addSubview(trackersView.emptyTrackersLabel)

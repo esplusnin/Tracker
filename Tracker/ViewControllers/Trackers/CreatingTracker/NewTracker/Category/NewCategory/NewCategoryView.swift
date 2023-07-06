@@ -37,7 +37,7 @@ final class NewCategoryView {
         button.setTitle(LocalizableConstants.NewCategoryVC.readyButton, for: .normal)
         button.setTitleColor(.whiteDay, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
-        button.backgroundColor = .gray
+        button.backgroundColor = .backgroundDay
         
         return button
     }()

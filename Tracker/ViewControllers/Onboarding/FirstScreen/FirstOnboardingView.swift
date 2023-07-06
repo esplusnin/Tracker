@@ -18,6 +18,7 @@ final class FirstOnboardingView {
     lazy var introduceLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 32)
+        label.textColor = .black
         label.numberOfLines = 0
         label.textAlignment = .center
         label.text = LocalizableConstants.OnboardingVC.firstScreenTitle
@@ -29,8 +30,8 @@ final class FirstOnboardingView {
         let pageControl = UIPageControl()
         pageControl.numberOfPages = 2
         pageControl.currentPage = 0
-        pageControl.currentPageIndicatorTintColor = .blackDay
-        pageControl.pageIndicatorTintColor = .blackDay.withAlphaComponent(0.3)
+        pageControl.currentPageIndicatorTintColor = .black
+        pageControl.pageIndicatorTintColor = .black.withAlphaComponent(0.3)
         
         return pageControl
     }()
@@ -40,10 +41,9 @@ final class FirstOnboardingView {
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
         button.setTitle(LocalizableConstants.OnboardingVC.continueButton, for: .normal)
-        button.setTitleColor(.whiteDay, for: .normal)
+        button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
-        button.titleLabel?.textColor = .whiteDay
-        button.backgroundColor = .blackDay
+        button.backgroundColor = .black
         
         return button
     }()

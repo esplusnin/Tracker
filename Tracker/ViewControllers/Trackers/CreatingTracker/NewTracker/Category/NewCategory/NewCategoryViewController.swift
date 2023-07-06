@@ -68,7 +68,7 @@ extension NewCategoryViewController: UITextFieldDelegate {
 // MARK: Setting views:
 extension NewCategoryViewController {
     private func setViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .whiteDay
         view.addSubview(newCategoryView.titleLabel)
         view.addSubview(newCategoryView.textField)
         view.addSubview(newCategoryView.completeButton)

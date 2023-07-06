@@ -16,7 +16,7 @@ extension UIColor {
     static let blue = UIColor(named: "blue") ?? UIColor.systemBlue
     static let red = UIColor(named: "red") ?? UIColor.systemRed
     static let whiteDay = UIColor(named: "whiteDay") ?? UIColor.white
-    static let whiteNight = UIColor(named: "whiteNight") ?? UIColor.black
+//    static let whiteNight = UIColor(named: "whiteNight") ?? UIColor.black
     
     // Selection colors:
     static let colorSelection1 = UIColor(named: "ColorSelection1") ?? UIColor.clear
