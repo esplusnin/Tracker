@@ -20,6 +20,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     private(set) var newTrackerView = NewTrackerView()
     private let viewModel = NewTrackerViewModel()
+    private let analyticsService = AnalyticsService.instance
 
     // For Editing VC:
     private var trackerID: UUID?
@@ -31,6 +32,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        analyticsService.sentEvent(typeOfEvent: .open, screen: .newTrackerVC, item: nil)
+        
         viewModel.view = self
         newTrackerView.textField.delegate = self
         
@@ -126,6 +129,10 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     @objc private func createNewTracker() {
         viewModel.createNewTracker()
         viewModel.resetTrackerInfoAfterCreate()
+        
+        analyticsService.sentEvent(typeOfEvent: .click, screen: .newTrackerVC, item: .create)
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .newTrackerVC, item: nil)
+
         dismissNewTrackerVC()
     }
     
@@ -139,16 +146,23 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     
     @objc private func increaseCountOfDays() {
         countOfDays += 1
+        
+        analyticsService.sentEvent(typeOfEvent: .click, screen: .editingTrackerVC, item: .increaseDays)
     }
     
     @objc private func decreaseCountOfDays() {
         if countOfDays > 0 {
             countOfDays -= 1
         }
+        
+        analyticsService.sentEvent(typeOfEvent: .click, screen: .editingTrackerVC, item: .decreaseDays)
     }
     
     @objc private func dismissNewTrackerVC() {
         dismiss(animated: true)
+        analyticsService.sentEvent(typeOfEvent: .click, screen: .newTrackerVC, item: .cancel)
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .newTrackerVC, item: nil)
+
         creatingTrackerViewController?.backToTrackerViewController()
     }
 }
@@ -349,11 +363,13 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         case 0:
             cell.backgroundColor = .lightGray
             viewModel.setTrackerEmoji(emoji: cell.emojiLabel.text ?? "")
+            analyticsService.sentEvent(typeOfEvent: .click, screen: .newTrackerVC, item: .emoji)
         case 1:
             let color = cell.colorSectionImageView.backgroundColor?.withAlphaComponent(0.3)
             cell.layer.borderWidth = 3
             cell.layer.borderColor = color?.cgColor
             viewModel.setTrackerColor(color: cell.colorSectionImageView.backgroundColor ?? UIColor())
+            analyticsService.sentEvent(typeOfEvent: .click, screen: .newTrackerVC, item: .color)
         default:
             cell.backgroundColor = .lightGray
         }

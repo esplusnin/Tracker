@@ -12,9 +12,12 @@ final class FilterViewController: UIViewController {
     
     private(set) var filterView = FilterView()
     private let viewModel = FilterViewModel()
+    private let analyticsService = AnalyticsService.instance
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        analyticsService.sentEvent(typeOfEvent: .open, screen: .filterVC, item: nil)
+        
         view.backgroundColor = .whiteDay
         
         filterView.tableView.register(FilterCell.self, forCellReuseIdentifier: "FilterCell")
@@ -23,6 +26,10 @@ final class FilterViewController: UIViewController {
         
         setViews()
         setConstraints()
+    }
+    
+    deinit {
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .filterVC, item: nil)
     }
 }
 

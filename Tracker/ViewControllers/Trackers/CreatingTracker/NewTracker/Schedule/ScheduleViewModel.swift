@@ -11,6 +11,7 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     
     private let dataProviderService = DataProviderService.instance
     private let scheduleService = ScheduleService()
+    private let analyticsService = AnalyticsService.instance
     
     @Observable
     private(set) var isReadyToCloseScheduleVC = false
@@ -35,6 +36,12 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     
     func setSchedule() {
         let string = schedule.count == 7 ? LocalizableConstants.ScheduleVC.everyDay : scheduleService.getScheduleString(schedule)
+        
+        if string == LocalizableConstants.ScheduleVC.everyDay {
+            analyticsService.sentEvent(typeOfEvent: .click, screen: .scheduleVC, item: .everyDay)
+        } else {
+            analyticsService.sentEvent(typeOfEvent: .click, screen: .scheduleVC, item: .notEveryDay)
+        }
         
         dataProviderService.selectedScheduleString = string
         dataProviderService.trackerSchedule = schedule

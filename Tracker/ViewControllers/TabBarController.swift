@@ -12,7 +12,7 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBar()
-       
+
         let separator = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 0.5))
         separator.backgroundColor = .blackNight
             tabBar.shadowImage = UIImage()
@@ -24,7 +24,6 @@ final class TabBarController: UITabBarController {
         tabBar.standardAppearance = appearance
         tabBar.backgroundColor = .whiteDay
 
-        
         let trackersViewController = TrackersViewController()
         
         let trackersViewControllerNavigation = UINavigationController(rootViewController: trackersViewController)

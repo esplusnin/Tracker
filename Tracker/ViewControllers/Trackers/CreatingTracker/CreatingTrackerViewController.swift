@@ -12,10 +12,13 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
     
     var trackerViewController: TrackersViewControllerProtocol?
     
+    private let analyticsService = AnalyticsService.instance
     private(set) var creatingTrackerView = CreatingTrackerView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        analyticsService.sentEvent(typeOfEvent: .open, screen: .creatingVC, item: nil)
+        
         setViews()
         setConstraints()
         setTargets()
@@ -34,6 +37,9 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
         let viewController = NewTrackerViewController()
         viewController.kindOfTracker = .habit
         
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .creatingVC, item: nil)
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .creatingVC, item: .habit)
+        
         viewController.creatingTrackerViewController = self
         
         present(viewController, animated: true)
@@ -42,6 +48,9 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
     @objc private func switchToNewUnregularVC() {
         let viewController = NewTrackerViewController()
         viewController.kindOfTracker = .unregularEvent
+        
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .creatingVC, item: nil)
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .creatingVC, item: .unregularEvent)
         
         viewController.creatingTrackerViewController = self
         

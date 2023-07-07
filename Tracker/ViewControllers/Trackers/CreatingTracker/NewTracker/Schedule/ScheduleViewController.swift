@@ -16,15 +16,22 @@ final class ScheduleViewController: UIViewController {
     private(set) var scheduleView = ScheduleView()
     private let viewModel = ScheduleViewModel()
     private var scheduleService = ScheduleService()
+    private let analyticsService = AnalyticsService.instance
     
     override func viewDidLoad() {
-        super.viewDidLoad()        
+        super.viewDidLoad()
+        analyticsService.sentEvent(typeOfEvent: .open, screen: .scheduleVC, item: nil)
+        
         setViews()
         setConstraints()
         settingTableView()
         setTarget()
         scheduleView.completeButton.controlState(isLock: true)
         bind()
+    }
+    
+    deinit {
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .scheduleVC, item: nil)
     }
     
     private func bind() {

@@ -11,11 +11,13 @@ import SnapKit
 class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     private let viewModel = TrackersViewModel()
+    private let analyticsService = AnalyticsService.instance
     private var indexToUpdate: IndexPath?
     private(set) var trackersView = TrackersView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        analyticsService.sentEvent(typeOfEvent: .open, screen: .trackersVC, item: nil)
         trackersView.searchTextField.delegate = self
         bind()
         setDate()
@@ -26,6 +28,10 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         setMainCollectionSettings()
         
         viewModel.setVisibleTrackersFromProvider()
+    }
+    
+    deinit {
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .trackersVC, item: nil)
     }
     
     func bind() {
@@ -113,7 +119,8 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     private func setTargets() {
         trackersView.addTrackerButton.addTarget(
             self, action: #selector(switchToCreatingTrackerVC), for: .touchUpInside)
-        trackersView.filterButton.addTarget(self, action: #selector(switchToFilterVC), for: .touchUpInside)
+        trackersView.filterButton.addTarget(
+            self, action: #selector(switchToFilterVC), for: .touchUpInside)
         trackersView.navigationBarDatePicker.addTarget(
             self, action: #selector(setDateFromDatePicker), for: .primaryActionTriggered)
         trackersView.searchTextField.addTarget(
@@ -127,6 +134,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     @objc private func switchToFilterVC() {
         let viewController = FilterViewController()
         resetTextField()
+        analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .filter)
         
         present(viewController, animated: true)
     }
@@ -135,6 +143,8 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         let viewController = CreatingTrackerViewController()
         viewController.trackerViewController = self
         trackersView.searchTextField.endEditing(true)
+    
+        analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .addTrack)
         
         present(viewController, animated: true)
     }
@@ -326,6 +336,8 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         viewModel.changeStatusTrackerRecord(model: TrackerRecord(id: tracker.id,
                                                                         date: date), isAddDay: isAddDay)
         viewModel.fillAdditionalInfo(id: tracker.id)
+        analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .track)
+        
         cell.additionalTrackerInfo = viewModel.additionTrackerInfo
     }
     
@@ -353,6 +365,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         additionalTrackerInfo.categoryName = viewModel.visibleTrackers[indexPath.section].name
         viewController.kindOfTracker = .habit
         viewController.setupEditingVC(trackerInfo: trackerModel, additionalTrackerInfo: additionalTrackerInfo)
+        analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .edit)
         
         present(viewController, animated: true)
     }
@@ -366,6 +379,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             let visibleCategories = self.viewModel.visibleTrackers
             let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
             
+            self.analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .delete)
             self.viewModel.deleteTracker(id: tracker.id)
         }
     }

@@ -12,6 +12,7 @@ final class StatisticViewController: UIViewController {
     
     private(set) var statisticView = StatisticView()
     private let viewModel = StatisticsViewModel()
+    private let analyticsService = AnalyticsService.instance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,15 @@ final class StatisticViewController: UIViewController {
         viewModel.checkIsStatisticsExist()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        analyticsService.sentEvent(typeOfEvent: .open, screen: .statisticsVC, item: nil)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .statisticsVC, item: nil)
+    }
     private func bind() {
         viewModel.$isStatisticsExist.bind { [weak self] value in
             guard let self = self else { return }
