@@ -10,6 +10,8 @@ import SnapKit
 
 final class FilterViewController: UIViewController {
     
+    var trackersViewController: TrackersViewControllerProtocol?
+
     private(set) var filterView = FilterView()
     private let viewModel = FilterViewModel()
     private let analyticsService = AnalyticsService.instance
@@ -87,9 +89,11 @@ extension FilterViewController: UITableViewDataSource {
 extension FilterViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? FilterCell else { return }
-        
+        trackersViewController?.changeStatusForFilterButton(isHide: false)
+
         cell.accessoryType = cell.accessoryType == UITableViewCell.AccessoryType.none ? .checkmark : .none
         viewModel.setCurrentFilter(selected: cell.cellLabel.text ?? "")
+        
         
         dismiss(animated: true)
     }

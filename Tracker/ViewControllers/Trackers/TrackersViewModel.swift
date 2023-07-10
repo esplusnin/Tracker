@@ -157,6 +157,13 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         dataProviderService.deleteTrackerFromStore(id: id)
     }
     
+    func changeCountOfPerfectDays(isAdd: Bool) {
+        guard let date = currentDate else { return }
+        let statisticsTool = StatisticsServiceHelper()
+
+        isAdd ? statisticsTool.setNewPerfectDaysValue(date: date) : statisticsTool.removePerfectDays(date: date)
+    }
+    
     func fillAdditionalInfo(id: UUID) {
         let completeDayString = setCellButtonIfTrackerWasCompletedToday(id: id)
         let countOfDays = countAmountOfCompleteDays(id: id)

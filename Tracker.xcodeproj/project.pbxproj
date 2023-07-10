@@ -32,6 +32,7 @@
 		7EB00FB42A5BBB9C00A58281 /* StatisticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB00FB32A5BBB9C00A58281 /* StatisticsService.swift */; };
 		7EB00FB62A5BC17C00A58281 /* StatisticsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB00FB52A5BC17C00A58281 /* StatisticsServiceProtocol.swift */; };
 		7EB00FBA2A5BDD7200A58281 /* StatisticsBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB00FB92A5BDD7200A58281 /* StatisticsBlockView.swift */; };
+		7EB00FC02A5C021F00A58281 /* StatisticsServiceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB00FBF2A5C021F00A58281 /* StatisticsServiceHelper.swift */; };
 		7EB1D68F2A405CAB00106032 /* OnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D68E2A405CAB00106032 /* OnboardingPageViewController.swift */; };
 		7EB1D6912A405CED00106032 /* FirstOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D6902A405CED00106032 /* FirstOnboardingViewController.swift */; };
 		7EB1D6932A405CF900106032 /* SecondOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D6922A405CF900106032 /* SecondOnboardingViewController.swift */; };
@@ -138,6 +139,7 @@
 		7EB00FB32A5BBB9C00A58281 /* StatisticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsService.swift; sourceTree = "<group>"; };
 		7EB00FB52A5BC17C00A58281 /* StatisticsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsServiceProtocol.swift; sourceTree = "<group>"; };
 		7EB00FB92A5BDD7200A58281 /* StatisticsBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsBlockView.swift; sourceTree = "<group>"; };
+		7EB00FBF2A5C021F00A58281 /* StatisticsServiceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsServiceHelper.swift; sourceTree = "<group>"; };
 		7EB1D68E2A405CAB00106032 /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
 		7EB1D6902A405CED00106032 /* FirstOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstOnboardingViewController.swift; sourceTree = "<group>"; };
 		7EB1D6922A405CF900106032 /* SecondOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondOnboardingViewController.swift; sourceTree = "<group>"; };
@@ -286,6 +288,24 @@
 				7EB00FB92A5BDD7200A58281 /* StatisticsBlockView.swift */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		7EB00FBD2A5C01AE00A58281 /* DatesAndScheduleServices */ = {
+			isa = PBXGroup;
+			children = (
+				7EDABC562A20DD5200F39D8E /* DateService.swift */,
+				7EDABC582A20F0F700F39D8E /* ScheduleService.swift */,
+			);
+			path = DatesAndScheduleServices;
+			sourceTree = "<group>";
+		};
+		7EB00FBE2A5C020F00A58281 /* StatisticsService */ = {
+			isa = PBXGroup;
+			children = (
+				7EB00FBF2A5C021F00A58281 /* StatisticsServiceHelper.swift */,
+				7EB00FB32A5BBB9C00A58281 /* StatisticsService.swift */,
+			);
+			path = StatisticsService;
 			sourceTree = "<group>";
 		};
 		7EB1D68D2A405C9300106032 /* Onboarding */ = {
@@ -537,14 +557,13 @@
 			isa = PBXGroup;
 			children = (
 				7EC9934E2A2CC5BF0053F34D /* Protocols */,
+				7EB00FBD2A5C01AE00A58281 /* DatesAndScheduleServices */,
 				7EC577A62A2DD504000837E8 /* Store */,
+				7EB00FBE2A5C020F00A58281 /* StatisticsService */,
 				7E584B5C2A53098E004C1341 /* AlertService.swift */,
 				7EEBEEF92A56FFB300093EC4 /* AnalyticsService.swift */,
 				7EC8175C2A2724CF00527BBB /* DataProviderService.swift */,
-				7EDABC562A20DD5200F39D8E /* DateService.swift */,
 				7EB1D69A2A40689100106032 /* FirstEntryRevisionService.swift */,
-				7EDABC582A20F0F700F39D8E /* ScheduleService.swift */,
-				7EB00FB32A5BBB9C00A58281 /* StatisticsService.swift */,
 				7E916FC22A2B9C6700FA18F3 /* UIColorMarshallingService.swift */,
 			);
 			path = Services;
@@ -830,6 +849,7 @@
 				7ECDD9482A1CB44900771EE4 /* TrackerCategory.swift in Sources */,
 				7E14905D2A309537002B58F2 /* TrackerRecordStoreProtocol.swift in Sources */,
 				7E584B5B2A52FD24004C1341 /* FilterCell.swift in Sources */,
+				7EB00FC02A5C021F00A58281 /* StatisticsServiceHelper.swift in Sources */,
 				7ECDD92F2A1BB13300771EE4 /* NewTrackerViewController.swift in Sources */,
 				7E102F9D2A53E63D00A1BDB7 /* CategoryCellDelegate.swift in Sources */,
 				7EDABC552A209F8100F39D8E /* CreatingTrackerViewControllerProtocol.swift in Sources */,

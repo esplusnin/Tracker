@@ -268,10 +268,18 @@ final class DataProviderService {
     // MARK: RecordStatistics block:
     func setRecordsToStatisticsService() {
         statisticsService?.provideStatisticsModel(records: completedTrackers)
+        
+        if completedTrackers?.count == 0 {
+            StatisticsServiceHelper().removeAllStatistics()
+        }
     }
     
     func getRecordsStatisticsModel() -> TrackersStatistics {
         statisticsService?.statisticsModel ?? TrackersStatistics(completedDays: 0, perfectDays: 0, bestSeries: 0, averageValue: 0)
+    }
+    
+    func clearStatistics() {
+        StatisticsServiceHelper().removeAllStatistics()
     }
     
     //MARK: Setting Controller protocols:

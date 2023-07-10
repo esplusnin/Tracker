@@ -66,7 +66,10 @@ final class StatisticViewController: UIViewController {
 // MARK: Set views:
 extension StatisticViewController {
     private func setDumbs() {
+        statisticView.bestPeriod.removeFromSuperview()
+        statisticView.perfectDays.removeFromSuperview()
         statisticView.completedTrackersView.removeFromSuperview()
+        statisticView.averageDays.removeFromSuperview()
         
         view.addSubview(statisticView.emptyStatisticImageView)
         view.addSubview(statisticView.emptyStatisticLabel)

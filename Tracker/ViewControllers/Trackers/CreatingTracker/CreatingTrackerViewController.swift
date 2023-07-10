@@ -26,6 +26,7 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
     
     func backToTrackerViewController() {
         dismiss(animated: true)
+        trackerViewController?.changeStatusForFilterButton(isHide: false)
     }
     
     private func setTargets() {

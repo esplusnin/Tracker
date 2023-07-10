@@ -12,8 +12,10 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     private let viewModel = TrackersViewModel()
     private let analyticsService = AnalyticsService.instance
-    private var indexToUpdate: IndexPath?
     private(set) var trackersView = TrackersView()
+    
+    private var isReadyToHideFilterButton = true
+    private var indexToUpdate: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,9 +41,15 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             guard let self = self else { return }
             self.reloadCollectionView()
 
-            if self.viewModel.visibleTrackers.count == 0 {
+            if self.viewModel.visibleTrackers.count == 0 && isReadyToHideFilterButton == true {
                 self.trackersView.filterButton.removeFromSuperview()
                 self.trackersView.trackersCollection.alpha = 0
+            } else if self.viewModel.visibleTrackers.count > 0 && isReadyToHideFilterButton == false {
+                self.trackersView.trackersCollection.alpha = 1
+                self.setFilterButton()
+            } else if self.viewModel.visibleTrackers.count == 0 && isReadyToHideFilterButton == false {
+                self.trackersView.trackersCollection.alpha = 0
+                self.setFilterButton()
             } else {
                 self.trackersView.trackersCollection.alpha = 1
                 self.setFilterButton()
@@ -90,30 +98,29 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         trackersView.searchTextField.text = .none
     }
     
+    func changeStatusForFilterButton(isHide: Bool) {
+        isReadyToHideFilterButton = isHide ? true : false
+    }
+    
+    private func isPerfectDayToday() {
+        var counter = 0
+        for trackerCell in trackersView.trackersCollection.visibleCells {
+            guard let trackerCell = trackerCell as? TrackerCell else { return }
+            if trackerCell.additionalTrackerInfo?.isCompleteToday == true {
+                counter += 1
+            }
+        }
+
+        if counter == trackersView.trackersCollection.visibleCells.count {
+            viewModel.changeCountOfPerfectDays(isAdd: true)
+        } else {
+            viewModel.changeCountOfPerfectDays(isAdd: false)
+        }
+    }
+    
     private func setDate() {
         let date = DateService().convertDateWithoutTimes(date: trackersView.navigationBarDatePicker.date)
         viewModel.currentDate = date
-    }
-    
-    private func setDumbImageViewAfterSearch() {
-        trackersView.emptyTrackersImageView.image = Resources.Images.searchedTrackersIsEmpty
-        trackersView.emptyTrackersLabel.text = LocalizableConstants.TrackerVC.nothingSearched
-    }
-    
-    private func setDumbWithNoTrackers() {
-        trackersView.emptyTrackersImageView.image = Resources.Images.trackersIsEmpty
-        trackersView.emptyTrackersLabel.text = LocalizableConstants.TrackerVC.emptyStateLabel
-    }
-    
-    private func setFilterButton() {
-        view.addSubview(trackersView.filterButton)
-        
-        trackersView.filterButton.snp.makeConstraints { make in
-            make.height.equalTo(50)
-            make.centerX.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(130)
-            make.bottom.equalTo(view.layoutMarginsGuide.snp.bottom).inset(30)
-        }
     }
     
     private func setTargets() {
@@ -133,6 +140,8 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     @objc private func switchToFilterVC() {
         let viewController = FilterViewController()
+        viewController.trackersViewController = self
+        
         resetTextField()
         analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .filter)
         
@@ -143,58 +152,24 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         let viewController = CreatingTrackerViewController()
         viewController.trackerViewController = self
         trackersView.searchTextField.endEditing(true)
-    
+        isReadyToHideFilterButton = true
+        
         analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .addTrack)
         
         present(viewController, animated: true)
     }
     
     @objc private func updateVisibleTrackersAfterSearch() {
+        isReadyToHideFilterButton = true
+
         guard let searchFieldText = trackersView.searchTextField.text else { return }
         
         viewModel.updateVisibleTrackersAfterSearch(filledName: searchFieldText)
     }
     
-    @objc private func addCanceletionButton() {
-        view.addSubview(trackersView.cancelationButton)
-        
-        trackersView.searchTextField.snp.removeConstraints()
-        
-        trackersView.cancelationButton.snp.makeConstraints { make in
-            make.width.equalTo(83)
-            make.height.equalTo(36)
-            make.top.equalToSuperview().inset(150)
-            make.trailing.equalToSuperview().inset(16)
-            make.centerY.equalTo(trackersView.searchTextField)
-        }
-        
-        trackersView.searchTextField.snp.makeConstraints { make in
-            make.height.equalTo(36)
-            make.top.equalToSuperview().inset(150)
-            make.leading.equalToSuperview().inset(16)
-            make.trailing.equalTo(trackersView.cancelationButton.snp.leading).inset(-5)
-        }
-    }
-    
-    @objc private func setSearchFieldWithoutCancelationButton() {
-        resetTextField()
-        let visibleCategories = viewModel.visibleTrackers
-        trackersView.cancelationButton.removeFromSuperview()
-        
-        trackersView.searchTextField.snp.makeConstraints { make in
-            make.height.equalTo(36)
-            make.top.equalToSuperview().inset(150)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-        
-        if visibleCategories.count == 0 {
-            setDumbWithNoTrackers()
-        }
-        
-        viewModel.showNewTrackersAfterChangeDate()
-    }
-    
     @objc private func setDateFromDatePicker() {
+        isReadyToHideFilterButton = true
+        
         setDate()
         resetTextField()
         viewModel.showNewTrackersAfterChangeDate()
@@ -331,6 +306,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell),
               let date = viewModel.currentDate else { return }
         
+
         let tracker = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row]
         indexToUpdate = indexPath
         viewModel.changeStatusTrackerRecord(model: TrackerRecord(id: tracker.id,
@@ -339,6 +315,8 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .track)
         
         cell.additionalTrackerInfo = viewModel.additionTrackerInfo
+        
+        isPerfectDayToday()
     }
     
     func pinTracker(from cell: TrackerCell) {
@@ -411,6 +389,66 @@ extension TrackersViewController {
         setNavBar()
         setConstraints()
         setTargets()
+    }
+    
+    @objc private func addCanceletionButton() {
+        view.addSubview(trackersView.cancelationButton)
+        
+        trackersView.searchTextField.snp.removeConstraints()
+        
+        trackersView.cancelationButton.snp.makeConstraints { make in
+            make.width.equalTo(83)
+            make.height.equalTo(36)
+            make.top.equalToSuperview().inset(150)
+            make.trailing.equalToSuperview().inset(16)
+            make.centerY.equalTo(trackersView.searchTextField)
+        }
+        
+        trackersView.searchTextField.snp.makeConstraints { make in
+            make.height.equalTo(36)
+            make.top.equalToSuperview().inset(150)
+            make.leading.equalToSuperview().inset(16)
+            make.trailing.equalTo(trackersView.cancelationButton.snp.leading).inset(-5)
+        }
+    }
+    
+    @objc private func setSearchFieldWithoutCancelationButton() {
+        resetTextField()
+        let visibleCategories = viewModel.visibleTrackers
+        trackersView.cancelationButton.removeFromSuperview()
+        
+        trackersView.searchTextField.snp.makeConstraints { make in
+            make.height.equalTo(36)
+            make.top.equalToSuperview().inset(150)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        if visibleCategories.count == 0 {
+            setDumbWithNoTrackers()
+        }
+        
+        viewModel.showNewTrackersAfterChangeDate()
+    }
+    
+    private func setDumbImageViewAfterSearch() {
+        trackersView.emptyTrackersImageView.image = Resources.Images.searchedTrackersIsEmpty
+        trackersView.emptyTrackersLabel.text = LocalizableConstants.TrackerVC.nothingSearched
+    }
+    
+    private func setDumbWithNoTrackers() {
+        trackersView.emptyTrackersImageView.image = Resources.Images.trackersIsEmpty
+        trackersView.emptyTrackersLabel.text = LocalizableConstants.TrackerVC.emptyStateLabel
+    }
+    
+    private func setFilterButton() {
+        view.addSubview(trackersView.filterButton)
+        
+        trackersView.filterButton.snp.makeConstraints { make in
+            make.height.equalTo(50)
+            make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(130)
+            make.bottom.equalTo(view.layoutMarginsGuide.snp.bottom).inset(30)
+        }
     }
 }
 
