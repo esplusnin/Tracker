@@ -33,6 +33,7 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
     private(set) var isReadyToCreateNewTracker = false
     
     init() {
+        dataProviderService.resetNewTrackerInfo()
         dataProviderService.bindNewTrackerViewModel(controller: self)
     }
     

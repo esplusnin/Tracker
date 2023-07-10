@@ -21,8 +21,9 @@ final class StatisticViewController: UIViewController {
         setDumbs()
         setDumbsConstraints()
         setNavBar()
-        bind() 
-        viewModel.checkIsStatisticsExist()
+        
+        bind()
+        viewModel.isStatisticsExists()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -34,21 +35,20 @@ final class StatisticViewController: UIViewController {
         super.viewDidDisappear(animated)
         analyticsService.sentEvent(typeOfEvent: .close, screen: .statisticsVC, item: nil)
     }
-    private func bind() {
+    
+    func bind() {
         viewModel.$isStatisticsExist.bind { [weak self] value in
             guard let self = self else { return }
             self.isStatisticExist(value: value)
         }
         
-        viewModel.$totalCountOfCompletedTrackers.bind { [weak self] newValue in
+        viewModel.$recordsModel.bind { [weak self] model in
             guard let self = self else { return }
-            self.setCompletedTrackerslabel(newValue)
+            statisticView.bestPeriod.setCountLabel(value: String(model?.bestSeries ?? 0))
+            statisticView.perfectDays.setCountLabel(value: String(model?.perfectDays ?? 0))
+            statisticView.completedTrackersView.setCountLabel(value: String(model?.completedDays ?? 0))
+            statisticView.averageDays.setCountLabel(value: String(model?.averageValue ?? 0))
         }
-    }
-    
-    private func setCompletedTrackerslabel(_ newValue: Int?) {
-        guard let newValue = newValue else { return }
-        statisticView.countOfCompletedTrackersLabel.text = String(newValue)
     }
     
     private func isStatisticExist(value: Bool?) {
@@ -66,7 +66,7 @@ final class StatisticViewController: UIViewController {
 // MARK: Set views:
 extension StatisticViewController {
     private func setDumbs() {
-        statisticView.totalCompletedTrackerView.removeFromSuperview()
+        statisticView.completedTrackersView.removeFromSuperview()
         
         view.addSubview(statisticView.emptyStatisticImageView)
         view.addSubview(statisticView.emptyStatisticLabel)
@@ -76,9 +76,10 @@ extension StatisticViewController {
         statisticView.emptyStatisticImageView.removeFromSuperview()
         statisticView.emptyStatisticLabel.removeFromSuperview()
         
-        view.addSubview(statisticView.totalCompletedTrackerView)
-        statisticView.totalCompletedTrackerView.addSubview(statisticView.countOfCompletedTrackersLabel)
-        statisticView.totalCompletedTrackerView.addSubview(statisticView.completedTrackersLabel)
+        view.addSubview(statisticView.bestPeriod)
+        view.addSubview(statisticView.perfectDays)
+        view.addSubview(statisticView.completedTrackersView)
+        view.addSubview(statisticView.averageDays)
     }
     
     private func setNavBar() {
@@ -101,19 +102,28 @@ extension StatisticViewController {
     }
     
     private func setStatisticsViewsConstraints() {
-        statisticView.totalCompletedTrackerView.snp.makeConstraints { make in
+        statisticView.bestPeriod.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(200)
-            make.height.equalTo(90)
-            make.leading.trailing.equalToSuperview().inset(16)
         }
         
-        statisticView.countOfCompletedTrackersLabel.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview().inset(12)
+        statisticView.perfectDays.snp.makeConstraints { make in
+            make.top.equalTo(statisticView.bestPeriod.snp.bottom).inset(-12)
         }
         
-        statisticView.completedTrackersLabel.snp.makeConstraints { make in
-            make.top.equalTo(statisticView.countOfCompletedTrackersLabel.snp.bottom)
-            make.leading.bottom.trailing.equalToSuperview().inset(12)
+        statisticView.completedTrackersView.snp.makeConstraints { make in
+            make.top.equalTo(statisticView.perfectDays.snp.bottom).inset(-12)
+        }
+        
+        statisticView.averageDays.snp.makeConstraints { make in
+            make.top.equalTo(statisticView.completedTrackersView.snp.bottom).inset(-12)
+        }
+        
+        [statisticView.bestPeriod, statisticView.perfectDays,
+         statisticView.completedTrackersView, statisticView.averageDays].forEach { view in
+            view.snp.makeConstraints { make in
+                make.height.equalTo(90)
+                make.leading.trailing.equalToSuperview().inset(16)
+            }
         }
     }
 }

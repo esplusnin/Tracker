@@ -12,28 +12,21 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
     private let dataProviderService = DataProviderService.instance
     
     @Observable
-    private(set) var isStatisticsExist: Bool? {
-        didSet {
-            setCountOfTotalCompletedTrackers()
-        }
-    }
+    private(set) var isStatisticsExist: Bool?
     @Observable
-    private(set) var totalCountOfCompletedTrackers: Int?
+    private(set) var recordsModel: TrackersStatistics?
     
     init() {
         dataProviderService.bindStatisticsViewModel(controller: self)
     }
     
-    func checkIsStatisticsExist() {
-        if dataProviderService.getTotalCompletedTrackers() != 0 {
+    func isStatisticsExists() {
+        let statisticsModel = dataProviderService.getRecordsStatisticsModel()
+        if statisticsModel.completedDays != 0 {
             isStatisticsExist = true
+            recordsModel = statisticsModel
         } else {
             isStatisticsExist = false
         }
-
-    }
-    
-    private func setCountOfTotalCompletedTrackers() {
-        totalCountOfCompletedTrackers = dataProviderService.getTotalCompletedTrackers()
     }
 }

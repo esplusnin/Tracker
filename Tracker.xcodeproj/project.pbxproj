@@ -28,6 +28,10 @@
 		7E584B5D2A53098E004C1341 /* AlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E584B5C2A53098E004C1341 /* AlertService.swift */; };
 		7E584B5F2A530A86004C1341 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E584B5E2A530A86004C1341 /* Observable.swift */; };
 		7E916FC32A2B9C6700FA18F3 /* UIColorMarshallingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E916FC22A2B9C6700FA18F3 /* UIColorMarshallingService.swift */; };
+		7EA9107C2A57FA3F00384EBA /* TrackersStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA9107B2A57FA3F00384EBA /* TrackersStatistics.swift */; };
+		7EB00FB42A5BBB9C00A58281 /* StatisticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB00FB32A5BBB9C00A58281 /* StatisticsService.swift */; };
+		7EB00FB62A5BC17C00A58281 /* StatisticsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB00FB52A5BC17C00A58281 /* StatisticsServiceProtocol.swift */; };
+		7EB00FBA2A5BDD7200A58281 /* StatisticsBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB00FB92A5BDD7200A58281 /* StatisticsBlockView.swift */; };
 		7EB1D68F2A405CAB00106032 /* OnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D68E2A405CAB00106032 /* OnboardingPageViewController.swift */; };
 		7EB1D6912A405CED00106032 /* FirstOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D6902A405CED00106032 /* FirstOnboardingViewController.swift */; };
 		7EB1D6932A405CF900106032 /* SecondOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D6922A405CF900106032 /* SecondOnboardingViewController.swift */; };
@@ -130,6 +134,10 @@
 		7E584B5C2A53098E004C1341 /* AlertService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertService.swift; sourceTree = "<group>"; };
 		7E584B5E2A530A86004C1341 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		7E916FC22A2B9C6700FA18F3 /* UIColorMarshallingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorMarshallingService.swift; sourceTree = "<group>"; };
+		7EA9107B2A57FA3F00384EBA /* TrackersStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersStatistics.swift; sourceTree = "<group>"; };
+		7EB00FB32A5BBB9C00A58281 /* StatisticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsService.swift; sourceTree = "<group>"; };
+		7EB00FB52A5BC17C00A58281 /* StatisticsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsServiceProtocol.swift; sourceTree = "<group>"; };
+		7EB00FB92A5BDD7200A58281 /* StatisticsBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsBlockView.swift; sourceTree = "<group>"; };
 		7EB1D68E2A405CAB00106032 /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
 		7EB1D6902A405CED00106032 /* FirstOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstOnboardingViewController.swift; sourceTree = "<group>"; };
 		7EB1D6922A405CF900106032 /* SecondOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondOnboardingViewController.swift; sourceTree = "<group>"; };
@@ -263,6 +271,23 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
+		7EB00FBB2A5BDF3800A58281 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7EB00FBC2A5BDF8F00A58281 /* UI */,
+				7ECDD91C2A1B396200771EE4 /* StatisticView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		7EB00FBC2A5BDF8F00A58281 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				7EB00FB92A5BDD7200A58281 /* StatisticsBlockView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		7EB1D68D2A405C9300106032 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -361,6 +386,7 @@
 		7EC9934E2A2CC5BF0053F34D /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				7EB00FB52A5BC17C00A58281 /* StatisticsServiceProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -424,6 +450,7 @@
 				7ECDD9442A1CB41F00771EE4 /* Tracker.swift */,
 				7ECDD9472A1CB44900771EE4 /* TrackerCategory.swift */,
 				7ECDD9492A1CB45000771EE4 /* TrackerRecord.swift */,
+				7EA9107B2A57FA3F00384EBA /* TrackersStatistics.swift */,
 				7E584B5E2A530A86004C1341 /* Observable.swift */,
 			);
 			path = Models;
@@ -478,7 +505,7 @@
 			isa = PBXGroup;
 			children = (
 				7EE598822A56A64200998A3F /* Protocols */,
-				7ECDD91C2A1B396200771EE4 /* StatisticView.swift */,
+				7EB00FBB2A5BDF3800A58281 /* View */,
 				7EE5987A2A558ECC00998A3F /* StatisticsViewModel.swift */,
 				7ED3D3FA2A1A0E21004C371B /* StatisticViewController.swift */,
 			);
@@ -517,6 +544,7 @@
 				7EDABC562A20DD5200F39D8E /* DateService.swift */,
 				7EB1D69A2A40689100106032 /* FirstEntryRevisionService.swift */,
 				7EDABC582A20F0F700F39D8E /* ScheduleService.swift */,
+				7EB00FB32A5BBB9C00A58281 /* StatisticsService.swift */,
 				7E916FC22A2B9C6700FA18F3 /* UIColorMarshallingService.swift */,
 			);
 			path = Services;
@@ -820,6 +848,7 @@
 				7ECDD92A2A1BAB0800771EE4 /* CreatingTrackerViewController.swift in Sources */,
 				7EDABC5B2A20F56600F39D8E /* ScheduleViewControllerDelegate.swift in Sources */,
 				7ED3D3FD2A1A1035004C371B /* Resources.swift in Sources */,
+				7EB00FB62A5BC17C00A58281 /* StatisticsServiceProtocol.swift in Sources */,
 				7EB1D6C22A4095E400106032 /* CategoryViewModel.swift in Sources */,
 				7ED3D3F52A1A0643004C371B /* UIColor + Extension.swift in Sources */,
 				7E102F942A53D8C600A1BDB7 /* UIButton + Extension.swift in Sources */,
@@ -848,10 +877,13 @@
 				7ECDD9392A1BBE9F00771EE4 /* NewTrackerCell.swift in Sources */,
 				7E584B5F2A530A86004C1341 /* Observable.swift in Sources */,
 				7ECDD9332A1BB15B00771EE4 /* NewTrackerView.swift in Sources */,
+				7EB00FBA2A5BDD7200A58281 /* StatisticsBlockView.swift in Sources */,
 				7EB1D6972A405D1F00106032 /* SecondOnboardingView.swift in Sources */,
 				7EC577AC2A2E2E67000837E8 /* TrackerCategoryStore.swift in Sources */,
+				7EB00FB42A5BBB9C00A58281 /* StatisticsService.swift in Sources */,
 				7EEBEEFA2A56FFB300093EC4 /* AnalyticsService.swift in Sources */,
 				7EDAE28B2A41E5B300A75A69 /* NewTrackerViewModelProtocol.swift in Sources */,
+				7EA9107C2A57FA3F00384EBA /* TrackersStatistics.swift in Sources */,
 				7EDABC592A20F0F700F39D8E /* ScheduleService.swift in Sources */,
 				7EDAE2832A41BFD400A75A69 /* ScheduleViewModel.swift in Sources */,
 				7E584B5D2A53098E004C1341 /* AlertService.swift in Sources */,

@@ -76,7 +76,10 @@
 // StatisticsVC:
 "statistics.title" = "الإحصاءات";
 "statistics.nothingToAnalyze" = "لا يوجد شيء لتحليل حتى الآن";
+"statistics.bestPeriod" = "أفضل فترة";
+"statistics.perfectDays" = "أيام مثالية";
 "statistics.totalCompletedTracker" = "بتتبع الانتهاء";
+"statistics.averageValue" = "متوسط القيمة";
 
 // Alerts:
 "alert.removeCategory.title" = "هل هذه الفئة بالتأكيد ليست هناك حاجة?";

@@ -8,5 +8,5 @@
 import Foundation
 
 protocol StatisticsViewModelProtocol: AnyObject {
-    func checkIsStatisticsExist()
+    func isStatisticsExists()
 }

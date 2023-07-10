@@ -76,7 +76,10 @@
 // StatisticsVC:
 "statistics.title" = "Статистика";
 "statistics.nothingToAnalyze" = "Анализировать пока нечего";
+"statistics.bestPeriod" = "Лучший период";
+"statistics.perfectDays" = "Идеальные дни";
 "statistics.totalCompletedTracker" = "Трекеров завершено";
+"statistics.averageValue" = "Среднее значение";
 
 // Alerts:
 "alert.removeCategory.title" = "Эта категория точно не нужна?";

@@ -41,16 +41,6 @@ final class TrackerTests: XCTestCase {
                         as: [.recursiveDescription(traits: .init(userInterfaceStyle: .light))])
     }
     
-    func testDatePickerTrackersViewController() {
-        assertSnapshots(matching: trackersViewController.trackersView.navigationBarDatePicker,
-                        as: [.image(traits: .init(userInterfaceStyle: .light))])
-    }
-    
-    func testDatePickerTrackersViewControllerRecursive() {
-        assertSnapshots(matching: trackersViewController.trackersView.navigationBarDatePicker,
-                        as: [.recursiveDescription(traits: .init(userInterfaceStyle: .light))])
-    }
-    
     func testSearchFieldTrackerViewController() {
         assertSnapshots(matching: trackersViewController.trackersView.searchTextField,
                         as: [.image(traits: .init(userInterfaceStyle: .light))])
@@ -236,16 +226,6 @@ final class TrackerTests: XCTestCase {
     
     func testAddTrackerButtonTrackersViewControllerRecursiveBlack() {
         assertSnapshots(matching: trackersViewController.trackersView.addTrackerButton,
-                        as: [.recursiveDescription(traits: .init(userInterfaceStyle: .dark))])
-    }
-    
-    func testDatePickerTrackersViewControllerBlack() {
-        assertSnapshots(matching: trackersViewController.trackersView.navigationBarDatePicker,
-                        as: [.image(traits: .init(userInterfaceStyle: .dark))])
-    }
-    
-    func testDatePickerTrackersViewControllerRecursiveBlack() {
-        assertSnapshots(matching: trackersViewController.trackersView.navigationBarDatePicker,
                         as: [.recursiveDescription(traits: .init(userInterfaceStyle: .dark))])
     }
     

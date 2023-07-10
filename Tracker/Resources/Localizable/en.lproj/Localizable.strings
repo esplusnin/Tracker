@@ -76,7 +76,10 @@
 // StatisticsVC:
 "statistics.title" = "Statistics";
 "statistics.nothingToAnalyze" = "There is nothing to analyze yet";
+"statistics.bestPeriod" = "The best period";
+"statistics.perfectDays" = "Perfect day";
 "statistics.totalCompletedTracker" = "Trackers completed";
+"statistics.averageValue" = "Average value";
 
 // Alerts:
 "alert.removeCategory.title" = "Is this category definitely not needed?";

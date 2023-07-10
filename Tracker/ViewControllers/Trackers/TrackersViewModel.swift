@@ -38,6 +38,7 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         dataProviderService.trackerStore = TrackerStore()
         dataProviderService.trackerCategoryStore = TrackerCategoryStore()
         dataProviderService.trackerRecordStore = TrackerRecordStore()
+        dataProviderService.statisticsService = StatisticsService()
         
         dataProviderService.inizializeVisibleCategories()
         dataProviderService.getCategoryNames()

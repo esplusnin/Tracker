@@ -25,9 +25,10 @@ final class TabBarController: UITabBarController {
         tabBar.backgroundColor = .whiteDay
 
         let trackersViewController = TrackersViewController()
-        
+        let statisticsViewController = StatisticViewController()
+                
         let trackersViewControllerNavigation = UINavigationController(rootViewController: trackersViewController)
-        let statisticViewControllerNavigation = UINavigationController(rootViewController: StatisticViewController())
+        let statisticViewControllerNavigation = UINavigationController(rootViewController: statisticsViewController)
         
         
         trackersViewControllerNavigation.tabBarItem = UITabBarItem(title: LocalizableConstants.TabBarVC.trackers,

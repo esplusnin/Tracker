@@ -23,7 +23,7 @@ final class DataProviderService {
     var trackersViewModel: TrackersViewModelProtocol?
     var statisticsViewModel: StatisticsViewModelProtocol?
     
-    private init() {}
+    var statisticsService: StatisticsServiceProtocol?
     
     // Preparing for create new tracker:
     var selectedCategoryString: String? {
@@ -69,7 +69,11 @@ final class DataProviderService {
             trackerDidCreate()
         }
     }
-    private var completedTrackers: [TrackerRecord]?
+    private var completedTrackers: [TrackerRecord]? {
+        didSet {
+            setRecordsToStatisticsService()
+        }
+    }
     private var categoryNames: [String]? {
         didSet {
             categoryViewModel?.updateVisibleCategories()
@@ -143,7 +147,10 @@ final class DataProviderService {
     
     func recordDidUpdate() {
         trackersViewModel?.recordDidUpdate()
-        statisticsViewModel?.checkIsStatisticsExist()
+    }
+    
+    func statisticsDidUpdate() {
+        statisticsViewModel?.isStatisticsExists()
     }
     
     // Return string of current localize value from selected filter 
@@ -258,9 +265,13 @@ final class DataProviderService {
         trackerRecordStore?.editRecord(trackerID, newRecordValues: newRecordValues)
     }
     
-    // MARK: Statistics block:
-    func getTotalCompletedTrackers() -> Int {
-        trackerRecordStore?.getTotalCompletedTrackers() ?? 0
+    // MARK: RecordStatistics block:
+    func setRecordsToStatisticsService() {
+        statisticsService?.provideStatisticsModel(records: completedTrackers)
+    }
+    
+    func getRecordsStatisticsModel() -> TrackersStatistics {
+        statisticsService?.statisticsModel ?? TrackersStatistics(completedDays: 0, perfectDays: 0, bestSeries: 0, averageValue: 0)
     }
     
     //MARK: Setting Controller protocols:

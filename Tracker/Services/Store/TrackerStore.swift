@@ -16,7 +16,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
     private var trackerCategoryObservation: NSKeyValueObservation?
   
     private lazy var appDelegate = {
-        (UIApplication.shared.delegate as! AppDelegate)
+        UIApplication.shared.delegate as! AppDelegate
     }()
     
     private lazy var context: NSManagedObjectContext = {

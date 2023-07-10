@@ -13,7 +13,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     private let dataProviderService = DataProviderService.instance
     
     private lazy var appDelegate = {
-        (UIApplication.shared.delegate as! AppDelegate)
+        UIApplication.shared.delegate as! AppDelegate
     }()
     
     private lazy var context: NSManagedObjectContext = {

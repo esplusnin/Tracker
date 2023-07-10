@@ -13,11 +13,11 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
     private let dataProviderService = DataProviderService.instance
     
     private lazy var appDelegate = {
-        (UIApplication.shared.delegate as! AppDelegate)
+        UIApplication.shared.delegate as! AppDelegate
     }()
     
     private lazy var context: NSManagedObjectContext = {
-        (appDelegate.persistantContainer.viewContext)
+        appDelegate.persistantContainer.viewContext
     }()
     
     private lazy var fetchedResultController: NSFetchedResultsController<TrackerRecordCoreData> = {
@@ -63,6 +63,10 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         })
         
         return newRecordsArray
+    }
+    
+    func getTrackerRecordsCoreData() -> [TrackerRecordCoreData]? {
+        fetchedResultController.fetchedObjects ?? []
     }
     
     func editRecord(_ trackerID: UUID, newRecordValues: Int) {
@@ -126,15 +130,6 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         }
         
         return answer
-    }
-    
-    // Statistics block:
-    func getTotalCompletedTrackers() -> Int {
-        fetchedResultController.fetchedObjects?.count ?? 0
-    }
-    
-    func getTotalSequintance() -> Int {
-        0
     }
 }
 
