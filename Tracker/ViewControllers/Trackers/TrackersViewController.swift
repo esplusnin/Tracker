@@ -28,8 +28,6 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         
         setViews()
         setMainCollectionSettings()
-        
-        viewModel.setVisibleTrackersFromProvider()
     }
     
     deinit {
@@ -42,45 +40,47 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             self.reloadCollectionView()
 
             if self.viewModel.visibleTrackers.count == 0 && isReadyToHideFilterButton == true {
-                self.trackersView.filterButton.removeFromSuperview()
                 self.trackersView.trackersCollection.alpha = 0
-            } else if self.viewModel.visibleTrackers.count > 0 && isReadyToHideFilterButton == false {
-                self.trackersView.trackersCollection.alpha = 1
-                self.setFilterButton()
+                self.setDumbWithNoTrackers()
+                self.trackersView.filterButton.removeFromSuperview()
             } else if self.viewModel.visibleTrackers.count == 0 && isReadyToHideFilterButton == false {
                 self.trackersView.trackersCollection.alpha = 0
+                self.setDumbImageViewAfterSearch()
+                self.setFilterButton()
+            } else if self.viewModel.visibleTrackers.count != 0 && isReadyToHideFilterButton == true {
+                self.trackersView.trackersCollection.alpha = 1
                 self.setFilterButton()
             } else {
                 self.trackersView.trackersCollection.alpha = 1
                 self.setFilterButton()
             }
-        }
-        
-        viewModel.$isRecordUpdate.bind { [weak self] _ in
-            guard let self = self,
-                  let indexToUpdate = indexToUpdate,
-                  let cell = trackersView.trackersCollection.dequeueReusableCell(withReuseIdentifier: "Cell",
-                                                                                 for: indexToUpdate) as? TrackerCell else { return }
-            cell.numberOfDaysLabel.reloadInputViews()
-        }
-        
-        viewModel.$isVisibleCategoryEmptyAfterSearch.bind { [weak self] _ in
-            guard let self = self else { return }
-            self.setDumbImageViewAfterSearch()
-        }
-        
-        viewModel.$isVisibleCategoryEmpty.bind { [weak self] _ in
-            guard let self = self else { return }
-            self.setDumbWithNoTrackers()
-        }
-        
-        viewModel.$isNeedToChangeDate.bind { [weak self] value in
-            guard let self = self else { return }
             
-            if value == true {
-                trackersView.navigationBarDatePicker.date = Date()
-                setDate()
-                viewModel.showNewTrackersAfterChangeDate()
+            viewModel.$isRecordUpdate.bind { [weak self] _ in
+                guard let self = self,
+                      let indexToUpdate = indexToUpdate,
+                      let cell = trackersView.trackersCollection.dequeueReusableCell(withReuseIdentifier: "Cell",
+                                                                                     for: indexToUpdate) as? TrackerCell else { return }
+                cell.numberOfDaysLabel.reloadInputViews()
+            }
+            
+            viewModel.$isVisibleCategoryEmptyAfterSearch.bind { [weak self] _ in
+                guard let self = self else { return }
+                self.setDumbImageViewAfterSearch()
+            }
+            
+            viewModel.$isVisibleCategoryEmpty.bind { [weak self] _ in
+                guard let self = self else { return }
+                self.setDumbWithNoTrackers()
+            }
+            
+            viewModel.$isNeedToChangeDate.bind { [weak self] value in
+                guard let self = self else { return }
+                
+                if value == true {
+                    trackersView.navigationBarDatePicker.date = Date()
+                    setDate()
+                    viewModel.showNewTrackersAfterChangeDate()
+                }
             }
         }
     }
@@ -152,7 +152,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         let viewController = CreatingTrackerViewController()
         viewController.trackerViewController = self
         trackersView.searchTextField.endEditing(true)
-        isReadyToHideFilterButton = true
+        changeStatusForFilterButton(isHide: true)
         
         analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .addTrack)
         
@@ -160,7 +160,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     @objc private func updateVisibleTrackersAfterSearch() {
-        isReadyToHideFilterButton = true
+        changeStatusForFilterButton(isHide: true)
 
         guard let searchFieldText = trackersView.searchTextField.text else { return }
         
@@ -168,12 +168,11 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     @objc private func setDateFromDatePicker() {
-        isReadyToHideFilterButton = true
-        
+        changeStatusForFilterButton(isHide: true)
+
         setDate()
         resetTextField()
         viewModel.showNewTrackersAfterChangeDate()
-        reloadCollectionView()
         
         self.dismiss(animated: true)
     }
@@ -349,6 +348,8 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
     }
     
     func deleteTracker(from cell: TrackerCell) {
+        changeStatusForFilterButton(isHide: true)
+
         AlertService().showAlert(event: .removeTracker,
                                  controller: self) { [weak self] in
             guard let self = self,
@@ -359,6 +360,7 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             
             self.analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .delete)
             self.viewModel.deleteTracker(id: tracker.id)
+            
         }
     }
 }

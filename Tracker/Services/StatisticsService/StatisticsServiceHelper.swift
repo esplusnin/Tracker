@@ -9,6 +9,7 @@ import Foundation
 
 final class StatisticsServiceHelper {
     
+    
     private let userDefaults = UserDefaults.standard
     private let dataProviderService = DataProviderService.instance
     

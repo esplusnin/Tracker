@@ -35,7 +35,7 @@ final class StatisticsService: StatisticsServiceProtocol {
     }
     
     private func countAverageValue(records: [TrackerRecord], _ dateFormatter: DateFormatter) -> Int {
-        let countOfDays = records.map({ dateFormatter.string(from: $0.date) }).count
+        let countOfDays = Array(Set(records.map({ dateFormatter.string(from: $0.date) }))).count
         
         return records.count != 0 ? records.count / countOfDays : 0
     }

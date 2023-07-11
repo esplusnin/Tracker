@@ -50,7 +50,7 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         if isPinnedTrackersExist() {
             getVisibleTrackersWithPinned()
         } else {
-            visibleTrackers = dataProviderService.getVisiblieCategories()
+            showNewTrackersAfterChangeDate()
         }
         
         if visibleTrackers.count == 0 {
@@ -81,13 +81,13 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     }
     
     func showNewTrackersAfterChangeDate() {
-        dataProviderService.inizializeVisibleCategories()
+        let trackers = dataProviderService.getVisiblieCategories()
+        
         guard let date = currentDate else { return }
         
-        setVisibleTrackersFromProvider()
         var newArray: [TrackerCategory] = []
         
-        for category in visibleTrackers {
+        for category in trackers {
             var newCategory = TrackerCategory(name: category.name, trackerDictionary: [])
             
             for tracker in category.trackerDictionary {
@@ -102,8 +102,11 @@ final class TrackersViewModel: TrackersViewModelProtocol {
                 newArray.append(newCategory)
             }
         }
-        
         visibleTrackers = newArray
+        
+        if visibleTrackers.count == 0 {
+            isVisibleCategoryEmpty = true
+        }
     }
     
     func updateVisibleTrackers(isCompleted: Bool) {

@@ -66,7 +66,7 @@ final class DataProviderService {
     
     private var visibleCategories: [TrackerCategory]? {
         didSet {
-            trackerDidCreate()
+            trackersDidChange()
         }
     }
     private var completedTrackers: [TrackerRecord]? {
@@ -141,7 +141,7 @@ final class DataProviderService {
         categoryNames ?? []
     }
     
-    func trackerDidCreate() {
+    func trackersDidChange() {
         trackersViewModel?.setVisibleTrackersFromProvider()
     }
     
