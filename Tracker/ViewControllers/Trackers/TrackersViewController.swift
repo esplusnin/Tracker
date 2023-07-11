@@ -39,15 +39,15 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             guard let self = self else { return }
             self.reloadCollectionView()
 
-            if self.viewModel.visibleTrackers.count == 0 && isReadyToHideFilterButton == true {
+            if self.viewModel.visibleTrackers.count == 0 && self.isReadyToHideFilterButton == true {
                 self.trackersView.trackersCollection.alpha = 0
                 self.setDumbWithNoTrackers()
                 self.trackersView.filterButton.removeFromSuperview()
-            } else if self.viewModel.visibleTrackers.count == 0 && isReadyToHideFilterButton == false {
+            } else if self.viewModel.visibleTrackers.count == 0 && self.isReadyToHideFilterButton == false {
                 self.trackersView.trackersCollection.alpha = 0
                 self.setDumbImageViewAfterSearch()
                 self.setFilterButton()
-            } else if self.viewModel.visibleTrackers.count != 0 && isReadyToHideFilterButton == true {
+            } else if self.viewModel.visibleTrackers.count != 0 && self.isReadyToHideFilterButton == true {
                 self.trackersView.trackersCollection.alpha = 1
                 self.setFilterButton()
             } else {
@@ -57,8 +57,8 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
             
             viewModel.$isRecordUpdate.bind { [weak self] _ in
                 guard let self = self,
-                      let indexToUpdate = indexToUpdate,
-                      let cell = trackersView.trackersCollection.dequeueReusableCell(withReuseIdentifier: "Cell",
+                      let indexToUpdate = self.indexToUpdate,
+                      let cell = self.trackersView.trackersCollection.dequeueReusableCell(withReuseIdentifier: "Cell",
                                                                                      for: indexToUpdate) as? TrackerCell else { return }
                 cell.numberOfDaysLabel.reloadInputViews()
             }
@@ -77,9 +77,9 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
                 guard let self = self else { return }
                 
                 if value == true {
-                    trackersView.navigationBarDatePicker.date = Date()
-                    setDate()
-                    viewModel.showNewTrackersAfterChangeDate()
+                    self.trackersView.navigationBarDatePicker.date = Date()
+                    self.setDate()
+                    self.viewModel.showNewTrackersAfterChangeDate()
                 }
             }
         }
@@ -160,11 +160,13 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
     
     @objc private func updateVisibleTrackersAfterSearch() {
-        changeStatusForFilterButton(isHide: true)
-
-        guard let searchFieldText = trackersView.searchTextField.text else { return }
-        
-        viewModel.updateVisibleTrackersAfterSearch(filledName: searchFieldText)
+        if trackersView.searchTextField.hasText {
+            changeStatusForFilterButton(isHide: true)
+            
+            guard let searchFieldText = trackersView.searchTextField.text else { return }
+            
+            viewModel.updateVisibleTrackersAfterSearch(filledName: searchFieldText)
+        }
     }
     
     @objc private func setDateFromDatePicker() {
@@ -178,6 +180,73 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
 }
 
+// MARK: TrackersCollectionViewCellDelegate
+extension TrackersViewController: TrackersCollectionViewCellDelegate {
+    func addCurrentTrackerToCompletedThisDate(_ cell: TrackerCell, isAddDay: Bool) {
+        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell),
+              let date = viewModel.currentDate else { return }
+        
+
+        let tracker = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row]
+        indexToUpdate = indexPath
+        viewModel.changeStatusTrackerRecord(model: TrackerRecord(id: tracker.id,
+                                                                        date: date), isAddDay: isAddDay)
+        viewModel.fillAdditionalInfo(id: tracker.id)
+        analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .track)
+        
+        cell.additionalTrackerInfo = viewModel.additionTrackerInfo
+        
+        isPerfectDayToday()
+    }
+    
+    func pinTracker(from cell: TrackerCell) {
+        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
+        let trackerID = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
+
+        viewModel.pinTracker(trackerID)
+    }
+    
+    func unpinTracker(from cell: TrackerCell) {
+        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
+        let trackerID = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
+
+        viewModel.unpinTracker(trackerID)
+    }
+    
+    func editTracker(from cell: TrackerCell) {
+        guard let trackerModel = cell.trackerModel,
+              var additionalTrackerInfo = cell.additionalTrackerInfo,
+              let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
+        
+        let viewController = NewTrackerViewController()
+        
+        additionalTrackerInfo.categoryName = viewModel.visibleTrackers[indexPath.section].name
+        viewController.kindOfTracker = .habit
+        viewController.setupEditingVC(trackerInfo: trackerModel, additionalTrackerInfo: additionalTrackerInfo)
+        analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .edit)
+        
+        present(viewController, animated: true)
+    }
+    
+    func deleteTracker(from cell: TrackerCell) {
+        changeStatusForFilterButton(isHide: true)
+
+        AlertService().showAlert(event: .removeTracker,
+                                 controller: self) { [weak self] in
+            guard let self = self,
+                  let indexPath = self.trackersView.trackersCollection.indexPath(for: cell) else { return }
+            
+            let visibleCategories = self.viewModel.visibleTrackers
+            let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
+            
+            self.analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .delete)
+            self.viewModel.deleteTracker(id: tracker.id)
+            
+        }
+    }
+}
+
+// MARK: UITextFieldDelegate
 extension TrackersViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.becomeFirstResponder()
@@ -188,7 +257,7 @@ extension TrackersViewController: UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if range.length == 1 && string.isEmpty || !textField.hasText {
+        if range.length == 1 && string.isEmpty || !textField.hasText || range.length == 1 && textField.text?.count == 0 {
             viewModel.showNewTrackersAfterChangeDate()
         }
         
@@ -299,72 +368,6 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: TrackersCollectionViewCellDelegate
-extension TrackersViewController: TrackersCollectionViewCellDelegate {
-    func addCurrentTrackerToCompletedThisDate(_ cell: TrackerCell, isAddDay: Bool) {
-        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell),
-              let date = viewModel.currentDate else { return }
-        
-
-        let tracker = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row]
-        indexToUpdate = indexPath
-        viewModel.changeStatusTrackerRecord(model: TrackerRecord(id: tracker.id,
-                                                                        date: date), isAddDay: isAddDay)
-        viewModel.fillAdditionalInfo(id: tracker.id)
-        analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .track)
-        
-        cell.additionalTrackerInfo = viewModel.additionTrackerInfo
-        
-        isPerfectDayToday()
-    }
-    
-    func pinTracker(from cell: TrackerCell) {
-        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-        let trackerID = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
-
-        viewModel.pinTracker(trackerID)
-    }
-    
-    func unpinTracker(from cell: TrackerCell) {
-        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-        let trackerID = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
-
-        viewModel.unpinTracker(trackerID)
-    }
-    
-    func editTracker(from cell: TrackerCell) {
-        guard let trackerModel = cell.trackerModel,
-              var additionalTrackerInfo = cell.additionalTrackerInfo,
-              let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-        
-        let viewController = NewTrackerViewController()
-        
-        additionalTrackerInfo.categoryName = viewModel.visibleTrackers[indexPath.section].name
-        viewController.kindOfTracker = .habit
-        viewController.setupEditingVC(trackerInfo: trackerModel, additionalTrackerInfo: additionalTrackerInfo)
-        analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .edit)
-        
-        present(viewController, animated: true)
-    }
-    
-    func deleteTracker(from cell: TrackerCell) {
-        changeStatusForFilterButton(isHide: true)
-
-        AlertService().showAlert(event: .removeTracker,
-                                 controller: self) { [weak self] in
-            guard let self = self,
-                  let indexPath = self.trackersView.trackersCollection.indexPath(for: cell) else { return }
-            
-            let visibleCategories = self.viewModel.visibleTrackers
-            let tracker = visibleCategories[indexPath.section].trackerDictionary[indexPath.row]
-            
-            self.analyticsService.sentEvent(typeOfEvent: .click, screen: .trackersVC, item: .delete)
-            self.viewModel.deleteTracker(id: tracker.id)
-            
-        }
-    }
-}
-
 // MARK: Main settings of CollectionView
 extension TrackersViewController {
     private func setMainCollectionSettings() {
@@ -449,7 +452,7 @@ extension TrackersViewController {
             make.height.equalTo(50)
             make.centerX.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(130)
-            make.bottom.equalTo(view.layoutMarginsGuide.snp.bottom).inset(30)
+            make.bottom.equalTo(view.layoutMarginsGuide.snp.bottom).inset(60)
         }
     }
 }

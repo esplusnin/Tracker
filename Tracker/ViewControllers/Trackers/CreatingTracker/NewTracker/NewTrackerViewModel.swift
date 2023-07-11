@@ -8,12 +8,11 @@
 import UIKit
 
 final class NewTrackerViewModel: NewTrackerViewModelProtocol {
-    
-    weak var view: NewTrackerViewControllerProtocol?
-    
+        
     private let dataProviderService = DataProviderService.instance
     
-    let buttonsTitleForTableView = [LocalizableConstants.NewTrackerVC.tableViewCategory, LocalizableConstants.NewTrackerVC.tableViewSchedule]
+    let buttonsTitleForTableView = [LocalizableConstants.NewTrackerVC.tableViewCategory,
+                                    LocalizableConstants.NewTrackerVC.tableViewSchedule]
     
     var emojiArray = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -31,8 +30,10 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
     
     @Observable
     private(set) var isReadyToCreateNewTracker = false
+    private var kindOfTrackers: KindOfTrackers
     
-    init() {
+    init(kindOfTrackers: KindOfTrackers) {
+        self.kindOfTrackers = kindOfTrackers
         dataProviderService.resetNewTrackerInfo()
         dataProviderService.bindNewTrackerViewModel(controller: self)
     }
@@ -99,13 +100,11 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
     
     func isControllerReadyToCreateNewTracker() {
         if dataProviderService.isTrackerParametersWasFilled() {
-            switch view?.kindOfTracker {
+            switch kindOfTrackers {
             case .unregularEvent:
                 isReadyToCreateNewTracker = true
             case .habit:
                 isReadyToCreateNewTracker = dataProviderService.selectedScheduleString != nil ? true : false
-            default:
-                isReadyToCreateNewTracker = false
             }
         } else {
             isReadyToCreateNewTracker = false

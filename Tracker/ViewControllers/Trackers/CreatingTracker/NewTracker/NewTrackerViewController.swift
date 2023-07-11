@@ -16,10 +16,15 @@ enum KindOfTrackers {
 final class NewTrackerViewController: UIViewController, NewTrackerViewControllerProtocol {
     
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
-    var kindOfTracker: KindOfTrackers?
+    var kindOfTracker: KindOfTrackers? {
+        didSet {
+            guard let kindOfTracker = kindOfTracker else { return }
+            viewModel = NewTrackerViewModel(kindOfTrackers: kindOfTracker)
+        }
+    }
     
     private(set) var newTrackerView = NewTrackerView()
-    private let viewModel = NewTrackerViewModel()
+    private var viewModel: NewTrackerViewModel?
     private let analyticsService = AnalyticsService.instance
 
     // For Editing VC:
@@ -34,7 +39,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         super.viewDidLoad()
         analyticsService.sentEvent(typeOfEvent: .open, screen: .newTrackerVC, item: nil)
         
-        viewModel.view = self
         newTrackerView.textField.delegate = self
         
         setViews()
@@ -48,7 +52,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     func bind() {
-        viewModel.$isReadyToCreateNewTracker.bind { [weak self] value in
+        viewModel?.$isReadyToCreateNewTracker.bind { [weak self] value in
             guard let self = self else { return }
             if value == true {
                 self.newTrackerView.createButton.controlState(isLock: false)
@@ -127,8 +131,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     @objc private func createNewTracker() {
-        viewModel.createNewTracker()
-        viewModel.resetTrackerInfoAfterCreate()
+        viewModel?.createNewTracker()
+        viewModel?.resetTrackerInfoAfterCreate()
         
         analyticsService.sentEvent(typeOfEvent: .click, screen: .newTrackerVC, item: .create)
         analyticsService.sentEvent(typeOfEvent: .close, screen: .newTrackerVC, item: nil)
@@ -139,8 +143,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     @objc private func editTracker() {
         guard let trackerID = trackerID else { return }
         
-        viewModel.editTracker(trackerID)
-        viewModel.changeRecord(trackerID: trackerID, newRecordValues: countOfDays)
+        viewModel?.editTracker(trackerID)
+        viewModel?.changeRecord(trackerID: trackerID, newRecordValues: countOfDays)
         dismiss(animated: true)
     }
     
@@ -183,7 +187,7 @@ extension NewTrackerViewController: UITextFieldDelegate {
         guard let name = name else { return }
         
         if name.count < 38 {
-            viewModel.setTrackerName(name: name)
+            viewModel?.setTrackerName(name: name)
         }
     }
 }
@@ -205,19 +209,19 @@ extension NewTrackerViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "Cell", for: indexPath) as? NewTrackerCell else { return UITableViewCell() }
         
-        cell.categoryLabel.text = viewModel.buttonsTitleForTableView[indexPath.row]
+        cell.categoryLabel.text = viewModel?.buttonsTitleForTableView[indexPath.row]
         cell.accessoryType = .disclosureIndicator
       
         switch indexPath.row {
         case 0:
-             if let name = viewModel.getSelectedCategoryName() {
+             if let name = viewModel?.getSelectedCategoryName() {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(name)
             } else {
                 cell.setViewsWithoutCategory()
             }
         case 1:
-            if let schedule = viewModel.getSelectedScheduleString() {
+            if let schedule = viewModel?.getSelectedScheduleString() {
                 cell.categoryLabel.snp.removeConstraints()
                 cell.setViewsWithCategory(schedule)
             } else {
@@ -253,6 +257,7 @@ extension NewTrackerViewController: UITableViewDelegate {
 // MARK: UICollectionViewDataSource
 extension NewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let viewModel = viewModel else { return 0 }
         let emojiArray = viewModel.emojiArray.count
         
         return section == 0 ? emojiArray : viewModel.colorSectionArray.count
@@ -268,15 +273,15 @@ extension NewTrackerViewController: UICollectionViewDataSource {
             withReuseIdentifier: "CollectionCell",
             for: indexPath) as? NewTrackerCollectionCell else { return UICollectionViewCell() }
         
-        let emojiArray = viewModel.emojiArray
+        let emojiArray = viewModel?.emojiArray
         
         switch indexPath.section {
         case 0:
             cell.setFirstSection()
-            cell.emojiLabel.text = emojiArray[indexPath.row]
+            cell.emojiLabel.text = emojiArray?[indexPath.row]
         case 1:
             cell.setSecondSection()
-            cell.colorSectionImageView.backgroundColor = viewModel.colorSectionArray[indexPath.row]
+            cell.colorSectionImageView.backgroundColor = viewModel?.colorSectionArray[indexPath.row]
         default:
             return UICollectionViewCell()
         }
@@ -292,7 +297,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         case UICollectionView.elementKindSectionHeader:
             id = "Header"
         default:
-            return UICollectionReusableView()
+            id = ""
         }
         
         guard let view = collectionView.dequeueReusableSupplementaryView(
@@ -308,7 +313,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         default:
             view.headerLabel.text = ""
         }
-        
+
         return view
     }
 }
@@ -349,7 +354,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         let headerView = self.collectionView(collectionView,
                                              viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
                                              at: indexPath)
-        
+       
         return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
                                                          height: UIView.layoutFittingExpandedSize.height),
                                                   withHorizontalFittingPriority: .required,
@@ -362,13 +367,13 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         switch indexPath.section {
         case 0:
             cell.backgroundColor = .lightGray
-            viewModel.setTrackerEmoji(emoji: cell.emojiLabel.text ?? "")
+            viewModel?.setTrackerEmoji(emoji: cell.emojiLabel.text ?? "")
             analyticsService.sentEvent(typeOfEvent: .click, screen: .newTrackerVC, item: .emoji)
         case 1:
             let color = cell.colorSectionImageView.backgroundColor?.withAlphaComponent(0.3)
             cell.layer.borderWidth = 3
             cell.layer.borderColor = color?.cgColor
-            viewModel.setTrackerColor(color: cell.colorSectionImageView.backgroundColor ?? UIColor())
+            viewModel?.setTrackerColor(color: cell.colorSectionImageView.backgroundColor ?? UIColor())
             analyticsService.sentEvent(typeOfEvent: .click, screen: .newTrackerVC, item: .color)
         default:
             cell.backgroundColor = .lightGray
@@ -380,7 +385,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         
         cell.backgroundColor = .none
         
-        viewModel.resetTrackerInfoAfterDeselect(section: indexPath.section)
+        viewModel?.resetTrackerInfoAfterDeselect(section: indexPath.section)
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
@@ -423,7 +428,7 @@ extension NewTrackerViewController {
         setupTargets()
     }
     private func setupEditingTrackerMenu(trackerInfo: Tracker, additionalTrackerInfo: AdditionTrackerInfo) {
-        viewModel.presetTrackerInfo(trackerInfo: trackerInfo, additionalTrackerInfo: additionalTrackerInfo)
+        viewModel?.presetTrackerInfo(trackerInfo: trackerInfo, additionalTrackerInfo: additionalTrackerInfo)
         
         view.addSubview(newTrackerView.countOfCompleteDaysLabel)
         view.addSubview(newTrackerView.leftStepperButton)
@@ -457,12 +462,10 @@ extension NewTrackerViewController {
         setupCurrentTrackerInfo(trackerInfo: trackerInfo, additionatlInfo: additionalTrackerInfo)
     }
     
-    private func setupCurrentTrackerInfo(trackerInfo: Tracker, additionatlInfo: AdditionTrackerInfo) {
-//        let indexes = findIndexesOfEmojiAndColors(emoji: trackerInfo.emoji, color: trackerInfo.color)
-        
-        viewModel.setTrackerName(name: trackerInfo.name)
-        viewModel.setTrackerEmoji(emoji: trackerInfo.emoji)
-        viewModel.setTrackerColor(color: trackerInfo.color)
+    private func setupCurrentTrackerInfo(trackerInfo: Tracker, additionatlInfo: AdditionTrackerInfo) {        
+        viewModel?.setTrackerName(name: trackerInfo.name)
+        viewModel?.setTrackerEmoji(emoji: trackerInfo.emoji)
+        viewModel?.setTrackerColor(color: trackerInfo.color)
         
         newTrackerView.titleLabel.text = LocalizableConstants.EditingHabit.title
         newTrackerView.createButton.setTitle(LocalizableConstants.EditingHabit.saveButton, for: .normal)
@@ -477,8 +480,8 @@ extension NewTrackerViewController {
         let colorService = UIColorMarshallingService()
         let trackerColorHex = colorService.hexStringFromColor(color: color)
         
-        guard let emojiIndex = viewModel.emojiArray.firstIndex(where: { $0 == emoji }),
-              let colorIndex = viewModel.colorSectionArray.firstIndex(
+        guard let emojiIndex = viewModel?.emojiArray.firstIndex(where: { $0 == emoji }),
+              let colorIndex = viewModel?.colorSectionArray.firstIndex(
                 where: { colorService.hexStringFromColor(color: $0) == trackerColorHex }) else { return (0, 0) }
         
         return (emojiIndex, colorIndex)
