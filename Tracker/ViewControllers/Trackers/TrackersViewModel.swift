@@ -61,7 +61,7 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     func getVisibleTrackersWithPinned() {
         var trackerCategories = dataProviderService.getVisiblieCategories()
         
-        if let index = trackerCategories.firstIndex(where: { $0.name == LocalizableConstants.TrackerVC.pinned }) {
+        if let index = trackerCategories.firstIndex(where: { $0.name == L10n.TrackerVC.pinned }) {
             let pinnedTrackers = trackerCategories[index]
             trackerCategories.remove(at: index)
             trackerCategories.insert(pinnedTrackers, at: 0)
@@ -131,7 +131,7 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     }
     
     func pinTracker(_ trackerID: UUID) {
-        let pinnedName = LocalizableConstants.TrackerVC.pinned
+        let pinnedName = L10n.TrackerVC.pinned
         if visibleTrackers[0].name != pinnedName {
             dataProviderService.addCategoryToStore(name: pinnedName)
             dataProviderService.pinTracker(trackerID)
@@ -170,7 +170,7 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     func fillAdditionalInfo(id: UUID) {
         let completeDayString = setCellButtonIfTrackerWasCompletedToday(id: id)
         let countOfDays = countAmountOfCompleteDays(id: id)
-        let countOfDaysString = LocalizableConstants.TrackerVC.countOfCompletedDays(countOfDays: countOfDays)
+        let countOfDaysString = L10n.numberOfDays(countOfDays)
         let isCompleteToday = completeDayString == "+" ? false : true
         let isTodayFuture = checkCurrentDateIsFuture()
         
@@ -219,7 +219,7 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     }
     
     private func isPinnedTrackersExist() -> Bool {
-        dataProviderService.getVisiblieCategories().contains(where: { $0.name == LocalizableConstants.TrackerVC.pinned })
+        dataProviderService.getVisiblieCategories().contains(where: { $0.name == L10n.TrackerVC.pinned })
     }
     
     private func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory] {

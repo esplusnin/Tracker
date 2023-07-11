@@ -31,7 +31,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     private var trackerID: UUID?
     private var countOfDays = 0 {
         didSet {
-            newTrackerView.countOfCompleteDaysLabel.text = LocalizableConstants.TrackerVC.countOfCompletedDays(countOfDays: countOfDays)
+            newTrackerView.countOfCompleteDaysLabel.text = L10n.numberOfDays(countOfDays)
         }
     }
     
@@ -74,7 +74,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
     
     private func setTitle() {
-        newTrackerView.titleLabel.text = kindOfTracker == .habit ? LocalizableConstants.NewTrackerVC.habitTitle : LocalizableConstants.NewTrackerVC.unregularTitle
+        newTrackerView.titleLabel.text = kindOfTracker == .habit ? L10n.NewTracker.Habit.title : L10n.NewTracker.UnregularEvent.title
     }
     
     private func switchToCategoryVC() {
@@ -307,9 +307,9 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         
         switch indexPath.section {
         case 0:
-            view.headerLabel.text = LocalizableConstants.NewTrackerVC.emoji
+            view.headerLabel.text = L10n.NewTracker.emoji
         case 1:
-            view.headerLabel.text = LocalizableConstants.NewTrackerVC.collectionViewColor
+            view.headerLabel.text = L10n.NewTracker.CollectionView.color
         default:
             view.headerLabel.text = ""
         }
@@ -467,10 +467,10 @@ extension NewTrackerViewController {
         viewModel?.setTrackerEmoji(emoji: trackerInfo.emoji)
         viewModel?.setTrackerColor(color: trackerInfo.color)
         
-        newTrackerView.titleLabel.text = LocalizableConstants.EditingHabit.title
-        newTrackerView.createButton.setTitle(LocalizableConstants.EditingHabit.saveButton, for: .normal)
+        newTrackerView.titleLabel.text = L10n.EditingTracker.title
+        newTrackerView.createButton.setTitle(L10n.EditingTracker.saveChanges, for: .normal)
         newTrackerView.textField.text = trackerInfo.name
-        newTrackerView.countOfCompleteDaysLabel.text = LocalizableConstants.TrackerVC.countOfCompletedDays(countOfDays: additionatlInfo.countOfDays)
+        newTrackerView.countOfCompleteDaysLabel.text = L10n.numberOfDays(additionatlInfo.countOfDays)
         
         countOfDays = additionatlInfo.countOfDays
         trackerID = trackerInfo.id

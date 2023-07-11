@@ -28,7 +28,7 @@ final class NewTrackerView {
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftViewMode = .always
         textField.backgroundColor = .backgroundDay
-        textField.placeholder = LocalizableConstants.NewTrackerVC.textFieldPlaceholder
+        textField.placeholder = L10n.NewTracker.TextField.placeholder
         textField.textColor = .blackDay
         textField.font = .systemFont(ofSize: 17)
         
@@ -59,7 +59,7 @@ final class NewTrackerView {
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.red.cgColor
         button.backgroundColor = .whiteDay
-        button.setTitle(LocalizableConstants.NewTrackerVC.buttonCancel, for: .normal)
+        button.setTitle(L10n.NewTracker.Buttons.cancel, for: .normal)
         button.setTitleColor(.red, for: .normal)
         
         return button
@@ -69,7 +69,7 @@ final class NewTrackerView {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
         button.backgroundColor = .gray
-        button.setTitle(LocalizableConstants.NewTrackerVC.buttonCreate, for: .normal)
+        button.setTitle(L10n.NewTracker.Buttons.create, for: .normal)
         button.setTitleColor(.whiteDay, for: .normal)
         
         return button
@@ -77,7 +77,7 @@ final class NewTrackerView {
     
     lazy var warningTextFieldLimitationLabel: UILabel = {
         let label = UILabel()
-        label.text = LocalizableConstants.NewTrackerVC.warning
+        label.text = L10n.NewTracker.warning
         label.textColor = .red
         label.font = .systemFont(ofSize: 17)
         

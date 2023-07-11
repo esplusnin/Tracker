@@ -33,6 +33,7 @@
 		7EB00FB62A5BC17C00A58281 /* StatisticsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB00FB52A5BC17C00A58281 /* StatisticsServiceProtocol.swift */; };
 		7EB00FBA2A5BDD7200A58281 /* StatisticsBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB00FB92A5BDD7200A58281 /* StatisticsBlockView.swift */; };
 		7EB00FC02A5C021F00A58281 /* StatisticsServiceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB00FBF2A5C021F00A58281 /* StatisticsServiceHelper.swift */; };
+		7EB00FC92A5D708D00A58281 /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB00FC82A5D708D00A58281 /* Strings+Generated.swift */; };
 		7EB1D68F2A405CAB00106032 /* OnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D68E2A405CAB00106032 /* OnboardingPageViewController.swift */; };
 		7EB1D6912A405CED00106032 /* FirstOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D6902A405CED00106032 /* FirstOnboardingViewController.swift */; };
 		7EB1D6932A405CF900106032 /* SecondOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D6922A405CF900106032 /* SecondOnboardingViewController.swift */; };
@@ -41,7 +42,6 @@
 		7EB1D69B2A40689100106032 /* FirstEntryRevisionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D69A2A40689100106032 /* FirstEntryRevisionService.swift */; };
 		7EB1D6C22A4095E400106032 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D6C12A4095E400106032 /* CategoryViewModel.swift */; };
 		7EB1D6C62A409CF000106032 /* CategoryViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB1D6C52A409CF000106032 /* CategoryViewModelProtocol.swift */; };
-		7EB68B012A4EDAA600A35B3C /* LocalizableConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB68B002A4EDAA600A35B3C /* LocalizableConstants.swift */; };
 		7EB68B042A4EDBBE00A35B3C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7EB68B062A4EDBBE00A35B3C /* Localizable.strings */; };
 		7EC577AC2A2E2E67000837E8 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC577AB2A2E2E67000837E8 /* TrackerCategoryStore.swift */; };
 		7EC577C62A2E5934000837E8 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC577C52A2E5934000837E8 /* TrackerStore.swift */; };
@@ -140,6 +140,7 @@
 		7EB00FB52A5BC17C00A58281 /* StatisticsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsServiceProtocol.swift; sourceTree = "<group>"; };
 		7EB00FB92A5BDD7200A58281 /* StatisticsBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsBlockView.swift; sourceTree = "<group>"; };
 		7EB00FBF2A5C021F00A58281 /* StatisticsServiceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsServiceHelper.swift; sourceTree = "<group>"; };
+		7EB00FC82A5D708D00A58281 /* Strings+Generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = SOURCE_ROOT; };
 		7EB1D68E2A405CAB00106032 /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
 		7EB1D6902A405CED00106032 /* FirstOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstOnboardingViewController.swift; sourceTree = "<group>"; };
 		7EB1D6922A405CF900106032 /* SecondOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondOnboardingViewController.swift; sourceTree = "<group>"; };
@@ -148,7 +149,6 @@
 		7EB1D69A2A40689100106032 /* FirstEntryRevisionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstEntryRevisionService.swift; sourceTree = "<group>"; };
 		7EB1D6C12A4095E400106032 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		7EB1D6C52A409CF000106032 /* CategoryViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModelProtocol.swift; sourceTree = "<group>"; };
-		7EB68B002A4EDAA600A35B3C /* LocalizableConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizableConstants.swift; sourceTree = "<group>"; };
 		7EB68B052A4EDBBE00A35B3C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7EB68B072A4EDEEF00A35B3C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7EB68B092A4EDF1700A35B3C /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -339,7 +339,7 @@
 		7EB68AFF2A4EDA8100A35B3C /* Localizable */ = {
 			isa = PBXGroup;
 			children = (
-				7EB68B002A4EDAA600A35B3C /* LocalizableConstants.swift */,
+				7EB00FC82A5D708D00A58281 /* Strings+Generated.swift */,
 				7E26C0AC2A4DD67700A52D69 /* Localizable.stringsdict */,
 				7EB68B062A4EDBBE00A35B3C /* Localizable.strings */,
 			);
@@ -668,6 +668,7 @@
 			buildConfigurationList = 7EF620AE2A1629BA00B66A4B /* Build configuration list for PBXNativeTarget "Tracker" */;
 			buildPhases = (
 				7B77E17344099DC91AFB03E0 /* [CP] Check Pods Manifest.lock */,
+				7E5C8DC92A5D969800EA858F /* SwiftGen */,
 				7EF620962A1629B800B66A4B /* Sources */,
 				7EF620972A1629B800B66A4B /* Frameworks */,
 				7EF620982A1629B800B66A4B /* Resources */,
@@ -773,6 +774,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		7E5C8DC92A5D969800EA858F /* SwiftGen */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftGen;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftgen >/dev/null; then\n  swiftgen\nelse\n  echo \"warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
+		};
 		B224F200841602BF85349A29 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -851,6 +870,7 @@
 				7E584B5B2A52FD24004C1341 /* FilterCell.swift in Sources */,
 				7EB00FC02A5C021F00A58281 /* StatisticsServiceHelper.swift in Sources */,
 				7ECDD92F2A1BB13300771EE4 /* NewTrackerViewController.swift in Sources */,
+				7EB00FC92A5D708D00A58281 /* Strings+Generated.swift in Sources */,
 				7E102F9D2A53E63D00A1BDB7 /* CategoryCellDelegate.swift in Sources */,
 				7EDABC552A209F8100F39D8E /* CreatingTrackerViewControllerProtocol.swift in Sources */,
 				7EF620A22A1629B900B66A4B /* TrackersViewController.swift in Sources */,
@@ -858,7 +878,6 @@
 				7EB1D6932A405CF900106032 /* SecondOnboardingViewController.swift in Sources */,
 				7ED3D40A2A1A20BB004C371B /* Colors.swift in Sources */,
 				7EC8175D2A2724CF00527BBB /* DataProviderService.swift in Sources */,
-				7EB68B012A4EDAA600A35B3C /* LocalizableConstants.swift in Sources */,
 				7ECDD92C2A1BAB3400771EE4 /* CreatingTrackerView.swift in Sources */,
 				7ECDD93B2A1BC56400771EE4 /* CategoryViewController.swift in Sources */,
 				7EDAE2852A41D1B200A75A69 /* ScheduleViewModelProtocol.swift in Sources */,

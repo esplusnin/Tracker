@@ -12,7 +12,7 @@ final class NewCategoryView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
         label.textColor = .blackDay
-        label.text = LocalizableConstants.NewCategoryVC.title
+        label.text = L10n.NewCategory.title
         
         return label
     }()
@@ -26,7 +26,7 @@ final class NewCategoryView {
         textField.leftViewMode = .always
         textField.layer.cornerRadius = 16
         textField.backgroundColor = .backgroundDay
-        textField.placeholder = LocalizableConstants.NewCategoryVC.textFieldPlaceholder
+        textField.placeholder = L10n.NewCategory.TextField.placeholder
         
         return textField
     }()
@@ -34,7 +34,7 @@ final class NewCategoryView {
     lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
-        button.setTitle(LocalizableConstants.NewCategoryVC.readyButton, for: .normal)
+        button.setTitle(L10n.NewCategory.readyButton, for: .normal)
         button.setTitleColor(.whiteDay, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.backgroundColor = .backgroundDay

@@ -87,7 +87,7 @@ extension StatisticViewController {
     
     private func setNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = LocalizableConstants.StatisticsVC.title
+        title = L10n.Statistics.title
     }
 }
     

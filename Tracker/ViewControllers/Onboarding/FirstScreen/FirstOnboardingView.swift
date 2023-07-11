@@ -21,7 +21,7 @@ final class FirstOnboardingView {
         label.textColor = .black
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.text = LocalizableConstants.OnboardingVC.firstScreenTitle
+        label.text = L10n.Onboarding.FirstScreen.title
         
         return label
     }()
@@ -40,7 +40,7 @@ final class FirstOnboardingView {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.setTitle(LocalizableConstants.OnboardingVC.continueButton, for: .normal)
+        button.setTitle(L10n.Onboarding.continueButton, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.backgroundColor = .black

@@ -10,7 +10,7 @@ import UIKit
 final class FilterView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = LocalizableConstants.FilterVC.title
+        label.text = L10n.Filter.title
         label.font = .systemFont(ofSize: 16)
         label.textColor = .blackDay
         

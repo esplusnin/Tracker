@@ -23,19 +23,19 @@ final class ScheduleService {
     
     func addWeekDayToSchedule(dayName: String) -> Int {
         switch dayName {
-        case LocalizableConstants.ScheduleVC.sunday:
+        case L10n.Schedule.sunday:
             return 1
-        case LocalizableConstants.ScheduleVC.monday:
+        case L10n.Schedule.monday:
             return 2
-        case LocalizableConstants.ScheduleVC.tuesday:
+        case L10n.Schedule.tuesday:
             return 3
-        case LocalizableConstants.ScheduleVC.wednesday:
+        case L10n.Schedule.wednesday:
             return 4
-        case LocalizableConstants.ScheduleVC.thursday:
+        case L10n.Schedule.thursday:
             return 5
-        case LocalizableConstants.ScheduleVC.friday:
+        case L10n.Schedule.friday:
             return 6
-        case LocalizableConstants.ScheduleVC.saturday:
+        case L10n.Schedule.saturday:
             return 7
         default:
             return 0
@@ -45,19 +45,19 @@ final class ScheduleService {
     private func getShortNameWeekDayFromNumber(_ number: Int) -> String {
         switch number {
         case 1:
-            return LocalizableConstants.ScheduleVC.sundayShort
+            return L10n.Schedule.Sunday.short
         case 2:
-            return LocalizableConstants.ScheduleVC.mondayShort
+            return L10n.Schedule.Monday.short
         case 3:
-            return LocalizableConstants.ScheduleVC.tuesdayShort
+            return L10n.Schedule.Tuesday.short
         case 4:
-            return LocalizableConstants.ScheduleVC.wednesdayShort
+            return L10n.Schedule.Wednesday.short
         case 5:
-            return LocalizableConstants.ScheduleVC.thursdayShort
+            return L10n.Schedule.Thursday.short
         case 6:
-            return LocalizableConstants.ScheduleVC.fridayShort
+            return L10n.Schedule.Friday.short
         case 7:
-            return LocalizableConstants.ScheduleVC.saturdayShort
+            return L10n.Schedule.Saturday.short
         default:
             return ""
         }

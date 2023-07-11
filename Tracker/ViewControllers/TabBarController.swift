@@ -31,10 +31,10 @@ final class TabBarController: UITabBarController {
         let statisticViewControllerNavigation = UINavigationController(rootViewController: statisticsViewController)
         
         
-        trackersViewControllerNavigation.tabBarItem = UITabBarItem(title: LocalizableConstants.TabBarVC.trackers,
+        trackersViewControllerNavigation.tabBarItem = UITabBarItem(title: L10n.TabBar.trackers,
                                                                    image: Resources.Images.trackersTabBar,
                                                                    selectedImage: nil)
-        statisticViewControllerNavigation.tabBarItem = UITabBarItem(title: LocalizableConstants.TabBarVC.statistics,
+        statisticViewControllerNavigation.tabBarItem = UITabBarItem(title: L10n.TabBar.statistics,
                                                                     image: Resources.Images.statisticTabBar,
                                                                     selectedImage: nil)
         

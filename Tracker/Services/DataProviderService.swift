@@ -156,14 +156,14 @@ final class DataProviderService {
     // Return string of current localize value from selected filter 
     func currentFilterDidUpdate() {
         switch currentFilter {
-        case "\(LocalizableConstants.FilterVC.allTrackers)":
+        case L10n.Filter.allTrackers:
             trackersViewModel?.showNewTrackersAfterChangeDate()
-        case "\(LocalizableConstants.FilterVC.todaysTrackers)":
+        case L10n.Filter.todaysTrackers:
             trackersViewModel?.todaysFilterDidEnable()
-        case "\(LocalizableConstants.FilterVC.completedTrackers)":
+        case L10n.Filter.completedTrackers:
             trackersViewModel?.showNewTrackersAfterChangeDate()
             trackersViewModel?.updateVisibleTrackers(isCompleted: true)
-        case "\(LocalizableConstants.FilterVC.uncompletedTrackers)":
+        case L10n.Filter.uncompletedTrackers:
             trackersViewModel?.showNewTrackersAfterChangeDate()
             trackersViewModel?.updateVisibleTrackers(isCompleted: false)
         default:

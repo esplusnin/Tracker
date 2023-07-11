@@ -18,7 +18,7 @@ final class StatisticView {
     
     lazy var emptyStatisticLabel: UILabel = {
         let label = UILabel()
-        label.text = LocalizableConstants.StatisticsVC.nothingToAnalyze
+        label.text = L10n.Statistics.nothingToAnalyze
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor.blackDay
@@ -28,28 +28,28 @@ final class StatisticView {
     
     lazy var bestPeriod: StatisticsBlockView = {
         let view = StatisticsBlockView()
-        view.setDescriptionLabel(value: LocalizableConstants.StatisticsVC.bestPeriod)
+        view.setDescriptionLabel(value: L10n.Statistics.bestPeriod)
         
         return view
     }()
     
     lazy var perfectDays: StatisticsBlockView = {
         let view = StatisticsBlockView()
-        view.setDescriptionLabel(value: LocalizableConstants.StatisticsVC.perfectDays)
+        view.setDescriptionLabel(value: L10n.Statistics.perfectDays)
         
         return view
     }()
     
     lazy var completedTrackersView: StatisticsBlockView = {
         let view = StatisticsBlockView()
-        view.setDescriptionLabel(value: LocalizableConstants.StatisticsVC.totalCompletedTracker)
+        view.setDescriptionLabel(value: L10n.Statistics.totalCompletedTracker)
         
         return view
     }()
     
     lazy var averageDays:  StatisticsBlockView = {
         let view = StatisticsBlockView()
-        view.setDescriptionLabel(value: LocalizableConstants.StatisticsVC.averageValue)
+        view.setDescriptionLabel(value: L10n.Statistics.averageValue)
         
         return view
     }()

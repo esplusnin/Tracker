@@ -22,17 +22,17 @@ final class AlertService {
         
         switch event {
         case .removeCategory:
-            title = LocalizableConstants.AlertsVC.removeCategoryTitle
-            message = LocalizableConstants.AlertsVC.removeCategoryMessage
+            title = L10n.Alert.RemoveCategory.title
+            message = L10n.Alert.RemoveCategory.message
         case .removeTracker:
-            title = LocalizableConstants.AlertsVC.removeTrackerTitle
+            title = L10n.Alert.RemoveTracker.title
         }
         
         let alert = UIAlertController(title: title,
                                       message: message,
                                       preferredStyle: .actionSheet)
-        let cancel = UIAlertAction(title: LocalizableConstants.AlertsVC.cancel, style: .cancel)
-        let remove = UIAlertAction(title: LocalizableConstants.AlertsVC.remove, style: .destructive) { _ in
+        let cancel = UIAlertAction(title: L10n.Alert.cancel, style: .cancel)
+        let remove = UIAlertAction(title: L10n.Alert.remove, style: .destructive) { _ in
             completion()
         }
         

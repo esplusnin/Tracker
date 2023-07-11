@@ -11,8 +11,8 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
         
     private let dataProviderService = DataProviderService.instance
     
-    let buttonsTitleForTableView = [LocalizableConstants.NewTrackerVC.tableViewCategory,
-                                    LocalizableConstants.NewTrackerVC.tableViewSchedule]
+    let buttonsTitleForTableView = [L10n.NewTracker.TableView.category,
+                                    L10n.NewTracker.TableView.schedule]
     
     var emojiArray = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -121,7 +121,7 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
         
         guard let schedule = dataProviderService.trackerSchedule else { return }
         
-        let string = schedule.count == 7 ? LocalizableConstants.ScheduleVC.everyDay : ScheduleService().getScheduleString(schedule)
+        let string = schedule.count == 7 ? L10n.Schedule.everyDay : ScheduleService().getScheduleString(schedule)
         
         dataProviderService.selectedScheduleString = string
     }

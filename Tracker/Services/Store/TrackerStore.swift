@@ -116,7 +116,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         guard let tracker = fetchedResultController.fetchedObjects?.first(
             where: { $0.id == trackerID }) else { return }
         
-        let pinnedName = LocalizableConstants.TrackerVC.pinned
+        let pinnedName = L10n.TrackerVC.pinned
         let category = dataProviderService.fetchSpecificCategory(name: pinnedName)
         
         tracker.previousCategory = tracker.category

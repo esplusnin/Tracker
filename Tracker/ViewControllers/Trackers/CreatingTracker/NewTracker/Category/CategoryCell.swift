@@ -50,12 +50,12 @@ extension CategoryCell: UIContextMenuInteractionDelegate {
         let removeImage = UIImage(systemName: "trash")
         
         return UIContextMenuConfiguration(actionProvider:  { _ in
-            let editAction = UIAction(title: LocalizableConstants.ContextMenuVC.edit,
+            let editAction = UIAction(title: L10n.ContextMenu.edit,
                                       image: editImage) { [weak self] _ in
                 guard let self = self else { return }
                 self.delegate?.editCategory(self)
             }
-            let removeAction = UIAction(title: LocalizableConstants.ContextMenuVC.remove,
+            let removeAction = UIAction(title: L10n.ContextMenu.remove,
                                         image: removeImage,
                                         attributes: .destructive) { [weak self] _ in
                 guard let self = self else { return }

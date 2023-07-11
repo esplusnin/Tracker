@@ -21,7 +21,7 @@ final class SecondOnboardingView {
         label.textColor = .black
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.text = LocalizableConstants.OnboardingVC.secondScreenTitle
+        label.text = L10n.Onboarding.SecondScreen.title
         
         return label
     }()
@@ -40,7 +40,7 @@ final class SecondOnboardingView {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.setTitle(LocalizableConstants.OnboardingVC.continueButton, for: .normal)
+        button.setTitle(L10n.Onboarding.continueButton, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.titleLabel?.textColor = .white

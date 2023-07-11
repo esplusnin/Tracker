@@ -12,7 +12,7 @@ final class EditingCategoryView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16)
         label.textColor = .blackDay
-        label.text = LocalizableConstants.EditingCategory.title
+        label.text = L10n.EditingCategory.title
         
         return label
     }()
@@ -39,7 +39,7 @@ final class EditingCategoryView {
     lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
-        button.setTitle(LocalizableConstants.EditingCategory.completeButton, for: .normal)
+        button.setTitle(L10n.EditingCategory.completeButton, for: .normal)
         button.setTitleColor(.whiteDay, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.backgroundColor = .backgroundDay

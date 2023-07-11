@@ -10,7 +10,7 @@ import UIKit
 final class CategoryView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = LocalizableConstants.CategoryVC.title
+        label.text = L10n.Category.title
         label.font = .systemFont(ofSize: 16)
         label.textColor = .blackDay
         
@@ -27,7 +27,7 @@ final class CategoryView {
     lazy var emptyCategoryLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.text = LocalizableConstants.CategoryVC.emptyCategory
+        label.text = L10n.Category.emptyCategory
         label.textAlignment = .center
         label.textColor = .blackDay
         label.font = .systemFont(ofSize: 12)
@@ -47,7 +47,7 @@ final class CategoryView {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
         button.backgroundColor = .blackDay
-        button.setTitle(LocalizableConstants.CategoryVC.addCategory, for: .normal)
+        button.setTitle(L10n.Category.addCategory, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.setTitleColor(.whiteDay, for: .normal)
         

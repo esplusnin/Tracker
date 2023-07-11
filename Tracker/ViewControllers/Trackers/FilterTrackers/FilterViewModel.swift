@@ -13,10 +13,10 @@ final class FilterViewModel {
     private let analyticsService = AnalyticsService.instance
     
     private(set) var availableFilters: [String] = [
-        LocalizableConstants.FilterVC.allTrackers,
-        LocalizableConstants.FilterVC.todaysTrackers,
-        LocalizableConstants.FilterVC.completedTrackers,
-        LocalizableConstants.FilterVC.uncompletedTrackers
+        L10n.Filter.allTrackers,
+        L10n.Filter.todaysTrackers,
+        L10n.Filter.completedTrackers,
+        L10n.Filter.uncompletedTrackers
     ]
     
     func getCurrentFilter() -> String {
@@ -28,13 +28,13 @@ final class FilterViewModel {
         var eventName: Item
         
         switch selected {
-        case LocalizableConstants.FilterVC.allTrackers:
+        case L10n.Filter.allTrackers:
             eventName = Item.allTrackers
-        case LocalizableConstants.FilterVC.todaysTrackers:
+        case L10n.Filter.todaysTrackers:
             eventName = Item.todaysTrackers
-        case LocalizableConstants.FilterVC.completedTrackers:
+        case L10n.Filter.completedTrackers:
             eventName = Item.completedTrackers
-        case LocalizableConstants.FilterVC.uncompletedTrackers:
+        case L10n.Filter.uncompletedTrackers:
             eventName = Item.uncompletedTrackers
         default:
             return

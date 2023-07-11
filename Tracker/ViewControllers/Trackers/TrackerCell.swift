@@ -42,9 +42,9 @@ final class TrackerCell: UICollectionViewCell {
             
             switch isTrackerPinned {
             case true:
-                pinCommandString = LocalizableConstants.ContextMenuVC.unfix
+                pinCommandString = L10n.ContextMenu.unfix
             case false:
-                pinCommandString = LocalizableConstants.ContextMenuVC.fix
+                pinCommandString = L10n.ContextMenu.fix
             }
         }
     }
@@ -214,13 +214,13 @@ extension TrackerCell: UIContextMenuInteractionDelegate {
                 isTrackerPinned ? self.unpinTracker(from: self) : self.pinTracker(from: self)
             }
             
-            let editAction = UIAction(title: LocalizableConstants.ContextMenuVC.edit,
+            let editAction = UIAction(title: L10n.ContextMenu.edit,
                                       image: editImage) { [weak self] action in
                 guard let self = self else { return }
                 self.editTracker(from: self)
             }
             
-            let deleteAction = UIAction(title: LocalizableConstants.ContextMenuVC.remove,
+            let deleteAction = UIAction(title: L10n.ContextMenu.remove,
                                         image: removeImage, attributes: .destructive) { [weak self] action in
                 guard let self = self else { return }
                 self.deleteTracker(from: self)

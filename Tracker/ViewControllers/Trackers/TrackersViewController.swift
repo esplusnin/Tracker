@@ -338,8 +338,8 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell.additionalTrackerInfo = additionalInfo
         cell.delegate = self
         
-        cell.isTrackerPinned = sectionName == LocalizableConstants.TrackerVC.pinned ? true : false
-        cell.pinSingImageView.isHidden = sectionName == LocalizableConstants.TrackerVC.pinned ? false : true 
+        cell.isTrackerPinned = sectionName == L10n.TrackerVC.pinned ? true : false
+        cell.pinSingImageView.isHidden = sectionName == L10n.TrackerVC.pinned ? false : true
         
         return cell
     }
@@ -437,12 +437,12 @@ extension TrackersViewController {
     
     private func setDumbImageViewAfterSearch() {
         trackersView.emptyTrackersImageView.image = Resources.Images.searchedTrackersIsEmpty
-        trackersView.emptyTrackersLabel.text = LocalizableConstants.TrackerVC.nothingSearched
+        trackersView.emptyTrackersLabel.text = L10n.TrackerVC.nothingSearched
     }
     
     private func setDumbWithNoTrackers() {
         trackersView.emptyTrackersImageView.image = Resources.Images.trackersIsEmpty
-        trackersView.emptyTrackersLabel.text = LocalizableConstants.TrackerVC.emptyStateLabel
+        trackersView.emptyTrackersLabel.text = L10n.TrackerVC.EmptyState.label
     }
     
     private func setFilterButton() {

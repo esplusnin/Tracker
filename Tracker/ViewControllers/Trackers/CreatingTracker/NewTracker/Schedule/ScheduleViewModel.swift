@@ -18,7 +18,9 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     @Observable
     private(set) var isReadyToUnlockCreateButton = false
     private(set) var schedule: [Int] = []
-    private(set) var daysArray = [LocalizableConstants.ScheduleVC.monday, LocalizableConstants.ScheduleVC.tuesday, LocalizableConstants.ScheduleVC.wednesday, LocalizableConstants.ScheduleVC.thursday, LocalizableConstants.ScheduleVC.friday, LocalizableConstants.ScheduleVC.saturday, LocalizableConstants.ScheduleVC.sunday]
+    private(set) var daysArray = [
+        L10n.Schedule.monday, L10n.Schedule.tuesday, L10n.Schedule.wednesday, L10n.Schedule.thursday,
+        L10n.Schedule.friday, L10n.Schedule.saturday, L10n.Schedule.sunday]
     
     init() {
         dataProviderService.bindScheduleViewModel(controller: self)
@@ -35,9 +37,9 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     }
     
     func setSchedule() {
-        let string = schedule.count == 7 ? LocalizableConstants.ScheduleVC.everyDay : scheduleService.getScheduleString(schedule)
+        let string = schedule.count == 7 ? L10n.Schedule.everyDay : scheduleService.getScheduleString(schedule)
         
-        if string == LocalizableConstants.ScheduleVC.everyDay {
+        if string == L10n.Schedule.everyDay {
             analyticsService.sentEvent(typeOfEvent: .click, screen: .scheduleVC, item: .everyDay)
         } else {
             analyticsService.sentEvent(typeOfEvent: .click, screen: .scheduleVC, item: .notEveryDay)
