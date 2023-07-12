@@ -668,7 +668,6 @@
 			buildConfigurationList = 7EF620AE2A1629BA00B66A4B /* Build configuration list for PBXNativeTarget "Tracker" */;
 			buildPhases = (
 				7B77E17344099DC91AFB03E0 /* [CP] Check Pods Manifest.lock */,
-				7E5C8DC92A5D969800EA858F /* SwiftGen */,
 				7EF620962A1629B800B66A4B /* Sources */,
 				7EF620972A1629B800B66A4B /* Frameworks */,
 				7EF620982A1629B800B66A4B /* Resources */,
@@ -773,24 +772,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		7E5C8DC92A5D969800EA858F /* SwiftGen */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = SwiftGen;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftgen >/dev/null; then\n  swiftgen\nelse\n  echo \"warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
 		};
 		B224F200841602BF85349A29 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
