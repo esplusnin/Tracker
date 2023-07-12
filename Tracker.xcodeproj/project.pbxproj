@@ -414,8 +414,8 @@
 		7ECDD92D2A1BAB3800771EE4 /* CreatingTracker */ = {
 			isa = PBXGroup;
 			children = (
-				7ECDD9342A1BB17800771EE4 /* NewTracker */,
 				7EC817552A25D85200527BBB /* CreatingTrackerProtocols */,
+				7ECDD9342A1BB17800771EE4 /* NewTracker */,
 				7ECDD92B2A1BAB3400771EE4 /* CreatingTrackerView.swift */,
 				7ECDD9292A1BAB0800771EE4 /* CreatingTrackerViewController.swift */,
 			);
@@ -509,8 +509,8 @@
 		7ED3D3FE2A1A193C004C371B /* Trackers */ = {
 			isa = PBXGroup;
 			children = (
-				7ECDD92D2A1BAB3800771EE4 /* CreatingTracker */,
 				7EC817542A25D80B00527BBB /* TrackersProtocols */,
+				7ECDD92D2A1BAB3800771EE4 /* CreatingTracker */,
 				7E584B552A52E835004C1341 /* FilterTrackers */,
 				7ED3D4012A1A19A0004C371B /* TrackersView.swift */,
 				7E14C1C92A446BE90000587D /* TrackersViewModel.swift */,

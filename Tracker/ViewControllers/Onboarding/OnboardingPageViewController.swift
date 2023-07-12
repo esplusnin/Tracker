@@ -8,9 +8,11 @@
 import UIKit
 
 final class OnboardingPageViewController: UIPageViewController {
+    
     let controller = [FirstOnboardingViewController(), SecondOnboardingViewController()]
     
-    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
+    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation,
+                  options: [UIPageViewController.OptionsKey : Any]? = nil) {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal)
         
         dataSource = self
@@ -25,6 +27,7 @@ final class OnboardingPageViewController: UIPageViewController {
     }
 }
 
+// MARK: - UIPageViewControllerDataSource
 extension OnboardingPageViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let index = controller.firstIndex(of: viewController) else { return nil }

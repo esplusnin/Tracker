@@ -16,6 +16,7 @@ enum KindOfTrackers {
 final class NewTrackerViewController: UIViewController, NewTrackerViewControllerProtocol {
     
     var creatingTrackerViewController: CreatingTrackerViewControllerProtocol?
+    
     var kindOfTracker: KindOfTrackers? {
         didSet {
             guard let kindOfTracker = kindOfTracker else { return }
@@ -23,9 +24,9 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         }
     }
     
-    private(set) var newTrackerView = NewTrackerView()
     private var viewModel: NewTrackerViewModel?
     private let analyticsService = AnalyticsService.instance
+    private(set) var newTrackerView = NewTrackerView()
 
     // For Editing VC:
     private var trackerID: UUID?
@@ -130,6 +131,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
         }
     }
     
+    // MARK: - Objc methods:
     @objc private func createNewTracker() {
         viewModel?.createNewTracker()
         viewModel?.resetTrackerInfoAfterCreate()
@@ -171,7 +173,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewController
     }
 }
 
-// MARK: UITextFieldDelegate
+// MARK: - UITextFieldDelegate
 extension NewTrackerViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.becomeFirstResponder()
@@ -192,7 +194,7 @@ extension NewTrackerViewController: UITextFieldDelegate {
     }
 }
 
-// MARK: UITableViewDataSource
+// MARK: - UITableViewDataSource
 extension NewTrackerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch kindOfTracker {
@@ -238,7 +240,7 @@ extension NewTrackerViewController: UITableViewDataSource {
     }
 }
 
-// MARK: UITableViewDelegate
+// MARK: - UITableViewDelegate
 extension NewTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
@@ -254,7 +256,7 @@ extension NewTrackerViewController: UITableViewDelegate {
     }
 }
 
-// MARK: UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
 extension NewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let viewModel = viewModel else { return 0 }
@@ -318,7 +320,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionViewDelegateFlowLayout
 extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
@@ -397,7 +399,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK: Main Settings of TableView
+// MARK: - Main Settings of TableView
 extension NewTrackerViewController {
     private func setTableViewMainSettings() {
         newTrackerView.tableView.register(NewTrackerCell.self, forCellReuseIdentifier: "Cell")
@@ -406,7 +408,7 @@ extension NewTrackerViewController {
     }
 }
 
-// MARK: Main Settings of CollectionView
+// MARK: - Main Settings of CollectionView
 extension NewTrackerViewController {
     private func setCollectionViewMainSetting() {
         newTrackerView.collectionView.register(NewTrackerCollectionCell.self,
@@ -420,20 +422,24 @@ extension NewTrackerViewController {
     }
 }
 
-// MARK: Set EditingVC:
+// MARK: - Settings EditingVC:
 extension NewTrackerViewController {
+    // Set tracker's info into ViewController:
     func setupEditingVC(trackerInfo: Tracker, additionalTrackerInfo: AdditionTrackerInfo) {
         setupEditingTrackerMenu(trackerInfo: trackerInfo, additionalTrackerInfo: additionalTrackerInfo)
         setupCurrentTrackerInfo(trackerInfo: trackerInfo, additionatlInfo: additionalTrackerInfo)
         setupTargets()
     }
     private func setupEditingTrackerMenu(trackerInfo: Tracker, additionalTrackerInfo: AdditionTrackerInfo) {
+        // Preset:
         viewModel?.presetTrackerInfo(trackerInfo: trackerInfo, additionalTrackerInfo: additionalTrackerInfo)
         
+        // Set views:
         view.addSubview(newTrackerView.countOfCompleteDaysLabel)
         view.addSubview(newTrackerView.leftStepperButton)
         view.addSubview(newTrackerView.rightStepperButton)
         
+        // Set constraints:
         newTrackerView.countOfCompleteDaysLabel.snp.makeConstraints { make in
             make.top.equalTo(newTrackerView.titleLabel).inset(35)
             make.top.equalTo(newTrackerView.titleLabel).inset(35)
@@ -462,6 +468,7 @@ extension NewTrackerViewController {
         setupCurrentTrackerInfo(trackerInfo: trackerInfo, additionatlInfo: additionalTrackerInfo)
     }
     
+
     private func setupCurrentTrackerInfo(trackerInfo: Tracker, additionatlInfo: AdditionTrackerInfo) {        
         viewModel?.setTrackerName(name: trackerInfo.name)
         viewModel?.setTrackerEmoji(emoji: trackerInfo.emoji)
@@ -493,7 +500,7 @@ extension NewTrackerViewController {
     }
 }
 
-// MARK: Setting views:
+// MARK: - Settings views:
 extension NewTrackerViewController {
     private func setViews() {
         view.backgroundColor = .whiteDay
@@ -508,7 +515,7 @@ extension NewTrackerViewController {
     }
 }
 
-// MARK: Setting constraints:
+// MARK: - Settings constraints:
 extension NewTrackerViewController {
     private func setConstraints() {
         newTrackerView.scrollView.snp.makeConstraints { make in

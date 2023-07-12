@@ -38,6 +38,25 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
         dataProviderService.bindNewTrackerViewModel(controller: self)
     }
     
+    // MARK: - Wrapped propertie's rules:
+    func changeStatusToCreateTracker() {
+        isReadyToCreateNewTracker = true
+    }
+    
+    func isControllerReadyToCreateNewTracker() {
+        if dataProviderService.isTrackerParametersWasFilled() {
+            switch kindOfTrackers {
+            case .unregularEvent:
+                isReadyToCreateNewTracker = true
+            case .habit:
+                isReadyToCreateNewTracker = dataProviderService.selectedScheduleString != nil ? true : false
+            }
+        } else {
+            isReadyToCreateNewTracker = false
+        }
+    }
+    
+    // MARK: - Create and reset tracker's info:
     func createNewTracker() {
         guard let trackerName = dataProviderService.trackerName,
               let trackerColor = dataProviderService.trackerColor,
@@ -52,7 +71,11 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
         dataProviderService.addTrackerToStore(model: tracker)
     }
     
-    // MARK: Setting Tracker info:
+    func resetTrackerInfoAfterCreate() {
+        dataProviderService.resetNewTrackerInfo()
+    }
+    
+    // MARK: - Setting Tracker info:
     func setTrackerName(name: String) {
         dataProviderService.trackerName = name == "" ? nil : name
     }
@@ -80,11 +103,7 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
         }
     }
     
-    func resetTrackerInfoAfterCreate() {
-        dataProviderService.resetNewTrackerInfo()
-    }
-    
-    // MARK: Getting Tracker info:
+    // MARK: - Getting Tracker info:
     func getSelectedCategoryName() -> String? {
         dataProviderService.selectedCategoryString
     }
@@ -93,25 +112,7 @@ final class NewTrackerViewModel: NewTrackerViewModelProtocol {
         dataProviderService.selectedScheduleString
     }
     
-    // MARK: Rule wrapped property:
-    func changeStatusToCreateTracker() {
-        isReadyToCreateNewTracker = true
-    }
-    
-    func isControllerReadyToCreateNewTracker() {
-        if dataProviderService.isTrackerParametersWasFilled() {
-            switch kindOfTrackers {
-            case .unregularEvent:
-                isReadyToCreateNewTracker = true
-            case .habit:
-                isReadyToCreateNewTracker = dataProviderService.selectedScheduleString != nil ? true : false
-            }
-        } else {
-            isReadyToCreateNewTracker = false
-        }
-    }
-    
-    // MARK: Editing tracker info:
+    // MARK: - Editing tracker info:
     func presetTrackerInfo(trackerInfo: Tracker, additionalTrackerInfo: AdditionTrackerInfo) {
         dataProviderService.trackerName = trackerInfo.name
         dataProviderService.trackerEmoji = trackerInfo.emoji

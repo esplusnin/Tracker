@@ -37,7 +37,6 @@ final class TrackersView {
     lazy var navigationBarTitleLabel: UILabel = {
         let label = UILabel()
         label.text = L10n.TrackerVC.title
-//        label.text = LocalizableConstants.TrackerVC.title
         label.font = .boldSystemFont(ofSize: 34)
         
         return label
@@ -57,7 +56,6 @@ final class TrackersView {
         textField.clearButtonMode = .never
         textField.returnKeyType = .go
         textField.placeholder = L10n.TrackerVC.SearchField.placeholder
-//        textField.placeholder = LocalizableConstants.TrackerVC.searchFieldPlaceholder
         textField.textColor = .blackDay
         
         return textField

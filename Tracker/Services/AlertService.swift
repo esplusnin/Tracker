@@ -13,6 +13,7 @@ enum ContextEvent {
 }
 
 final class AlertService {
+    
     func showAlert(event: ContextEvent,
                    controller: UIViewController,
                    completion: @escaping (() -> Void)) {

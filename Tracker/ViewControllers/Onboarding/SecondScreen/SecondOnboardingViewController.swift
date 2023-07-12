@@ -33,7 +33,7 @@ final class SecondOnboardingViewController: UIViewController {
     }
 }
 
-// Setup views
+// MARK: - Settings views
 extension SecondOnboardingViewController {
     private func setViews() {
         view.addSubview(secondOnboardingView.backgroundImageView)
@@ -43,6 +43,7 @@ extension SecondOnboardingViewController {
     }
 }
 
+// MARK: - Settings constraints
 extension SecondOnboardingViewController {
     private func setConstraints() {
         secondOnboardingView.backgroundImageView.snp.makeConstraints { make in

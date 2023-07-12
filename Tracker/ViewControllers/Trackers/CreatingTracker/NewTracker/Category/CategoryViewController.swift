@@ -16,7 +16,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        bindViewModel()
+        bind()
         
         checkToSetupDumb()
         categoryView.tableView.delegate = self
@@ -29,7 +29,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         setTargets()
     }
     
-    private func bindViewModel() {
+    private func bind() {
         viewModel.$visibleCategories.bind { [weak self] _ in
             guard let self = self else { return }
 
@@ -61,6 +61,21 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     }
 }
 
+// MARK: - CategoryCellDelegate
+extension CategoryViewController: CategoryCellDelegate {
+    func editCategory(_ cell: CategoryCell) {
+        guard let categoryName = cell.titleLabel.text else { return }
+        switchToEditingVC(categoryName)
+    }
+    
+    func removeCategory(_ cell: CategoryCell) {
+        AlertService().showAlert(event: .removeCategory, controller: self) { [weak self] in
+            guard let self = self, let categoryName = cell.titleLabel.text else { return }
+            self.viewModel.removeCategory(categoryName)
+        }
+    }
+}
+// MARK: - UITableViewDelegate
 extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? CategoryCell else { return }
@@ -79,6 +94,7 @@ extension CategoryViewController: UITableViewDelegate {
     }
 }
 
+//MARK: - UITableViewDataSource
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.numberOfCategories ?? 0
@@ -110,21 +126,7 @@ extension CategoryViewController: UITableViewDataSource {
     }
 }
 
-extension CategoryViewController: CategoryCellDelegate {
-    func editCategory(_ cell: CategoryCell) {
-        guard let categoryName = cell.titleLabel.text else { return }
-        switchToEditingVC(categoryName)
-    }
-    
-    func removeCategory(_ cell: CategoryCell) {
-        AlertService().showAlert(event: .removeCategory, controller: self) { [weak self] in
-            guard let self = self, let categoryName = cell.titleLabel.text else { return }
-            self.viewModel.removeCategory(categoryName)
-        }
-    }
-}
-
-// MARK: Setting views:
+// MARK: - Settings views:
 extension CategoryViewController {
     private func setViews() {
         view.backgroundColor = .whiteDay
@@ -137,7 +139,7 @@ extension CategoryViewController {
     }
 }
 
-// MARK: Setting constraints:
+// MARK: - Settings constraints:
 extension CategoryViewController {
     private func setConstraints() {
         categoryView.titleLabel.snp.makeConstraints { make in

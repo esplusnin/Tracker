@@ -18,6 +18,11 @@ struct AdditionTrackerInfo {
 
 final class TrackersViewModel: TrackersViewModelProtocol {
     
+    private let dataProviderService = DataProviderService.instance
+    
+    var additionTrackerInfo: AdditionTrackerInfo?
+    var currentDate: Date?
+    
     @Observable
     private(set) var visibleTrackers: [TrackerCategory] = []
     @Observable
@@ -28,12 +33,8 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     private(set) var isVisibleCategoryEmptyAfterSearch: Bool?
     @Observable
     private(set) var isNeedToChangeDate: Bool?
-    
-    private let dataProviderService = DataProviderService.instance
     private var pinnedTrackers: [Tracker] = []
-    var additionTrackerInfo: AdditionTrackerInfo?
-    var currentDate: Date?
-    
+        
     init() {
         dataProviderService.trackerStore = TrackerStore()
         dataProviderService.trackerCategoryStore = TrackerCategoryStore()
@@ -41,11 +42,20 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         dataProviderService.statisticsService = StatisticsService()
         
         dataProviderService.inizializeVisibleCategories()
-        dataProviderService.getCategoryNames()
+        dataProviderService.updateCategoryNames()
         dataProviderService.setAllTrackerRecords()
         dataProviderService.bindTrackersViewModel(controller: self)
     }
+    // MARK: - Wrapped propertie's rules:
+    func recordDidUpdate() {
+        isRecordUpdate = true
+    }
     
+    func todaysFilterDidEnable() {
+        isNeedToChangeDate = true
+    }
+    
+    // MARK: - Operating with arrays:
     func setVisibleTrackersFromProvider() {
         if isPinnedTrackersExist() {
             getVisibleTrackersWithPinned()
@@ -130,6 +140,15 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         visibleTrackers = newArray
     }
     
+    // MARK: - Tracker's actions:
+    func editTracker(trackerID: UUID) {
+        dataProviderService.editTrackerFromStore(trackerID)
+    }
+    
+    func deleteTracker(id: UUID) {
+        dataProviderService.deleteTrackerFromStore(id: id)
+    }
+    
     func pinTracker(_ trackerID: UUID) {
         let pinnedName = L10n.TrackerVC.pinned
         if visibleTrackers[0].name != pinnedName {
@@ -142,22 +161,6 @@ final class TrackersViewModel: TrackersViewModelProtocol {
     
     func unpinTracker(_ trackerID: UUID) {
         dataProviderService.unpinTracker(trackerID)
-    }
-    
-    func recordDidUpdate() {
-        isRecordUpdate = true
-    }
-    
-    func todaysFilterDidEnable() {
-        isNeedToChangeDate = true
-    }
-    
-    func editTracker(trackerID: UUID) {
-        dataProviderService.editTrackerFromStore(trackerID)
-    }
-    
-    func deleteTracker(id: UUID) {
-        dataProviderService.deleteTrackerFromStore(id: id)
     }
     
     func changeCountOfPerfectDays(isAdd: Bool) {
@@ -185,6 +188,7 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         dataProviderService.changeStatusTrackerRecord(model: model, isAddDay: isAddDay)
     }
     
+    // MARK: - Helpers:
     private func setCellButtonIfTrackerWasCompletedToday(id: UUID) -> String {
         var string = "+"
         let completedTrackers = dataProviderService.getTrackerRecords()

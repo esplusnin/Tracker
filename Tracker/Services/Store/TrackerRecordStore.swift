@@ -40,7 +40,7 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         return fetchedController
     }()
     
-    // CRUD TrackerRecord:
+    // MARK: - CRUD TrackerRecord:
     func addRecord(tracker: TrackerRecord) {
         if !isTrackerRecordExistToday(tracker: tracker) {
             let record = TrackerRecordCoreData(context: context)
@@ -133,6 +133,7 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
     }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
 extension TrackerRecordStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         dataProviderService.setAllTrackerRecords()

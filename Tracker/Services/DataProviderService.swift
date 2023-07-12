@@ -25,7 +25,7 @@ final class DataProviderService {
     
     var statisticsService: StatisticsServiceProtocol?
     
-    // Preparing for create new tracker:
+    // MARK: - Preparing for create new tracker:
     var selectedCategoryString: String? {
         didSet {
             newTrackerViewModel?.isControllerReadyToCreateNewTracker()
@@ -52,6 +52,7 @@ final class DataProviderService {
             newTrackerViewModel?.isControllerReadyToCreateNewTracker()
         }
     }
+    
     var trackerSchedule: [Int]? {
         didSet {
             isScheduleViewModelReadyToSave()
@@ -64,6 +65,7 @@ final class DataProviderService {
         }
     }
     
+    // MARK: -
     private var visibleCategories: [TrackerCategory]? {
         didSet {
             trackersDidChange()
@@ -106,21 +108,13 @@ final class DataProviderService {
     }
     
     
-    // MARK: Getting and Setting operating arrays:
+    // MARK: - Getting and Setting operating arrays:
     func getVisiblieCategories() -> [TrackerCategory] {
         return visibleCategories ?? []
     }
     
     func getTrackerRecords() -> [TrackerRecord] {
         completedTrackers ?? []
-    }
-    
-    func setVisibleCategory(_ category: [TrackerCategory]) {
-        visibleCategories = category
-    }
-    
-    func setTrackerRecords(_ records: [TrackerRecord]) {
-        completedTrackers = records
     }
     
     func inizializeVisibleCategories() {
@@ -136,8 +130,8 @@ final class DataProviderService {
         trackerSchedule = nil
     }
     
-    //MARK: ViewModels Block:
-    func updateCategoryViewModel() -> [String] {
+    //MARK: - ViewModels Block:
+    func getCategoryViewModel() -> [String] {
         categoryNames ?? []
     }
     
@@ -171,9 +165,19 @@ final class DataProviderService {
         }
     }
     
-    //MARK: TrackerStore Block:
+    //MARK: - TrackerStore Block:
     func addTrackerToStore(model: Tracker) {
         trackerStore?.addTracker(model: model)
+    }
+    
+    func getTrackersFromStore(categoryName: String, index: Int) -> Tracker {
+        let tracker = trackerStore?.getTracker(categoryName: categoryName, searchedindex: index)
+        
+        return Tracker(id: tracker?.id ?? UUID(),
+                       name: tracker?.name ?? "",
+                       color: tracker?.color ?? .clear,
+                       emoji: tracker?.emoji ?? "",
+                       schedule: tracker?.schedule ?? [])
     }
     
     func editTrackerFromStore(_ trackerID: UUID) {
@@ -193,16 +197,6 @@ final class DataProviderService {
         trackerRecordStore?.editRecord(id, newRecordValues: 0)
     }
     
-    func getTrackersFromStore(categoryName: String, index: Int) -> Tracker {
-        let tracker = trackerStore?.getTracker(categoryName: categoryName, searchedindex: index)
-        
-        return Tracker(id: tracker?.id ?? UUID(),
-                       name: tracker?.name ?? "",
-                       color: tracker?.color ?? .clear,
-                       emoji: tracker?.emoji ?? "",
-                       schedule: tracker?.schedule ?? [])
-    }
-    
     func updateTrackerStoreController() {
         trackerStore?.updateController()
     }
@@ -215,25 +209,13 @@ final class DataProviderService {
         trackerStore?.unpinTracker(trackerID)
     }
     
-    //MARK: TrackerCategoryStore Block:
-    func getNumberOfCategories() -> Int {
-        trackerCategoryStore?.getNumberOfCategories() ?? 0
-    }
-    
-    func getNumberOfRowsInSection(at section: Int) -> Int {
-        trackerCategoryStore?.numberOfRowsInSection(at: section) ?? 0
-    }
-    
+    //MARK: - TrackerCategoryStore Block:
     func addCategoryToStore(name: String) {
         trackerCategoryStore?.addCategory(name: name)
     }
     
-    func getCategoryNames() {
+    func updateCategoryNames() {
         categoryNames = trackerCategoryStore?.fetchCategoryNames()
-    }
-    
-    func getCategoryNameFromStore(at index: Int) -> String {
-        trackerCategoryStore?.getCategoryName(at: index) ?? ""
     }
     
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
@@ -248,7 +230,7 @@ final class DataProviderService {
         trackerCategoryStore?.removeCategory(name)
     }
     
-    //MARK: TrackerRecordStore Block:
+    //MARK: - TrackerRecordStore Block:
     func setAllTrackerRecords() {
         completedTrackers = trackerRecordStore?.getTrackerRecords()
     }
@@ -265,7 +247,7 @@ final class DataProviderService {
         trackerRecordStore?.editRecord(trackerID, newRecordValues: newRecordValues)
     }
     
-    // MARK: RecordStatistics block:
+    // MARK: - RecordStatistics block:
     func setRecordsToStatisticsService() {
         statisticsService?.provideStatisticsModel(records: completedTrackers)
         
@@ -282,7 +264,7 @@ final class DataProviderService {
         StatisticsServiceHelper().removeAllStatistics()
     }
     
-    //MARK: Setting Controller protocols:
+    //MARK: - Settings Controller protocols:
     func bindCategoryViewModel(controller: CategoryViewModelProtocol) {
         categoryViewModel = controller
     }

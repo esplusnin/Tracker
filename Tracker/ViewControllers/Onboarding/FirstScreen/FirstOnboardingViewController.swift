@@ -33,7 +33,7 @@ final class FirstOnboardingViewController: UIViewController {
     }
 }
 
-// Setup views
+// MARK: - Settings views
 extension FirstOnboardingViewController {
     private func setViews() {
         view.addSubview(firstOnboardingView.backgroundImageView)
@@ -43,6 +43,7 @@ extension FirstOnboardingViewController {
     }
 }
 
+// MARK: - Settings constraints
 extension FirstOnboardingViewController {
     private func setConstraints() {
         firstOnboardingView.backgroundImageView.snp.makeConstraints { make in

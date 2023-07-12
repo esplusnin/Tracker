@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
-        
+    
     private let dataProviderService = DataProviderService.instance
     
     private lazy var appDelegate = {
@@ -44,16 +44,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     private var deletedSet: IndexSet?
     private var categoryName: String?
     
-    func getNumberOfCategories() -> Int {
-        fetchedResultController.fetchedObjects?.count ?? 0
-    }
-    
-    func numberOfRowsInSection(at section: Int) -> Int {
-        guard let trackers = fetchedResultController.fetchedObjects?[section].trackers else { return 0 }
-        return trackers.count
-    }
-    
-    // CRUD TrackerCategory:
+    // MARK: - CRUD TrackerCategory:
     func addCategory(name: String) {
         if !checkCategoryIsExist(name: name) {
             let category = TrackerCategoryCoreData(context: context)
@@ -105,7 +96,7 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     
     private func checkCategoryIsExist(name: String) -> Bool {
         guard let categories = fetchedResultController.fetchedObjects else { return false }
-
+        
         var categoryName = ""
         
         for category in categories {
@@ -118,9 +109,10 @@ final class TrackerCategoryStore: NSObject, TrackerCategoryStoreProtocol {
     }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
 extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        dataProviderService.getCategoryNames()
+        dataProviderService.updateCategoryNames()
         dataProviderService.updateTrackerStoreController()
     }
     

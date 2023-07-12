@@ -12,9 +12,9 @@ final class FilterViewController: UIViewController {
     
     var trackersViewController: TrackersViewControllerProtocol?
 
-    private(set) var filterView = FilterView()
     private let viewModel = FilterViewModel()
     private let analyticsService = AnalyticsService.instance
+    private(set) var filterView = FilterView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,31 +35,7 @@ final class FilterViewController: UIViewController {
     }
 }
 
-// Set Views:
-extension FilterViewController {
-    private func setViews() {
-        view.addSubview(filterView.titleLabel)
-        view.addSubview(filterView.tableView)
-    }
-}
-
-// Set Consraints:
-extension FilterViewController {
-    private func setConstraints() {
-        filterView.titleLabel.snp.makeConstraints { make in
-            make.height.equalTo(22)
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().inset(27)
-        }
-        
-        filterView.tableView.snp.makeConstraints { make in
-            make.top.equalTo(filterView.titleLabel.snp.bottom).inset(-24)
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(300)
-        }
-    }
-}
-
+// MARK: - UITableViewDataSource
 extension FilterViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.availableFilters.count
@@ -86,6 +62,7 @@ extension FilterViewController: UITableViewDataSource {
     }
 }
 
+//MARK: - UITableViewDelegate
 extension FilterViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? FilterCell else { return }
@@ -96,5 +73,30 @@ extension FilterViewController: UITableViewDelegate {
         
         
         dismiss(animated: true)
+    }
+}
+
+// MARK: - Set Views:
+extension FilterViewController {
+    private func setViews() {
+        view.addSubview(filterView.titleLabel)
+        view.addSubview(filterView.tableView)
+    }
+}
+
+// MARK: - Set Consraints:
+extension FilterViewController {
+    private func setConstraints() {
+        filterView.titleLabel.snp.makeConstraints { make in
+            make.height.equalTo(22)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().inset(27)
+        }
+        
+        filterView.tableView.snp.makeConstraints { make in
+            make.top.equalTo(filterView.titleLabel.snp.bottom).inset(-24)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(300)
+        }
     }
 }

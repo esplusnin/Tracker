@@ -10,12 +10,13 @@ import Foundation
 final class CategoryViewModel: CategoryViewModelProtocol {
     
     private let dataProviderService = DataProviderService.instance
-    
-    @Observable
-    private(set) var visibleCategories: [String] = []
+
     var numberOfCategories: Int? {
         visibleCategories.count
     }
+    
+    @Observable
+    private(set) var visibleCategories: [String] = []
     
     init() {
         dataProviderService.bindCategoryViewModel(controller: self)
@@ -23,7 +24,7 @@ final class CategoryViewModel: CategoryViewModelProtocol {
     }
     
     func updateVisibleCategories() {
-        var categories = dataProviderService.updateCategoryViewModel()
+        var categories = dataProviderService.getCategoryViewModel()
         if let index = categories.firstIndex(where: { $0 == L10n.TrackerVC.pinned }) {
             categories.remove(at: index)
         }

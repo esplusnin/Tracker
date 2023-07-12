@@ -8,12 +8,12 @@
 import UIKit
 import SnapKit
 
-class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
+final class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     
     private let viewModel = TrackersViewModel()
     private let analyticsService = AnalyticsService.instance
+
     private(set) var trackersView = TrackersView()
-    
     private var isReadyToHideFilterButton = true
     private var indexToUpdate: IndexPath?
     
@@ -34,6 +34,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         analyticsService.sentEvent(typeOfEvent: .close, screen: .trackersVC, item: nil)
     }
     
+    // MARK: - Binds:
     func bind() {
         viewModel.$visibleTrackers.bind { [weak self] _ in
             guard let self = self else { return }
@@ -85,6 +86,7 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
         }
     }
     
+    // MARK: Methods:
     func reloadCollectionItem(at indexPath: IndexPath) {
         trackersView.trackersCollection.reloadItems(at: [indexPath])
     }
@@ -180,8 +182,9 @@ class TrackersViewController: UIViewController, TrackersViewControllerProtocol {
     }
 }
 
-// MARK: TrackersCollectionViewCellDelegate
+// MARK: - TrackersCollectionViewCellDelegate
 extension TrackersViewController: TrackersCollectionViewCellDelegate {
+    // CRUD trackers:
     func addCurrentTrackerToCompletedThisDate(_ cell: TrackerCell, isAddDay: Bool) {
         guard let indexPath = trackersView.trackersCollection.indexPath(for: cell),
               let date = viewModel.currentDate else { return }
@@ -197,20 +200,6 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
         cell.additionalTrackerInfo = viewModel.additionTrackerInfo
         
         isPerfectDayToday()
-    }
-    
-    func pinTracker(from cell: TrackerCell) {
-        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-        let trackerID = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
-
-        viewModel.pinTracker(trackerID)
-    }
-    
-    func unpinTracker(from cell: TrackerCell) {
-        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
-        let trackerID = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
-
-        viewModel.unpinTracker(trackerID)
     }
     
     func editTracker(from cell: TrackerCell) {
@@ -244,9 +233,24 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             
         }
     }
+    
+    // Pin and unpin trackers:
+    func pinTracker(from cell: TrackerCell) {
+        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
+        let trackerID = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
+
+        viewModel.pinTracker(trackerID)
+    }
+    
+    func unpinTracker(from cell: TrackerCell) {
+        guard let indexPath = trackersView.trackersCollection.indexPath(for: cell) else { return }
+        let trackerID = viewModel.visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
+
+        viewModel.unpinTracker(trackerID)
+    }
 }
 
-// MARK: UITextFieldDelegate
+// MARK: - UITextFieldDelegate
 extension TrackersViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.becomeFirstResponder()
@@ -265,7 +269,7 @@ extension TrackersViewController: UITextFieldDelegate {
     }
 }
 
-// MARK: UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionViewDelegateFlowLayout
 extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
@@ -310,7 +314,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK: UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         viewModel.visibleTrackers.count
@@ -368,7 +372,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: Main settings of CollectionView
+// MARK: - Main settings of CollectionView
 extension TrackersViewController {
     private func setMainCollectionSettings() {
         trackersView.trackersCollection.register(TrackerCell.self, forCellWithReuseIdentifier: "Cell")
@@ -381,7 +385,19 @@ extension TrackersViewController {
     }
 }
 
-// MARK: Setting Views
+// MARK: - Setting Navigation Bar
+extension TrackersViewController {
+    private func setNavBar() {
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        navigationBar.prefersLargeTitles = true
+        
+        navigationBar.addSubview(trackersView.addTrackerButton)
+        navigationBar.addSubview(trackersView.navigationBarTitleLabel)
+        navigationBar.addSubview(trackersView.navigationBarDatePicker)
+    }
+}
+
+// MARK: - Setting Views
 extension TrackersViewController {
     private func setViews() {
         view.backgroundColor = .whiteDay
@@ -457,19 +473,7 @@ extension TrackersViewController {
     }
 }
 
-// MARK: Setting Navigation Bar
-extension TrackersViewController {
-    private func setNavBar() {
-        guard let navigationBar = navigationController?.navigationBar else { return }
-        navigationBar.prefersLargeTitles = true
-        
-        navigationBar.addSubview(trackersView.addTrackerButton)
-        navigationBar.addSubview(trackersView.navigationBarTitleLabel)
-        navigationBar.addSubview(trackersView.navigationBarDatePicker)
-    }
-}
-
-// MARK: Setting Layout
+// MARK: - Setting constraints
 extension TrackersViewController {
     private func setConstraints() {
         guard let navigationBar = navigationController?.navigationBar else { return }

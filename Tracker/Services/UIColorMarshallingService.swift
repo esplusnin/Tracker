@@ -8,6 +8,7 @@
 import UIKit
 
 final class UIColorMarshallingService {
+    
     func hexStringFromColor(color: UIColor) -> String {
         let components = color.cgColor.components
         let r: CGFloat = components?[0] ?? 0.0

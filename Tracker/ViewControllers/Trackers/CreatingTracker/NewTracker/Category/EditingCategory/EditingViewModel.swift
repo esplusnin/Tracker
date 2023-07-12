@@ -10,6 +10,7 @@ import Foundation
 final class EditingViewModel {
     
     private let dataProviderService = DataProviderService.instance
+    
     private var oldCategoryName: String?
     
     func editCategory(newCategoryName: String) {

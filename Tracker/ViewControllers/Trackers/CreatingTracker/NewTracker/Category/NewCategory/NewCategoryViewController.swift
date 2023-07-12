@@ -51,6 +51,7 @@ final class NewCategoryViewController: UIViewController {
     }
 }
 
+// MARK: - UITextFieldDelegate
 extension NewCategoryViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.becomeFirstResponder()
@@ -65,7 +66,7 @@ extension NewCategoryViewController: UITextFieldDelegate {
     }
 }
 
-// MARK: Setting views:
+// MARK: - Settings views:
 extension NewCategoryViewController {
     private func setViews() {
         view.backgroundColor = .whiteDay
@@ -75,7 +76,7 @@ extension NewCategoryViewController {
     }
 }
 
-// MARK: Setting constraints:
+// MARK: - Settings constraints:
 extension NewCategoryViewController {
     private func setConstraints() {
         newCategoryView.titleLabel.snp.makeConstraints { make in

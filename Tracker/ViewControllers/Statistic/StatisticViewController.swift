@@ -10,10 +10,12 @@ import SnapKit
 
 final class StatisticViewController: UIViewController {
     
-    private(set) var statisticView = StatisticView()
     private let viewModel = StatisticsViewModel()
     private let analyticsService = AnalyticsService.instance
     
+    private(set) var statisticView = StatisticView()
+    
+    // MARK: - ViewControllers:
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .whiteDay
@@ -36,6 +38,7 @@ final class StatisticViewController: UIViewController {
         analyticsService.sentEvent(typeOfEvent: .close, screen: .statisticsVC, item: nil)
     }
     
+    // MARK: - Methods:
     func bind() {
         viewModel.$isStatisticsExist.bind { [weak self] value in
             guard let self = self else { return }
@@ -63,7 +66,7 @@ final class StatisticViewController: UIViewController {
     }
 }
 
-// MARK: Set views:
+// MARK: - Settings views:
 extension StatisticViewController {
     private func setDumbs() {
         statisticView.bestPeriod.removeFromSuperview()
@@ -91,7 +94,7 @@ extension StatisticViewController {
     }
 }
     
-// MARK: Set constraints:
+// MARK: - Settings constraints:
 extension StatisticViewController {
     private func setDumbsConstraints() {
         statisticView.emptyStatisticImageView.snp.makeConstraints { make in

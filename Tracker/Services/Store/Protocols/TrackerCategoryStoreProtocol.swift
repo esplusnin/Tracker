@@ -8,8 +8,6 @@
 import Foundation
 
 protocol TrackerCategoryStoreProtocol: AnyObject {
-    func getNumberOfCategories() -> Int
-    func numberOfRowsInSection(at section: Int) -> Int
     func addCategory(name: String)
     func getCategoryName(at index: Int) -> String
     func fetchCategoryNames() -> [String]

@@ -65,7 +65,7 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         return currentArray
     }
 
-    // CRUD Tracker:
+    // MARK: - CRUD Tracker:
     func addTracker(model: Tracker) {
         let category = dataProviderService.fetchSpecificCategory(name: dataProviderService.selectedCategoryString ?? "")
         let tracker = TrackerCoreData(context: context)
@@ -112,6 +112,16 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         appDelegate.saveContext()
     }
     
+    func deleteTracker(id: UUID) {
+        guard let object = fetchedResultController.fetchedObjects?.first(where: { trackerCoreData in
+            trackerCoreData.id == id
+        }) else { return }
+        
+        context.delete(object)
+        appDelegate.saveContext()
+    }
+    
+    // MARK: - Pin and unpin trackers
     func pinTracker(_ trackerID: UUID) {
         guard let tracker = fetchedResultController.fetchedObjects?.first(
             where: { $0.id == trackerID }) else { return }
@@ -143,17 +153,9 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         
         dataProviderService.inizializeVisibleCategories()
     }
-    
-    func deleteTracker(id: UUID) {
-        guard let object = fetchedResultController.fetchedObjects?.first(where: { trackerCoreData in
-            trackerCoreData.id == id
-        }) else { return }
-        
-        context.delete(object)
-        appDelegate.saveContext()
-    }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
 extension TrackerStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         dataProviderService.inizializeVisibleCategories()

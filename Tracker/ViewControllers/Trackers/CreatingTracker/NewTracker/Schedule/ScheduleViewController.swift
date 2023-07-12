@@ -13,10 +13,11 @@ final class ScheduleViewController: UIViewController {
 
     var newTrackerViewController: NewTrackerViewControllerProtocol?
     
-    private(set) var scheduleView = ScheduleView()
     private let viewModel = ScheduleViewModel()
     private var scheduleService = ScheduleService()
     private let analyticsService = AnalyticsService.instance
+    
+    private(set) var scheduleView = ScheduleView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +65,8 @@ final class ScheduleViewController: UIViewController {
     }
 }
 
-extension ScheduleViewController: UITableViewDataSource {
+// MARK: UITableViewDataSource, UITableViewDelegate
+extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.daysArray.count
     }
@@ -91,10 +93,7 @@ extension ScheduleViewController: UITableViewDataSource {
     }
 }
 
-extension ScheduleViewController: UITableViewDelegate {
-    
-}
-
+// MARK: ScheduleViewControllerDelegate
 extension ScheduleViewController: ScheduleViewControllerDelegate {
     func controlScheduleDay(_ cell: ScheduleCell) {
         guard let dayName = cell.label.text else { return }
@@ -110,7 +109,7 @@ extension ScheduleViewController: ScheduleViewControllerDelegate {
     }
 }
 
-// MARK: Main Settings of TableView:
+// MARK: Main settings of TableView:
 extension ScheduleViewController {
     private func settingTableView() {
         scheduleView.scheduleTableView.dataSource = self

@@ -49,6 +49,7 @@ final class TrackerCell: UICollectionViewCell {
         }
     }
     
+    // MARK: - Views:
     lazy var cellView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = true
@@ -109,7 +110,7 @@ final class TrackerCell: UICollectionViewCell {
     }()
     
     lazy var pinCommandString = String()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setViews()
@@ -164,6 +165,7 @@ final class TrackerCell: UICollectionViewCell {
         completeTrackerDayButton.addTarget(self, action: #selector(completeTrackerToday), for: .touchUpInside)
     }
     
+    // MARK: - TrackersCollectionViewCellDelegate block:
     private func pinTracker(from cell: TrackerCell) {
         delegate?.pinTracker(from: cell)
     }
@@ -193,6 +195,7 @@ final class TrackerCell: UICollectionViewCell {
     }
 }
 
+// MARK: - UIContextMenuInteractionDelegate
 extension TrackerCell: UIContextMenuInteractionDelegate {
     func addContextMenuInteraction() {
         let interaction = UIContextMenuInteraction(delegate: self)
@@ -231,7 +234,7 @@ extension TrackerCell: UIContextMenuInteractionDelegate {
     }
 }
 
-// MARK: Setting Views:
+// MARK: - Setting Views:
 extension TrackerCell {
     private func setViews() {
         contentView.addSubview(cellView)
@@ -244,7 +247,7 @@ extension TrackerCell {
     }
 }
 
-// MARK: Setting Layout:
+// MARK: - Setting Layout:
 extension TrackerCell {
     private func setConstraints() {
         cellView.snp.makeConstraints { make in

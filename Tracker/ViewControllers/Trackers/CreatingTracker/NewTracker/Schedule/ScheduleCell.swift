@@ -38,13 +38,19 @@ final class ScheduleCell: UITableViewCell {
     @objc private func controlSchedule() {
         delegate?.controlScheduleDay(self)
     }
-    
+}
+
+// MARK: Settings views:
+extension ScheduleCell {
     private func setViews() {
         contentView.backgroundColor = UIColor.backgroundDay
         contentView.addSubview(label)
         contentView.addSubview(switcher)
     }
-    
+}
+
+// MARK: Settings constraints: 
+extension ScheduleCell {
     private func setConstraints() {
         label.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(16)
