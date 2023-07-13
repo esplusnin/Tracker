@@ -152,7 +152,7 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     private func doAnimate() {
-        UIView.animate(withDuration: 1, delay: 0.5, animations: { [weak self] in
+        UIView.animate(withDuration: 1, delay: 0, animations: { [weak self] in
             guard let self = self else { return }
             self.contentView.layer.shadowColor = UIColor.gray.cgColor
             self.contentView.layer.shadowOpacity = 0.5
