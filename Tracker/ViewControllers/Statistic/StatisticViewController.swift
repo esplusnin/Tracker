@@ -38,6 +38,13 @@ final class StatisticViewController: UIViewController {
         analyticsService.sentEvent(typeOfEvent: .close, screen: .statisticsVC, item: nil)
     }
     
+    override func viewDidLayoutSubviews() {
+        statisticView.bestPeriod.layer.addGradienBorder()
+        statisticView.perfectDays.layer.addGradienBorder()
+        statisticView.completedTrackersView.layer.addGradienBorder()
+        statisticView.averageDays.layer.addGradienBorder()
+    }
+    
     // MARK: - Methods:
     func bind() {
         viewModel.$isStatisticsExist.bind { [weak self] value in

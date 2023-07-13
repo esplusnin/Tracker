@@ -9,15 +9,6 @@ import UIKit
 import SnapKit
 
 class StatisticsBlockView: UIView {
-    var blockView: UIView = {
-        let view = UIView()
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.blue.cgColor
-        view.layer.cornerRadius = 16
-        view.backgroundColor = .whiteDay
-        
-        return view
-    }()
     
     var countLabel: UILabel = {
         let label = UILabel()
@@ -38,6 +29,8 @@ class StatisticsBlockView: UIView {
         super.init(frame: frame)
         setViews()
         setConstraints()
+        
+        self.backgroundColor = .whiteDay
     }
     
     required init?(coder: NSCoder) {
@@ -53,16 +46,11 @@ class StatisticsBlockView: UIView {
     }
     
     private func setViews() {
-        addSubview(blockView)
-        blockView.addSubview(countLabel)
-        blockView.addSubview(descriptionLabel)
+        addSubview(countLabel)
+        addSubview(descriptionLabel)
     }
     
     private func setConstraints() {
-        blockView.snp.makeConstraints { make in
-            make.top.leading.bottom.trailing.equalToSuperview()
-        }
-        
         countLabel.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview().inset(12)
         }

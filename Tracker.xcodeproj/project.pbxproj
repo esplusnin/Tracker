@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		108E73E876AB6F3FAD3BEE8B /* Pods_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C0328148AFF132A9DA8FABA /* Pods_Tracker.framework */; };
+		7E0F70352A5FB274008AA633 /* CALayer + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0F70342A5FB274008AA633 /* CALayer + Extension.swift */; };
 		7E102F942A53D8C600A1BDB7 /* UIButton + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E102F932A53D8C600A1BDB7 /* UIButton + Extension.swift */; };
 		7E102F962A53DF1F00A1BDB7 /* EditingCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E102F952A53DF1F00A1BDB7 /* EditingCategoryViewController.swift */; };
 		7E102F992A53DFB400A1BDB7 /* EditingCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E102F982A53DFB400A1BDB7 /* EditingCategoryView.swift */; };
@@ -115,6 +116,7 @@
 		14F4658F9A671CA5858EAC97 /* Pods-Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tracker.release.xcconfig"; path = "Target Support Files/Pods-Tracker/Pods-Tracker.release.xcconfig"; sourceTree = "<group>"; };
 		25E6A626531C7CD9BFB63C84 /* Pods_TrackerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrackerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		72B39AA5369DC425CB55E14C /* Pods-TrackerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrackerTests.release.xcconfig"; path = "Target Support Files/Pods-TrackerTests/Pods-TrackerTests.release.xcconfig"; sourceTree = "<group>"; };
+		7E0F70342A5FB274008AA633 /* CALayer + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer + Extension.swift"; sourceTree = "<group>"; };
 		7E102F932A53D8C600A1BDB7 /* UIButton + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Extension.swift"; sourceTree = "<group>"; };
 		7E102F952A53DF1F00A1BDB7 /* EditingCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingCategoryViewController.swift; sourceTree = "<group>"; };
 		7E102F982A53DFB400A1BDB7 /* EditingCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingCategoryView.swift; sourceTree = "<group>"; };
@@ -489,6 +491,7 @@
 		7ED3D3F62A1A064A004C371B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				7E0F70342A5FB274008AA633 /* CALayer + Extension.swift */,
 				7E102F932A53D8C600A1BDB7 /* UIButton + Extension.swift */,
 				7ED3D3F42A1A0643004C371B /* UIColor + Extension.swift */,
 				7ED3D4092A1A20BB004C371B /* Colors.swift */,
@@ -898,6 +901,7 @@
 				7E584B5F2A530A86004C1341 /* Observable.swift in Sources */,
 				7ECDD9332A1BB15B00771EE4 /* NewTrackerView.swift in Sources */,
 				7EB00FBA2A5BDD7200A58281 /* StatisticsBlockView.swift in Sources */,
+				7E0F70352A5FB274008AA633 /* CALayer + Extension.swift in Sources */,
 				7EB1D6972A405D1F00106032 /* SecondOnboardingView.swift in Sources */,
 				7EC577AC2A2E2E67000837E8 /* TrackerCategoryStore.swift in Sources */,
 				7EB00FB42A5BBB9C00A58281 /* StatisticsService.swift in Sources */,
