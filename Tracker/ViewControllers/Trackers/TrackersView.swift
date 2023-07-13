@@ -17,7 +17,7 @@ final class TrackersView {
     
     lazy var emptyTrackersLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = L10n.TrackerVC.EmptyState.label
         label.textAlignment = .center
         label.textColor = .blackDay
         label.font = .systemFont(ofSize: 12)
@@ -36,7 +36,7 @@ final class TrackersView {
     
     lazy var navigationBarTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Трекеры"
+        label.text = L10n.TrackerVC.title
         label.font = .boldSystemFont(ofSize: 34)
         
         return label
@@ -46,7 +46,6 @@ final class TrackersView {
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ru-RU")
         datePicker.layer.cornerRadius = 8
         
         return datePicker
@@ -56,18 +55,34 @@ final class TrackersView {
         let textField = UISearchTextField()
         textField.clearButtonMode = .never
         textField.returnKeyType = .go
-        textField.placeholder = "Поиск..."
+        textField.placeholder = L10n.TrackerVC.SearchField.placeholder
         textField.textColor = .blackDay
         
         return textField
     }()
     
-    lazy var trackersCollection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-
+    lazy var trackersCollection: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.backgroundColor = .whiteDay
+        
+        return collectionView
+    }()
+    
     lazy var cancelationButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(L10n.TrackerVC.cancelationButton, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17)
+        
+        return button
+    }()
+    
+    lazy var filterButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.layer.cornerRadius = 20
+        button.backgroundColor = .blue
+        button.setTitle(L10n.Filter.title, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 17)
+        button.setTitleColor(.white, for: .normal)
         
         return button
     }()

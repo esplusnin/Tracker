@@ -13,26 +13,45 @@ final class ScheduleViewController: UIViewController {
 
     var newTrackerViewController: NewTrackerViewControllerProtocol?
     
-    private let scheduleView = ScheduleView()
-    private let scheduleViewModel = ScheduleViewModel()
+    private let viewModel = ScheduleViewModel()
     private var scheduleService = ScheduleService()
+    private let analyticsService = AnalyticsService.instance
+    
+    private(set) var scheduleView = ScheduleView()
     
     override func viewDidLoad() {
-        super.viewDidLoad()        
+        super.viewDidLoad()
+        analyticsService.sentEvent(typeOfEvent: .open, screen: .scheduleVC, item: nil)
+        
         setViews()
         setConstraints()
         settingTableView()
         setTarget()
+        scheduleView.completeButton.controlState(isLock: true)
         bind()
     }
     
+    deinit {
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .scheduleVC, item: nil)
+    }
+    
     private func bind() {
-        scheduleViewModel.$isReadyToCloseSchedule.bind { [weak self] value in
+        viewModel.$isReadyToCloseScheduleVC.bind { [weak self] value in
             guard let self = self else { return }
             
             if value == true {
                 newTrackerViewController?.reloadTableView()
                 dismiss(animated: true)
+            }
+        }
+        
+        viewModel.$isReadyToUnlockCreateButton.bind { [weak self] value in
+            guard let self = self else { return }
+            
+            if value == true {
+                scheduleView.completeButton.controlState(isLock: false)
+            } else {
+                scheduleView.completeButton.controlState(isLock: true)
             }
         }
     }
@@ -42,13 +61,14 @@ final class ScheduleViewController: UIViewController {
     }
     
     @objc private  func setCurrentScheduleForTracker() {
-        scheduleViewModel.setSchedule()
+        viewModel.setSchedule()
     }
 }
 
-extension ScheduleViewController: UITableViewDataSource {
+// MARK: UITableViewDataSource, UITableViewDelegate
+extension ScheduleViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        scheduleViewModel.daysArray.count
+        viewModel.daysArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -56,13 +76,13 @@ extension ScheduleViewController: UITableViewDataSource {
             withIdentifier: "ScheduleCell", for: indexPath) as? ScheduleCell else { return UITableViewCell() }
         
         cell.delegate = self
-        cell.viewModel = scheduleViewModel.daysArray[indexPath.row]
+        cell.viewModel = viewModel.daysArray[indexPath.row]
         
-        let numberOfDay = scheduleViewModel.returnNumberOfDay(from: indexPath)
+        let numberOfDay = viewModel.returnNumberOfDay(from: indexPath)
        
-        if scheduleViewModel.isCurrentDayExistInSchedule(day: numberOfDay) {
+        if viewModel.isCurrentDayExistInSchedule(day: numberOfDay) {
             cell.switcher.isOn = true
-            scheduleViewModel.addDayToSchedule(day: numberOfDay)
+            viewModel.addDayToSchedule(day: numberOfDay)
         }
                 
         return cell
@@ -73,10 +93,7 @@ extension ScheduleViewController: UITableViewDataSource {
     }
 }
 
-extension ScheduleViewController: UITableViewDelegate {
-    
-}
-
+// MARK: ScheduleViewControllerDelegate
 extension ScheduleViewController: ScheduleViewControllerDelegate {
     func controlScheduleDay(_ cell: ScheduleCell) {
         guard let dayName = cell.label.text else { return }
@@ -84,15 +101,15 @@ extension ScheduleViewController: ScheduleViewControllerDelegate {
         let numberOfDay = scheduleService.addWeekDayToSchedule(dayName: dayName)
         
         if cell.switcher.isOn {
-            scheduleViewModel.addDayToSchedule(day: numberOfDay)
+            viewModel.addDayToSchedule(day: numberOfDay)
         } else {
-            guard let index = scheduleViewModel.schedule.firstIndex(of: numberOfDay) else { return }
-            scheduleViewModel.removeAddFromSchedule(index: index)
+            guard let index = viewModel.schedule.firstIndex(of: numberOfDay) else { return }
+            viewModel.removeAddFromSchedule(index: index)
         }
     }
 }
 
-// MARK: Main Settings of TableView:
+// MARK: Main settings of TableView:
 extension ScheduleViewController {
     private func settingTableView() {
         scheduleView.scheduleTableView.dataSource = self
@@ -105,7 +122,7 @@ extension ScheduleViewController {
 // MARK: Setting views:
 extension ScheduleViewController {
     private func setViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .whiteDay
         
         view.addSubview(scheduleView.titleLabel)
         view.addSubview(scheduleView.scheduleTableView)

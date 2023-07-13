@@ -11,10 +11,12 @@ import CoreData
 final class TrackerStore: NSObject, TrackerStoreProtocol {
        
     private let colorMarshalling = UIColorMarshallingService()
-    private let dataProvider = DataProviderService.instance
+    private let dataProviderService = DataProviderService.instance
+    
+    private var trackerCategoryObservation: NSKeyValueObservation?
   
     private lazy var appDelegate = {
-        (UIApplication.shared.delegate as! AppDelegate)
+        UIApplication.shared.delegate as! AppDelegate
     }()
     
     private lazy var context: NSManagedObjectContext = {
@@ -63,9 +65,9 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         return currentArray
     }
 
-    // CRUD Tracker:
+    // MARK: - CRUD Tracker:
     func addTracker(model: Tracker) {
-        let category = dataProvider.fetchSpecificCategory(name: dataProvider.selectedCategoryString ?? "")
+        let category = dataProviderService.fetchSpecificCategory(name: dataProviderService.selectedCategoryString ?? "")
         let tracker = TrackerCoreData(context: context)
         let color = colorMarshalling.hexStringFromColor(color: model.color)
         
@@ -94,8 +96,20 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
                        schedule: tracker?.schedule ?? [])
     }
     
-    func editTracker(id: UUID) {
-        // Заготовка
+    func editTracker(newModel: Tracker) {
+        guard let tracker = fetchedResultController.fetchedObjects?.first( where: { $0.id == newModel.id }),
+              let selectedCategory = dataProviderService.selectedCategoryString else { return }
+        
+        let category = dataProviderService.fetchSpecificCategory(name: selectedCategory)
+        
+        tracker.id = newModel.id
+        tracker.name = newModel.name
+        tracker.emoji = newModel.emoji
+        tracker.color = colorMarshalling.hexStringFromColor(color: newModel.color)
+        tracker.schedule = newModel.schedule
+        tracker.category = category
+
+        appDelegate.saveContext()
     }
     
     func deleteTracker(id: UUID) {
@@ -106,11 +120,45 @@ final class TrackerStore: NSObject, TrackerStoreProtocol {
         context.delete(object)
         appDelegate.saveContext()
     }
+    
+    // MARK: - Pin and unpin trackers
+    func pinTracker(_ trackerID: UUID) {
+        guard let tracker = fetchedResultController.fetchedObjects?.first(
+            where: { $0.id == trackerID }) else { return }
+        
+        let pinnedName = L10n.TrackerVC.pinned
+        let category = dataProviderService.fetchSpecificCategory(name: pinnedName)
+        
+        tracker.previousCategory = tracker.category
+        tracker.category = category
+        
+        appDelegate.saveContext()
+    }
+    
+    func unpinTracker(_ trackerID: UUID) {
+        guard let tracker = fetchedResultController.fetchedObjects?.first(
+            where: { $0.id == trackerID }) else { return }
+        
+        tracker.category = tracker.previousCategory
+        
+        appDelegate.saveContext()
+    }
+    
+    func updateController() {
+        do {
+            try fetchedResultController.performFetch()
+        } catch {
+            print("error", error.localizedDescription)
+        }
+        
+        dataProviderService.inizializeVisibleCategories()
+    }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
 extension TrackerStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        dataProvider.inizializeVisibleCategories()
-        dataProvider.trackerDidCreate()
+        dataProviderService.inizializeVisibleCategories()
+        dataProviderService.recordDidUpdate()
     }
 }

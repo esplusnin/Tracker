@@ -10,28 +10,100 @@ import SnapKit
 
 final class StatisticViewController: UIViewController {
     
-    private let statisticView = StatisticView()
+    private let viewModel = StatisticsViewModel()
+    private let analyticsService = AnalyticsService.instance
     
+    private(set) var statisticView = StatisticView()
+    
+    // MARK: - ViewControllers:
     override func viewDidLoad() {
         super.viewDidLoad()
-        setViews()
+        view.backgroundColor = .whiteDay
+        
+        setDumbs()
+        setDumbsConstraints()
         setNavBar()
-        setConstraints()
+        
+        bind()
+        viewModel.isStatisticsExists()
     }
     
-    private func setViews() {
-        view.backgroundColor = .white
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        analyticsService.sentEvent(typeOfEvent: .open, screen: .statisticsVC, item: nil)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .statisticsVC, item: nil)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        statisticView.bestPeriod.layer.addGradienBorder()
+        statisticView.perfectDays.layer.addGradienBorder()
+        statisticView.completedTrackersView.layer.addGradienBorder()
+        statisticView.averageDays.layer.addGradienBorder()
+    }
+    
+    // MARK: - Methods:
+    func bind() {
+        viewModel.$isStatisticsExist.bind { [weak self] value in
+            guard let self = self else { return }
+            self.isStatisticExist(value: value)
+        }
+        
+        viewModel.$recordsModel.bind { [weak self] model in
+            guard let self = self else { return }
+            statisticView.bestPeriod.setCountLabel(value: String(model?.bestSeries ?? 0))
+            statisticView.perfectDays.setCountLabel(value: String(model?.perfectDays ?? 0))
+            statisticView.completedTrackersView.setCountLabel(value: String(model?.completedDays ?? 0))
+            statisticView.averageDays.setCountLabel(value: String(model?.averageValue ?? 0))
+        }
+    }
+    
+    private func isStatisticExist(value: Bool?) {
+        guard let value = value else { return }
+        if value == true {
+            setStatisticsViews()
+            setStatisticsViewsConstraints()
+        } else {
+            setDumbs()
+            setDumbsConstraints()
+        }
+    }
+}
 
+// MARK: - Settings views:
+extension StatisticViewController {
+    private func setDumbs() {
+        statisticView.bestPeriod.removeFromSuperview()
+        statisticView.perfectDays.removeFromSuperview()
+        statisticView.completedTrackersView.removeFromSuperview()
+        statisticView.averageDays.removeFromSuperview()
+        
         view.addSubview(statisticView.emptyStatisticImageView)
         view.addSubview(statisticView.emptyStatisticLabel)
     }
     
-    private func setNavBar() {
-        navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Cтатистика"
+    private func setStatisticsViews() {
+        statisticView.emptyStatisticImageView.removeFromSuperview()
+        statisticView.emptyStatisticLabel.removeFromSuperview()
+        
+        view.addSubview(statisticView.bestPeriod)
+        view.addSubview(statisticView.perfectDays)
+        view.addSubview(statisticView.completedTrackersView)
+        view.addSubview(statisticView.averageDays)
     }
     
-    private func setConstraints() {
+    private func setNavBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        title = L10n.Statistics.title
+    }
+}
+    
+// MARK: - Settings constraints:
+extension StatisticViewController {
+    private func setDumbsConstraints() {
         statisticView.emptyStatisticImageView.snp.makeConstraints { make in
             make.center.equalTo(view.snp.center)
         }
@@ -42,4 +114,29 @@ final class StatisticViewController: UIViewController {
         }
     }
     
+    private func setStatisticsViewsConstraints() {
+        statisticView.bestPeriod.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(200)
+        }
+        
+        statisticView.perfectDays.snp.makeConstraints { make in
+            make.top.equalTo(statisticView.bestPeriod.snp.bottom).inset(-12)
+        }
+        
+        statisticView.completedTrackersView.snp.makeConstraints { make in
+            make.top.equalTo(statisticView.perfectDays.snp.bottom).inset(-12)
+        }
+        
+        statisticView.averageDays.snp.makeConstraints { make in
+            make.top.equalTo(statisticView.completedTrackersView.snp.bottom).inset(-12)
+        }
+        
+        [statisticView.bestPeriod, statisticView.perfectDays,
+         statisticView.completedTrackersView, statisticView.averageDays].forEach { view in
+            view.snp.makeConstraints { make in
+                make.height.equalTo(90)
+                make.leading.trailing.equalToSuperview().inset(16)
+            }
+        }
+    }
 }

@@ -1,0 +1,99 @@
+// OnboardingVC:
+"onboarding.firstScreen.title" = "تتبع فقط ما تريد";
+"onboarding.secondScreen.title" = "حتى لو لم يكن لتر من الماء واليوغا";
+"onboarding.continueButton" = "هذه هي التقنيات!";
+
+// MainTabBarVC:
+"tabBar.trackers" = "بتتبع";
+"tabBar.statistics" = "الإحصاءات";
+
+// TrackerVC:
+"trackerVC.title" = "بتتبع";
+"trackerVC.searchField.placeholder" = "بحث...";
+"trackerVC.cancelationButton" = "إلغاء";
+"trackerVC.emptyState.label" = "ماذا سوف تتبع?";
+"trackerVC.nothingSearched" = "لم يتم العثور على شيء";
+"trackerVC.pinned" = "ثابت";
+
+// FilterVC
+"filter.title" = "الفلاتر";
+"filter.allTrackers" = "جميع أجهزة التتبع";
+"filter.todaysTrackers" = "بتتبع لهذا اليوم";
+"filter.completedTrackers" = "اكتمل";
+"filter.uncompletedTrackers" = "لم تكتمل";
+
+// CreatingTrackerVC:
+"creatingTracker.title" = "إنشاء تعقب";
+"creatingTracker.habit" = "العادة";
+"creatingTracker.unregularEvent" = "حدث غير منتظم";
+
+// NewTrackerVC:
+"newTracker.habit.title" = "عادة جديدة";
+"newTracker.unregularEvent.title" = "حدث جديد غير منتظم";
+"newTracker.textField.placeholder" = "أدخل اسم المقتفي";
+"newTracker.tableView.category" = "الفئة";
+"newTracker.tableView.schedule" = "الجدول الزمني";
+"newTracker.collectionView.color" = "اللون";
+"newTracker.buttons.cancel" = "إلغاء";
+"newTracker.buttons.create" = "لإنشاء";
+"newTracker.warning" = "الحد من 38 حرفا";
+"newTracker.emoji" = "الرموز التعبيرية";
+
+// CategoryVC:
+"category.title" = "الفئة";
+"category.addCategory" = "إضافة فئة";
+"category.emptyCategory" = "يمكن الجمع بين العادات\n والأحداث في المعنى";
+
+// New CategoryVC:
+"newCategory.title" = "فئة جديدة";
+"newCategory.textField.placeholder" = "أدخل اسم الفئة";
+"newCategory.readyButton" = "تم";
+
+// Editing CategoryVC:
+"editingCategory.title" = "تحرير فئة";
+"editingCategory.completeButton" = "تم";
+
+// ScheduleVC:
+"schedule.title" = "الجدول الزمني";
+"schedule.monday" = "الاثنين";
+"schedule.tuesday" = "الثلاثاء";
+"schedule.wednesday" = "الأربعاء";
+"schedule.thursday" = "الخميس";
+"schedule.friday" = "الجمعة";
+"schedule.saturday" = "السبت";
+"schedule.sunday" = "الأحد";
+"schedule.everyDay" = "كل يوم";
+"schedule.ready" = "تم";
+
+"schedule.monday.short" = "الاث";
+"schedule.tuesday.short" = "الث)";
+"schedule.wednesday.short" = "الأر";
+"schedule.thursday.short" = "الخم";
+"schedule.friday.short" = "الجم";
+"schedule.saturday.short" = "السب";
+"schedule.sunday.short" = "الأح";
+
+// StatisticsVC:
+"statistics.title" = "الإحصاءات";
+"statistics.nothingToAnalyze" = "لا يوجد شيء لتحليل حتى الآن";
+"statistics.bestPeriod" = "أفضل فترة";
+"statistics.perfectDays" = "أيام مثالية";
+"statistics.totalCompletedTracker" = "بتتبع الانتهاء";
+"statistics.averageValue" = "متوسط القيمة";
+
+// Alerts:
+"alert.removeCategory.title" = "هل هذه الفئة بالتأكيد ليست هناك حاجة?";
+"alert.removeCategory.message" = "سيؤدي حذف فئة إلى فقدان جميع أجهزة التتبع الخاصة بها";
+"alert.removeTracker.title" = "هل أنت متأكد أنك تريد حذف تعقب?";
+"alert.remove" = "إزالة";
+"alert.cancel" = "إلغاء";
+
+// Context menu:
+"contextMenu.remove" = "إزالة";
+"contextMenu.edit" = "تحرير";
+"contextMenu.fix" = "لإصلاح";
+"contextMenu.unfix" = "أونبين";
+
+// Editing Tracker:
+"editingTracker.title" = "عادات التحرير";
+"editingTracker.saveChanges" = "حفظ";

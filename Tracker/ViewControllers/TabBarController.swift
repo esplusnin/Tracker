@@ -12,26 +12,29 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBar()
+
+        let separator = UIView(frame: CGRect(x: 0, y: 0, width: tabBar.frame.width, height: 0.5))
+        separator.backgroundColor = .blackNight
+            tabBar.shadowImage = UIImage()
+            tabBar.addSubview(separator)
     }
     
     private func setupTabBar() {
         let appearance = UITabBarAppearance()
         tabBar.standardAppearance = appearance
-        tabBar.backgroundColor = .white
-        
-        tabBar.layer.borderWidth = 1
-        tabBar.layer.borderColor = UIColor.systemGray.cgColor
-        
+        tabBar.backgroundColor = .whiteDay
+
         let trackersViewController = TrackersViewController()
-        
+        let statisticsViewController = StatisticViewController()
+                
         let trackersViewControllerNavigation = UINavigationController(rootViewController: trackersViewController)
-        let statisticViewControllerNavigation = UINavigationController(rootViewController: StatisticViewController())
+        let statisticViewControllerNavigation = UINavigationController(rootViewController: statisticsViewController)
         
         
-        trackersViewControllerNavigation.tabBarItem = UITabBarItem(title: "Трекеры",
+        trackersViewControllerNavigation.tabBarItem = UITabBarItem(title: L10n.TabBar.trackers,
                                                                    image: Resources.Images.trackersTabBar,
                                                                    selectedImage: nil)
-        statisticViewControllerNavigation.tabBarItem = UITabBarItem(title: "Cтатистика",
+        statisticViewControllerNavigation.tabBarItem = UITabBarItem(title: L10n.TabBar.statistics,
                                                                     image: Resources.Images.statisticTabBar,
                                                                     selectedImage: nil)
         

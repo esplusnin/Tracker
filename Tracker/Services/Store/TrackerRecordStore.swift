@@ -13,11 +13,11 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
     private let dataProviderService = DataProviderService.instance
     
     private lazy var appDelegate = {
-        (UIApplication.shared.delegate as! AppDelegate)
+        UIApplication.shared.delegate as! AppDelegate
     }()
     
     private lazy var context: NSManagedObjectContext = {
-        (appDelegate.persistantContainer.viewContext)
+        appDelegate.persistantContainer.viewContext
     }()
     
     private lazy var fetchedResultController: NSFetchedResultsController<TrackerRecordCoreData> = {
@@ -40,7 +40,7 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         return fetchedController
     }()
     
-    // CRUD TrackerRecord:
+    // MARK: - CRUD TrackerRecord:
     func addRecord(tracker: TrackerRecord) {
         if !isTrackerRecordExistToday(tracker: tracker) {
             let record = TrackerRecordCoreData(context: context)
@@ -63,6 +63,41 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         })
         
         return newRecordsArray
+    }
+    
+    func getTrackerRecordsCoreData() -> [TrackerRecordCoreData]? {
+        fetchedResultController.fetchedObjects ?? []
+    }
+    
+    func editRecord(_ trackerID: UUID, newRecordValues: Int) {
+        guard let fetchedResult = fetchedResultController.fetchedObjects else { return }
+        let oldRecords = fetchedResult.filter({ $0.id == trackerID })
+        let newRecordValue = DateService().getRandomDate(times: newRecordValues)
+        
+        var counter = 0
+        
+        if oldRecords.count < newRecordValues {
+            let times = newRecordValues - oldRecords.count
+            for _ in 1...times {
+                let record = TrackerRecordCoreData(context: context)
+                record.id = trackerID
+                record.date = newRecordValue[counter]
+                
+                counter += 1
+            }
+        } else if oldRecords.count > newRecordValues {
+            let times = oldRecords.count - newRecordValues
+            for _ in 1...times {
+                let record = oldRecords[counter]
+                context.delete(record)
+                
+                counter += 1
+            }
+        } else {
+            return
+        }
+        
+        appDelegate.saveContext()
     }
     
     func deleteRecord(tracker: TrackerRecord) {
@@ -98,6 +133,7 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
     }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
 extension TrackerRecordStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         dataProviderService.setAllTrackerRecords()

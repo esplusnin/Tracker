@@ -11,11 +11,16 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     
     private let dataProviderService = DataProviderService.instance
     private let scheduleService = ScheduleService()
+    private let analyticsService = AnalyticsService.instance
     
-    @ScheduleObservable
-    private(set) var isReadyToCloseSchedule = false
+    @Observable
+    private(set) var isReadyToCloseScheduleVC = false
+    @Observable
+    private(set) var isReadyToUnlockCreateButton = false
     private(set) var schedule: [Int] = []
-    private(set) var daysArray = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    private(set) var daysArray = [
+        L10n.Schedule.monday, L10n.Schedule.tuesday, L10n.Schedule.wednesday, L10n.Schedule.thursday,
+        L10n.Schedule.friday, L10n.Schedule.saturday, L10n.Schedule.sunday]
     
     init() {
         dataProviderService.bindScheduleViewModel(controller: self)
@@ -23,14 +28,22 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     
     func addDayToSchedule(day: Int) {
         schedule.append(day)
+        isScheduleEmpty()
     }
     
     func removeAddFromSchedule(index: Int) {
         schedule.remove(at: index)
+        isScheduleEmpty()
     }
     
     func setSchedule() {
-        let string = schedule.count == 7 ? "Каждый день" : scheduleService.getScheduleString(schedule)
+        let string = schedule.count == 7 ? L10n.Schedule.everyDay : scheduleService.getScheduleString(schedule)
+        
+        if string == L10n.Schedule.everyDay {
+            analyticsService.sentEvent(typeOfEvent: .click, screen: .scheduleVC, item: .everyDay)
+        } else {
+            analyticsService.sentEvent(typeOfEvent: .click, screen: .scheduleVC, item: .notEveryDay)
+        }
         
         dataProviderService.selectedScheduleString = string
         dataProviderService.trackerSchedule = schedule
@@ -39,7 +52,7 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     }
     
     func changeStatusToCloseSchedule() {
-        isReadyToCloseSchedule = true
+        isReadyToCloseScheduleVC = true
     }
     
     func returnNumberOfDay(from index: IndexPath) -> Int {
@@ -48,5 +61,9 @@ final class ScheduleViewModel: ScheduleViewModelProtocol {
     
     func isCurrentDayExistInSchedule(day: Int) -> Bool {
         dataProviderService.isCurrentDayFromScheduleExist(day) ? true : false
+    }
+    
+    private func isScheduleEmpty() {
+        isReadyToUnlockCreateButton = schedule.count == 0 ? false : true
     }
 }

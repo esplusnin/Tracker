@@ -11,7 +11,7 @@ final class DataProviderService {
     
     static let instance = DataProviderService()
     
-    //CoreData Stores:
+    // CoreData Stores:
     var trackerStore: TrackerStoreProtocol?
     var trackerCategoryStore: TrackerCategoryStoreProtocol?
     var trackerRecordStore: TrackerRecordStore?
@@ -21,10 +21,11 @@ final class DataProviderService {
     var scheduleViewModel: ScheduleViewModelProtocol?
     var newTrackerViewModel: NewTrackerViewModelProtocol?
     var trackersViewModel: TrackersViewModelProtocol?
+    var statisticsViewModel: StatisticsViewModelProtocol?
     
-    private init() {}
+    var statisticsService: StatisticsServiceProtocol?
     
-    // Preparing for create new tracker:
+    // MARK: - Preparing for create new tracker:
     var selectedCategoryString: String? {
         didSet {
             newTrackerViewModel?.isControllerReadyToCreateNewTracker()
@@ -51,14 +52,30 @@ final class DataProviderService {
             newTrackerViewModel?.isControllerReadyToCreateNewTracker()
         }
     }
+    
     var trackerSchedule: [Int]? {
         didSet {
             isScheduleViewModelReadyToSave()
         }
     }
     
-    private var visibleCategories: [TrackerCategory]?
-    private var completedTrackers: [TrackerRecord]?
+    var currentFilter: String? {
+        didSet {
+            currentFilterDidUpdate()
+        }
+    }
+    
+    // MARK: -
+    private var visibleCategories: [TrackerCategory]? {
+        didSet {
+            trackersDidChange()
+        }
+    }
+    private var completedTrackers: [TrackerRecord]? {
+        didSet {
+            setRecordsToStatisticsService()
+        }
+    }
     private var categoryNames: [String]? {
         didSet {
             categoryViewModel?.updateVisibleCategories()
@@ -90,21 +107,14 @@ final class DataProviderService {
         trackerEmoji != nil && selectedCategoryString != nil ? true : false
     }
     
-    // Getting and Setting operating arrays:
+    
+    // MARK: - Getting and Setting operating arrays:
     func getVisiblieCategories() -> [TrackerCategory] {
         return visibleCategories ?? []
     }
     
-    func setVisibleCategory(_ category: [TrackerCategory]) {
-        visibleCategories = category
-    }
-    
     func getTrackerRecords() -> [TrackerRecord] {
         completedTrackers ?? []
-    }
-    
-    func setTrackerRecords(_ records: [TrackerRecord]) {
-        completedTrackers = records
     }
     
     func inizializeVisibleCategories() {
@@ -120,31 +130,44 @@ final class DataProviderService {
         trackerSchedule = nil
     }
     
-    //MARK: ViewModels Block:
-    func updateCategoryViewModel() -> [String] {
+    //MARK: - ViewModels Block:
+    func getCategoryViewModel() -> [String] {
         categoryNames ?? []
     }
     
-    func trackerDidCreate() {
+    func trackersDidChange() {
         trackersViewModel?.setVisibleTrackersFromProvider()
-        newTrackerViewModel?.trackerDidCreate()
     }
     
     func recordDidUpdate() {
         trackersViewModel?.recordDidUpdate()
     }
     
-    //MARK: TrackerStore Block:
+    func statisticsDidUpdate() {
+        statisticsViewModel?.isStatisticsExists()
+    }
+    
+    // Return string of current localize value from selected filter 
+    func currentFilterDidUpdate() {
+        switch currentFilter {
+        case L10n.Filter.allTrackers:
+            trackersViewModel?.showNewTrackersAfterChangeDate()
+        case L10n.Filter.todaysTrackers:
+            trackersViewModel?.todaysFilterDidEnable()
+        case L10n.Filter.completedTrackers:
+            trackersViewModel?.showNewTrackersAfterChangeDate()
+            trackersViewModel?.updateVisibleTrackers(isCompleted: true)
+        case L10n.Filter.uncompletedTrackers:
+            trackersViewModel?.showNewTrackersAfterChangeDate()
+            trackersViewModel?.updateVisibleTrackers(isCompleted: false)
+        default:
+            return
+        }
+    }
+    
+    //MARK: - TrackerStore Block:
     func addTrackerToStore(model: Tracker) {
         trackerStore?.addTracker(model: model)
-    }
-    
-    func editTrackerFromStore(id: UUID) {
-        trackerStore?.editTracker(id: id)
-    }
-    
-    func deleteTrackerFromStore(id: UUID) {
-        trackerStore?.deleteTracker(id: id)
     }
     
     func getTrackersFromStore(categoryName: String, index: Int) -> Tracker {
@@ -157,32 +180,57 @@ final class DataProviderService {
                        schedule: tracker?.schedule ?? [])
     }
     
-    //MARK: TrackerCategoryStore Block:
-    func getNumberOfCategories() -> Int {
-        trackerCategoryStore?.getNumberOfCategories() ?? 0
+    func editTrackerFromStore(_ trackerID: UUID) {
+        guard let name = trackerName, let color = trackerColor, let emoji = trackerEmoji,
+              let schedule = trackerSchedule else { return }
+        
+        trackerStore?.editTracker(newModel: Tracker(id: trackerID,
+                                                               name: name,
+                                                               color: color,
+                                                               emoji: emoji,
+                                                               schedule: schedule))
+        resetNewTrackerInfo()
     }
     
-    func getNumberOfRowsInSection(at section: Int) -> Int {
-        trackerCategoryStore?.numberOfRowsInSection(at: section) ?? 0
+    func deleteTrackerFromStore(id: UUID) {
+        trackerStore?.deleteTracker(id: id)
+        trackerRecordStore?.editRecord(id, newRecordValues: 0)
     }
     
+    func updateTrackerStoreController() {
+        trackerStore?.updateController()
+    }
+    
+    func pinTracker(_ trackerID: UUID) {
+        trackerStore?.pinTracker(trackerID)
+    }
+    
+    func unpinTracker(_ trackerID: UUID) {
+        trackerStore?.unpinTracker(trackerID)
+    }
+    
+    //MARK: - TrackerCategoryStore Block:
     func addCategoryToStore(name: String) {
         trackerCategoryStore?.addCategory(name: name)
     }
     
-    func getCategoryNames() {
+    func updateCategoryNames() {
         categoryNames = trackerCategoryStore?.fetchCategoryNames()
-    }
-    
-    func getCategoryNameFromStore(at index: Int) -> String {
-        trackerCategoryStore?.getCategoryName(at: index) ?? ""
     }
     
     func fetchSpecificCategory(name: String) -> TrackerCategoryCoreData? {
         trackerCategoryStore?.fetchSpecificCategory(name: name)
     }
     
-    //MARK: TrackerRecord Block:
+    func editCategory(oldName: String, newName: String) {
+        trackerCategoryStore?.editCategory(oldName: oldName, newName: newName)
+    }
+    
+    func removeCategory(_ name: String) {
+        trackerCategoryStore?.removeCategory(name)
+    }
+    
+    //MARK: - TrackerRecordStore Block:
     func setAllTrackerRecords() {
         completedTrackers = trackerRecordStore?.getTrackerRecords()
     }
@@ -195,7 +243,28 @@ final class DataProviderService {
         }
     }
     
-    //MARK: Setting Controller protocols:
+    func setNewValueRecords(trackerID: UUID, newRecordValues: Int) {
+        trackerRecordStore?.editRecord(trackerID, newRecordValues: newRecordValues)
+    }
+    
+    // MARK: - RecordStatistics block:
+    func setRecordsToStatisticsService() {
+        statisticsService?.provideStatisticsModel(records: completedTrackers)
+        
+        if completedTrackers?.count == 0 {
+            StatisticsServiceHelper().removeAllStatistics()
+        }
+    }
+    
+    func getRecordsStatisticsModel() -> TrackersStatistics {
+        statisticsService?.statisticsModel ?? TrackersStatistics(completedDays: 0, perfectDays: 0, bestSeries: 0, averageValue: 0)
+    }
+    
+    func clearStatistics() {
+        StatisticsServiceHelper().removeAllStatistics()
+    }
+    
+    //MARK: - Settings Controller protocols:
     func bindCategoryViewModel(controller: CategoryViewModelProtocol) {
         categoryViewModel = controller
     }
@@ -210,5 +279,9 @@ final class DataProviderService {
     
     func bindTrackersViewModel(controller: TrackersViewModelProtocol) {
         trackersViewModel = controller
+    }
+    
+    func bindStatisticsViewModel(controller: StatisticsViewModelProtocol) {
+        statisticsViewModel = controller
     }
 }

@@ -12,10 +12,13 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
     
     var trackerViewController: TrackersViewControllerProtocol?
     
-    private let creatingTrackerView = CreatingTrackerView()
+    private let analyticsService = AnalyticsService.instance
+    private(set) var creatingTrackerView = CreatingTrackerView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        analyticsService.sentEvent(typeOfEvent: .open, screen: .creatingVC, item: nil)
+        
         setViews()
         setConstraints()
         setTargets()
@@ -23,6 +26,7 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
     
     func backToTrackerViewController() {
         dismiss(animated: true)
+        trackerViewController?.changeStatusForFilterButton(isHide: false)
     }
     
     private func setTargets() {
@@ -34,6 +38,9 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
         let viewController = NewTrackerViewController()
         viewController.kindOfTracker = .habit
         
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .creatingVC, item: nil)
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .creatingVC, item: .habit)
+        
         viewController.creatingTrackerViewController = self
         
         present(viewController, animated: true)
@@ -42,6 +49,9 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
     @objc private func switchToNewUnregularVC() {
         let viewController = NewTrackerViewController()
         viewController.kindOfTracker = .unregularEvent
+        
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .creatingVC, item: nil)
+        analyticsService.sentEvent(typeOfEvent: .close, screen: .creatingVC, item: .unregularEvent)
         
         viewController.creatingTrackerViewController = self
         
@@ -52,7 +62,7 @@ final class CreatingTrackerViewController: UIViewController, CreatingTrackerView
 // MARK: Setting Views
 extension CreatingTrackerViewController {
     private func setViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .whiteDay
         view.addSubview(creatingTrackerView.titleLabel)
         view.addSubview(creatingTrackerView.habitCreateButton)
         view.addSubview(creatingTrackerView.unregularEventCreateButton)

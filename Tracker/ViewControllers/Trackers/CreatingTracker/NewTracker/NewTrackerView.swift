@@ -22,12 +22,13 @@ final class NewTrackerView {
     lazy var textField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 16
+        textField.textAlignment = NSLocale.current.languageCode == "ar" ? .right : .left
         textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .go
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftViewMode = .always
         textField.backgroundColor = .backgroundDay
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = L10n.NewTracker.TextField.placeholder
         textField.textColor = .blackDay
         textField.font = .systemFont(ofSize: 17)
         
@@ -57,8 +58,8 @@ final class NewTrackerView {
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.red.cgColor
-        button.backgroundColor = .white
-        button.setTitle("Отменить", for: .normal)
+        button.backgroundColor = .whiteDay
+        button.setTitle(L10n.NewTracker.Buttons.cancel, for: .normal)
         button.setTitleColor(.red, for: .normal)
         
         return button
@@ -68,18 +69,47 @@ final class NewTrackerView {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
         button.backgroundColor = .gray
-        button.setTitle("Создать", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitle(L10n.NewTracker.Buttons.create, for: .normal)
+        button.setTitleColor(.whiteDay, for: .normal)
         
         return button
     }()
     
     lazy var warningTextFieldLimitationLabel: UILabel = {
         let label = UILabel()
-        label.text = "Ограничение 38 символов"
+        label.text = L10n.NewTracker.warning
         label.textColor = .red
         label.font = .systemFont(ofSize: 17)
         
         return label
+    }()
+    
+    lazy var countOfCompleteDaysLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 32)
+        
+        return label
+    }()
+    
+    lazy var leftStepperButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.layer.cornerRadius = 6
+        button.backgroundColor = .blackDay
+        button.setTitle("-", for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 20)
+        button.setTitleColor(.whiteDay, for: .normal)
+        
+        return button
+    }()
+    
+    lazy var rightStepperButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.layer.cornerRadius = 6
+        button.backgroundColor = .blackDay
+        button.setTitle("+", for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 20)
+        button.setTitleColor(.whiteDay, for: .normal)
+        
+        return button
     }()
 }

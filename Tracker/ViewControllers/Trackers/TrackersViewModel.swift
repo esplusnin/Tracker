@@ -9,43 +9,75 @@ import Foundation
 
 struct AdditionTrackerInfo {
     var buttonString: String
-    var countOfDays: String
+    var countOfDays: Int
+    var countOfDaysString: String
     var isCompleteToday: Bool
     var isTodayFuture: Bool
+    var categoryName: String?
 }
 
 final class TrackersViewModel: TrackersViewModelProtocol {
-    
-    @TrackerObservable
-    private(set) var visibleTrackers: [TrackerCategory] = []
-    @TrackerObservable
-    private(set) var isRecordUpdate: Bool?
-    @TrackerObservable
-    private(set) var isVisibleCategoryEmpty: Bool?
-    @TrackerObservable
-    private(set) var isVisibleCategoryEmptyAfterSearch: Bool?
     
     private let dataProviderService = DataProviderService.instance
     
     var additionTrackerInfo: AdditionTrackerInfo?
     var currentDate: Date?
     
+    @Observable
+    private(set) var visibleTrackers: [TrackerCategory] = []
+    @Observable
+    private(set) var isRecordUpdate: Bool?
+    @Observable
+    private(set) var isVisibleCategoryEmpty: Bool?
+    @Observable
+    private(set) var isVisibleCategoryEmptyAfterSearch: Bool?
+    @Observable
+    private(set) var isNeedToChangeDate: Bool?
+    private var pinnedTrackers: [Tracker] = []
+        
     init() {
         dataProviderService.trackerStore = TrackerStore()
         dataProviderService.trackerCategoryStore = TrackerCategoryStore()
         dataProviderService.trackerRecordStore = TrackerRecordStore()
+        dataProviderService.statisticsService = StatisticsService()
         
         dataProviderService.inizializeVisibleCategories()
-        dataProviderService.getCategoryNames()
+        dataProviderService.updateCategoryNames()
         dataProviderService.setAllTrackerRecords()
         dataProviderService.bindTrackersViewModel(controller: self)
     }
+    // MARK: - Wrapped propertie's rules:
+    func recordDidUpdate() {
+        isRecordUpdate = true
+    }
     
+    func todaysFilterDidEnable() {
+        isNeedToChangeDate = true
+    }
+    
+    // MARK: - Operating with arrays:
     func setVisibleTrackersFromProvider() {
-        visibleTrackers = dataProviderService.getVisiblieCategories()
+        if isPinnedTrackersExist() {
+            getVisibleTrackersWithPinned()
+        } else {
+            showNewTrackersAfterChangeDate()
+        }
         
         if visibleTrackers.count == 0 {
             isVisibleCategoryEmpty = true
+        }
+    }
+    
+    func getVisibleTrackersWithPinned() {
+        var trackerCategories = dataProviderService.getVisiblieCategories()
+        
+        if let index = trackerCategories.firstIndex(where: { $0.name == L10n.TrackerVC.pinned }) {
+            let pinnedTrackers = trackerCategories[index]
+            trackerCategories.remove(at: index)
+            trackerCategories.insert(pinnedTrackers, at: 0)
+            visibleTrackers = trackerCategories
+        } else {
+            return
         }
     }
     
@@ -55,34 +87,108 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         
         if trackers.count == 0 {
             isVisibleCategoryEmptyAfterSearch = true
+        }        
+    }
+    
+    func showNewTrackersAfterChangeDate() {
+        let trackers = dataProviderService.getVisiblieCategories()
+        
+        guard let date = currentDate else { return }
+        
+        var newArray: [TrackerCategory] = []
+        
+        for category in trackers {
+            var newCategory = TrackerCategory(name: category.name, trackerDictionary: [])
+            
+            for tracker in category.trackerDictionary {
+                guard let schedule = tracker.schedule else { return }
+                let trackerDate = DateService().getNumberOfCurrentDate(date)
+                
+                if schedule.contains(trackerDate) {
+                    newCategory.trackerDictionary.append(tracker)
+                }
+            }
+            if !newCategory.trackerDictionary.isEmpty {
+                newArray.append(newCategory)
+            }
+        }
+        visibleTrackers = newArray
+        
+        if visibleTrackers.count == 0 {
+            isVisibleCategoryEmpty = true
         }
     }
     
-    func recordDidUpdate() {
-        isRecordUpdate = true
+    func updateVisibleTrackers(isCompleted: Bool) {
+        var newArray: [TrackerCategory] = []
+        let completeLabel = isCompleted ? "✓" : "+"
+        
+        for category in visibleTrackers {
+            var newCategory = TrackerCategory(name: category.name, trackerDictionary: [])
+            
+            for tracker in category.trackerDictionary {
+                if setCellButtonIfTrackerWasCompletedToday(id: tracker.id) == completeLabel {
+                    newCategory.trackerDictionary.append(tracker)
+                }
+            }
+            
+            if !newCategory.trackerDictionary.isEmpty {
+                newArray.append(newCategory)
+            }
+        }
+        
+        visibleTrackers = newArray
     }
     
-    func editTracker(id: UUID) {
-        dataProviderService.editTrackerFromStore(id: id)
+    // MARK: - Tracker's actions:
+    func editTracker(trackerID: UUID) {
+        dataProviderService.editTrackerFromStore(trackerID)
     }
     
     func deleteTracker(id: UUID) {
         dataProviderService.deleteTrackerFromStore(id: id)
     }
     
+    func pinTracker(_ trackerID: UUID) {
+        let pinnedName = L10n.TrackerVC.pinned
+        if visibleTrackers[0].name != pinnedName {
+            dataProviderService.addCategoryToStore(name: pinnedName)
+            dataProviderService.pinTracker(trackerID)
+        } else {
+            dataProviderService.pinTracker(trackerID)
+        }
+    }
+    
+    func unpinTracker(_ trackerID: UUID) {
+        dataProviderService.unpinTracker(trackerID)
+    }
+    
+    func changeCountOfPerfectDays(isAdd: Bool) {
+        guard let date = currentDate else { return }
+        let statisticsTool = StatisticsServiceHelper()
+
+        isAdd ? statisticsTool.setNewPerfectDaysValue(date: date) : statisticsTool.removePerfectDays(date: date)
+    }
+    
     func fillAdditionalInfo(id: UUID) {
         let completeDayString = setCellButtonIfTrackerWasCompletedToday(id: id)
         let countOfDays = countAmountOfCompleteDays(id: id)
-        let countOfDaysString = updateNumberOfCompletedDaysLabel(countOfDays)
+        let countOfDaysString = L10n.numberOfDays(countOfDays)
         let isCompleteToday = completeDayString == "+" ? false : true
         let isTodayFuture = checkCurrentDateIsFuture()
         
         additionTrackerInfo = AdditionTrackerInfo(buttonString: completeDayString,
-                                                  countOfDays: countOfDaysString,
+                                                  countOfDays: countOfDays,
+                                                  countOfDaysString: countOfDaysString,
                                                   isCompleteToday: isCompleteToday,
                                                   isTodayFuture: isTodayFuture)
     }
     
+    func changeStatusTrackerRecord(model: TrackerRecord, isAddDay: Bool) {
+        dataProviderService.changeStatusTrackerRecord(model: model, isAddDay: isAddDay)
+    }
+    
+    // MARK: - Helpers:
     private func setCellButtonIfTrackerWasCompletedToday(id: UUID) -> String {
         var string = "+"
         let completedTrackers = dataProviderService.getTrackerRecords()
@@ -92,49 +198,6 @@ final class TrackersViewModel: TrackersViewModelProtocol {
                 string = "✓"
             }
         })
-        
-        return string
-    }
-    
-    private func updateCellDayLabel(at indexPath: IndexPath) -> String {
-        let id = visibleTrackers[indexPath.section].trackerDictionary[indexPath.row].id
-        let string = updateNumberOfCompletedDaysLabel(countAmountOfCompleteDays(id: id))
-        
-        return string
-    }
-    
-    private func updateNumberOfCompletedDaysLabel(_ number: Int) -> String {
-        var string = "\(number) "
-        var array = [number]
-        
-        switch number {
-        case 0:
-            string += "Дней"
-        case 1:
-            string += "День"
-        case 2:
-            string += "Дня"
-        case 3, 4:
-            string += "Дня"
-        case 5...20:
-            string += "Дней"
-        case 20...:
-            switch array.removeLast() {
-            case 1:
-                string += "День"
-            case 2:
-                string += "Дня"
-            case 3, 4:
-                string += "Дня"
-            case 5...9:
-                string += "Дней"
-            default:
-                string += "Дней"
-            }
-            
-        default:
-            string = ""
-        }
         
         return string
     }
@@ -159,34 +222,8 @@ final class TrackersViewModel: TrackersViewModelProtocol {
         return date > currentDate
     }
     
-    func changeStatusTrackerRecord(model: TrackerRecord, isAddDay: Bool) {
-        dataProviderService.changeStatusTrackerRecord(model: model, isAddDay: isAddDay)
-    }
-    
-    func showNewTrackersAfterChangeDate() {
-        dataProviderService.inizializeVisibleCategories()
-        guard let date = currentDate else { return }
-        
-        setVisibleTrackersFromProvider()
-        var newArray: [TrackerCategory] = []
-        
-        for category in visibleTrackers {
-            var newCategory = TrackerCategory(name: category.name, trackerDictionary: [])
-            
-            for tracker in category.trackerDictionary {
-                guard let schedule = tracker.schedule else { return }
-                let trackerDate = DateService().getNumberOfCurrentDate(date)
-                
-                if schedule.contains(trackerDate) {
-                    newCategory.trackerDictionary.append(tracker)
-                }
-            }
-            if !newCategory.trackerDictionary.isEmpty {
-                newArray.append(newCategory)
-            }
-        }
-        
-        visibleTrackers = newArray
+    private func isPinnedTrackersExist() -> Bool {
+        dataProviderService.getVisiblieCategories().contains(where: { $0.name == L10n.TrackerVC.pinned })
     }
     
     private func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory] {

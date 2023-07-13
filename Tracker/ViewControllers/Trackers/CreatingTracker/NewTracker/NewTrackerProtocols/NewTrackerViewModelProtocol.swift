@@ -8,12 +8,10 @@
 import UIKit
 
 protocol NewTrackerViewModelProtocol: AnyObject {
-    var view: NewTrackerViewControllerProtocol? { get set }
     var emojiArray: [String] { get }
     var colorSectionArray: [UIColor] { get }
     var buttonsTitleForTableView: [String] { get }
     func createNewTracker()
-    func trackerDidCreate()
     func setTrackerName(name: String)
     func clearTrackerName()
     func resetTrackerInfoAfterDeselect(section: Int)

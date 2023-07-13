@@ -1,0 +1,99 @@
+// OnboardingVC:
+"onboarding.firstScreen.title" = "Track only what you want";
+"onboarding.secondScreen.title" = "Even if it's not liters of water and yoga";
+"onboarding.continueButton" = "These are the technologies!";
+
+// MainTabBarVC:
+"tabBar.trackers" = "Trackers";
+"tabBar.statistics" = "Statistics";
+
+// TrackerVC:
+"trackerVC.title" = "Trackers";
+"trackerVC.searchField.placeholder" = "Search...";
+"trackerVC.cancelationButton" = "Cancel";
+"trackerVC.emptyState.label" = "What we will track?";
+"trackerVC.nothingSearched" = "Nothing found";
+"trackerVC.pinned" = "Pinned";
+
+// FilterVC
+"filter.title" = "Filters";
+"filter.allTrackers" = "All trackers";
+"filter.todaysTrackers" = "Trackers for today";
+"filter.completedTrackers" = "Completed";
+"filter.uncompletedTrackers" = "Uncompleted";
+
+// CreatingTrackerVC:
+"creatingTracker.title" = "Creating a tracker";
+"creatingTracker.habit" = "Habit";
+"creatingTracker.unregularEvent" = "Unregular event";
+
+// NewTrackerVC:
+"newTracker.habit.title" = "New habit";
+"newTracker.unregularEvent.title" = "New unregular event";
+"newTracker.textField.placeholder" = "Enter the name of the tracker";
+"newTracker.tableView.category" = "Category";
+"newTracker.tableView.schedule" = "Schedule";
+"newTracker.collectionView.color" = "Color";
+"newTracker.buttons.cancel" = "Cancel";
+"newTracker.buttons.create" = "Create";
+"newTracker.warning" = "Limit of 38 characters";
+"newTracker.emoji" = "Emoji";
+
+// CategoryVC:
+"category.title" = "Category";
+"category.addCategory" = "Add category";
+"category.emptyCategory" = "Habits and events can be\ncombined in meaning";
+
+// New CategoryVC:
+"newCategory.title" = "New category";
+"newCategory.textField.placeholder" = "Enter the category name";
+"newCategory.readyButton" = "Complete";
+
+// Editing CategoryVC:
+"editingCategory.title" = "Editing category";
+"editingCategory.completeButton" = "Complete";
+
+// ScheduleVC:
+"schedule.title" = "Schedule";
+"schedule.monday" = "Monday";
+"schedule.tuesday" = "Tuesday";
+"schedule.wednesday" = "Wednesday";
+"schedule.thursday" = "Thursday";
+"schedule.friday" = "Friday";
+"schedule.saturday" = "Saturday";
+"schedule.sunday" = "Sunday";
+"schedule.everyDay" = "Every day";
+"schedule.ready" = "Complete";
+
+"schedule.monday.short" = "Mon";
+"schedule.tuesday.short" = "Tue";
+"schedule.wednesday.short" = "Wed";
+"schedule.thursday.short" = "Thur";
+"schedule.friday.short" = "Fri";
+"schedule.saturday.short" = "Sut";
+"schedule.sunday.short" = "Sun";
+
+// StatisticsVC:
+"statistics.title" = "Statistics";
+"statistics.nothingToAnalyze" = "There is nothing to analyze yet";
+"statistics.bestPeriod" = "The best period";
+"statistics.perfectDays" = "Perfect day";
+"statistics.totalCompletedTracker" = "Trackers completed";
+"statistics.averageValue" = "Average value";
+
+// Alerts:
+"alert.removeCategory.title" = "Is this category definitely not needed?";
+"alert.removeCategory.message" = "Deleting a category will result in the loss of all its trackers";
+"alert.removeTracker.title" = "Are you sure you want to delete the tracker?";
+"alert.remove" = "Remove";
+"alert.cancel" = "Cancel";
+
+// Context menu:
+"contextMenu.remove" = "Remove";
+"contextMenu.edit" = "Edit";
+"contextMenu.fix" = "Pin";
+"contextMenu.unfix" = "Unpin";
+
+// Editing Tracker:
+"editingTracker.title" = "Editing habit";
+"editingTracker.saveChanges" = "Save changes";

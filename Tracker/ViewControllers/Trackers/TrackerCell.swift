@@ -26,7 +26,7 @@ final class TrackerCell: UICollectionViewCell {
         didSet {
             guard let additionalTrackerInfo = additionalTrackerInfo else { return }
             completeTrackerDayButton.setTitle(additionalTrackerInfo.buttonString, for: .normal)
-            numberOfDaysLabel.text = additionalTrackerInfo.countOfDays
+            numberOfDaysLabel.text = additionalTrackerInfo.countOfDaysString
             if additionalTrackerInfo.isTodayFuture {
                 unlockCompleteButton()
                 completeTrackerDayButton.alpha = additionalTrackerInfo.isCompleteToday ? 0.5 : 1
@@ -36,6 +36,20 @@ final class TrackerCell: UICollectionViewCell {
         }
     }
     
+    var isTrackerPinned: Bool? {
+        didSet {
+            guard let isTrackerPinned = isTrackerPinned else { return }
+            
+            switch isTrackerPinned {
+            case true:
+                pinCommandString = L10n.ContextMenu.unfix
+            case false:
+                pinCommandString = L10n.ContextMenu.fix
+            }
+        }
+    }
+    
+    // MARK: - Views:
     lazy var cellView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = true
@@ -82,12 +96,21 @@ final class TrackerCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 17
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.whiteDay, for: .normal)
         
         return button
     }()
     
+    lazy var pinSingImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "pin.fill")
+        imageView.tintColor = .white
+        
+        return imageView
+    }()
     
+    lazy var pinCommandString = String()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setViews()
@@ -96,14 +119,23 @@ final class TrackerCell: UICollectionViewCell {
         
         addContextMenuInteraction()
         
-        contentView.layer.shadowColor = UIColor.gray.cgColor
-        contentView.layer.shadowOpacity = 0.4
-        contentView.layer.shadowOffset = CGSize(width: 10, height: 10)
-        contentView.layer.shadowRadius = 4
+        doAnimate()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.contentView.layer.shadowOpacity = 0
+        self.contentView.layer.shadowOffset = CGSize.zero
+        self.contentView.layer.shadowRadius = 0
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        doAnimate()
     }
     
     func lockCompleteButton() {
@@ -119,8 +151,27 @@ final class TrackerCell: UICollectionViewCell {
         completeTrackerDayButton.isEnabled = true
     }
     
+    private func doAnimate() {
+        UIView.animate(withDuration: 1, delay: 0, animations: { [weak self] in
+            guard let self = self else { return }
+            self.contentView.layer.shadowColor = UIColor.gray.cgColor
+            self.contentView.layer.shadowOpacity = 0.5
+            self.contentView.layer.shadowOffset = CGSize(width: 10, height: 10)
+            self.contentView.layer.shadowRadius = 4
+        })
+    }
+    
     private func setTarget() {
         completeTrackerDayButton.addTarget(self, action: #selector(completeTrackerToday), for: .touchUpInside)
+    }
+    
+    // MARK: - TrackersCollectionViewCellDelegate block:
+    private func pinTracker(from cell: TrackerCell) {
+        delegate?.pinTracker(from: cell)
+    }
+    
+    private func unpinTracker(from cell: TrackerCell) {
+        delegate?.unpinTracker(from: cell)
     }
     
     private func editTracker(from cell: TrackerCell) {
@@ -144,47 +195,59 @@ final class TrackerCell: UICollectionViewCell {
     }
 }
 
+// MARK: - UIContextMenuInteractionDelegate
 extension TrackerCell: UIContextMenuInteractionDelegate {
     func addContextMenuInteraction() {
         let interaction = UIContextMenuInteraction(delegate: self)
         cellView.addInteraction(interaction)
     }
     
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        let editImage = UIImage(systemName: "square.and.pencil")
-        let deleteImage = UIImage(systemName: "trash")
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        guard let isTrackerPinned = isTrackerPinned else { return UIContextMenuConfiguration() }
         
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
-            let editAction = UIAction(
-                title: "Редактировать", image: editImage) { [weak self] action in
-                    guard let self = self else { return }
-                    self.editTracker(from: self)
-                }
-            let deleteAction = UIAction(
-                title: "Удалить", image: deleteImage, attributes: .destructive) { [weak self] action in
-                    guard let self = self else { return }
-                    self.deleteTracker(from: self)
-                }
+        let pinImage = isTrackerPinned ? UIImage(systemName: "pin.slash") : UIImage(systemName: "pin.fill")
+        let editImage = UIImage(systemName: "square.and.pencil")
+        let removeImage = UIImage(systemName: "trash")
+        
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let pinAction = UIAction(title: self.pinCommandString,
+                                     image: pinImage) { [weak self] _ in
+                guard let self = self, let isTrackerPinned = self.isTrackerPinned  else { return }
+                isTrackerPinned ? self.unpinTracker(from: self) : self.pinTracker(from: self)
+            }
             
-            return UIMenu(children: [editAction, deleteAction])
+            let editAction = UIAction(title: L10n.ContextMenu.edit,
+                                      image: editImage) { [weak self] action in
+                guard let self = self else { return }
+                self.editTracker(from: self)
+            }
+            
+            let deleteAction = UIAction(title: L10n.ContextMenu.remove,
+                                        image: removeImage, attributes: .destructive) { [weak self] action in
+                guard let self = self else { return }
+                self.deleteTracker(from: self)
+            }
+            
+            return UIMenu(children: [pinAction, editAction, deleteAction])
         }
     }
 }
 
-
-// MARK: Setting Views:
+// MARK: - Setting Views:
 extension TrackerCell {
     private func setViews() {
         contentView.addSubview(cellView)
         cellView.addSubview(emojiImageView)
         cellView.addSubview(emojiLabel)
         cellView.addSubview(trackerLabel)
+        cellView.addSubview(pinSingImageView)
         contentView.addSubview(numberOfDaysLabel)
         contentView.addSubview(completeTrackerDayButton)
     }
 }
 
-// MARK: Setting Layout:
+// MARK: - Setting Layout:
 extension TrackerCell {
     private func setConstraints() {
         cellView.snp.makeConstraints { make in
@@ -216,6 +279,12 @@ extension TrackerCell {
             make.top.equalTo(cellView.snp.bottom).inset(-8)
             make.trailing.equalToSuperview().inset(12)
             make.centerY.equalTo(numberOfDaysLabel.snp.centerY)
+        }
+        
+        pinSingImageView.snp.makeConstraints { make in
+            make.height.width.equalTo(16)
+            make.centerY.equalTo(emojiImageView.snp.centerY)
+            make.trailing.equalToSuperview().inset(12)
         }
     }
 }
